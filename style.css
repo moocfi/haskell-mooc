@@ -1,0 +1,51 @@
+body { max-width: 55%; /* <100-30-12.5 */
+       margin-right: auto;
+       padding-left: 12.5%;
+       font-family: sans-serif;
+       background: #fffcec;
+       color: #222; }
+
+nav#TOC { position: fixed;
+          left: 70%;
+          width: 30%;
+          top: 0%;
+          height: 100%;
+          overflow-y: scroll; }
+
+p { max-width: 60em; }
+
+h1 { font-weight: 400;
+     margin-top: 2.1rem;
+     margin-bottom: 1.4rem;
+     font-size: 2.2rem;
+     line-height: 1; }
+
+h2 { font-weight: 400;
+     font-size: 1.7rem;
+     margin-top: 2rem;
+     margin-bottom: 1.4rem;
+     line-height: 1; }
+
+h3 { font-weight: 400;
+     font-size: 1.3rem;
+     margin-top: 2rem;
+     margin-bottom: 1.4rem;
+     line-height: 1; }
+
+ul,ol { padding-left: 3em; }
+
+ol.quiz { border-left: 2px dotted grey;
+          margin-left: 6rem;
+          padding-top: 0.5em;
+          padding-bottom: 0.5em;
+          list-style-type: lower-alpha; }
+ol.quiz li:active { background: red; }
+ol.quiz li.correct:active { background: green; }
+
+pre.sourceCode, pre, table
+{ max-width: 80%;
+  border-left: 2px solid grey;
+  padding: 0.5em 0.5em 0.5em 0.5em;
+  margin-left: 6rem; }
+
+table { border-spacing: 0.5em 0em }
