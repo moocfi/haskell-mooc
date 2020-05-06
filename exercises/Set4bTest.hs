@@ -18,7 +18,8 @@ tests = [(1,"countNothings",[ex1_countNothings])
         ,(3,"myHead",[ex3_myHead_empty, ex3_myHead_full])
         ,(4,"myLast",[ex4_myLast_empty, ex4_myLast_full])
         ,(5,"sumAndLength",[ex5_sumAndLength])
-        ,(6,"myConcat",[ex6_myConcat])]
+        ,(6,"myConcat",[ex6_myConcat])
+        ,(7,"largest",[ex7_largest])]
 
 ex1_countNothings = property $ do
   justs <- fmap (map Just) $ listOf (choose (0::Int,10))
@@ -63,3 +64,8 @@ ex6_myConcat =
   forAll_ $ \(xs :: [[Int]]) ->
   counterexample ("xs = "++show xs) $
   $(testing' [|foldr concatHelper concatStart xs|]) (?==concat xs)
+
+ex7_largest =
+  forAll_ $ \(NonEmpty (xs :: [Int])) ->
+  counterexample ("xs = "++show xs) $
+  $(testing' [|foldr largestHelper [] xs|]) (?==filter (==maximum xs) xs)
