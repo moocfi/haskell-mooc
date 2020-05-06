@@ -7,8 +7,10 @@ import Control.Monad
 import Data.Foldable
 import Data.Functor
 import Data.List
+import Data.Maybe
 import Data.Monoid
 import Data.Semigroup
+import System.Environment
 import System.Timeout
 import Test.QuickCheck
 import Test.QuickCheck.Monadic
@@ -89,27 +91,28 @@ myCheck prop = quickCheckWithResult quietArgs prop >>= interpret
 
 histogram vals = [(head xs, length xs) | xs <- group (sort vals)]
 
-textAttr a s = "\ESC[" ++ a ++ "m" ++ s ++ "\ESC[0m"
-textBold = textAttr "1"
-textBoldGreen = textAttr "1;32"
-textBoldRed = textAttr "1;31"
-textBlue = textAttr "34"
+textAttr False a s = s
+textAttr True a s = "\ESC[" ++ a ++ "m" ++ s ++ "\ESC[0m"
+textBold color = textAttr color "1"
+textBoldGreen color = textAttr color "1;32"
+textBoldRed color = textAttr color "1;31"
+textBlue color = textAttr color "34"
 
-showCheck :: Outcome -> String
-showCheck Todo = "_"
-showCheck Pass = textBoldGreen "\x2713"
-showCheck Fail = textBoldRed "\x2715"
+showCheck :: Bool -> Outcome -> String
+showCheck color Todo = "_"
+showCheck color Pass = textBoldGreen color "\x2713"
+showCheck color Fail = textBoldRed color "\x2715"
 
-showOutcome :: Outcome -> String
-showOutcome Pass = textBoldGreen "+++++ Pass"
-showOutcome Fail = textBoldRed "----- Fail"
-showOutcome Todo = textBlue "00000 Todo"
+showOutcome :: Bool -> Outcome -> String
+showOutcome color Pass = textBoldGreen color "+++++ Pass"
+showOutcome color Fail = textBoldRed color "----- Fail"
+showOutcome color Todo = textBlue color "00000 Todo"
 
-showExercise :: Int -> String
-showExercise i = textBold $ "===== EXERCISE " ++ show i
+showExercise :: Bool -> Int -> String
+showExercise color i = textBold color $ "===== EXERCISE " ++ show i
 
-showFinal :: [Outcome] -> String
-showFinal outs = concatMap showCheck outs ++ "\n" ++ show score ++ " / " ++ show total
+showFinal :: Bool -> [Outcome] -> String
+showFinal color outs = concatMap (showCheck color) outs ++ "\n" ++ show score ++ " / " ++ show total
   where score = length $ filter (==Pass) outs
         total = length outs
 
@@ -121,12 +124,13 @@ toJSON ts = "[" ++ intercalate "," (map f ts) ++ "]"
 
 score :: [Test] -> IO ()
 score tests = do
+  color <- fmap isNothing $ lookupEnv "NO_COLOR"
   triples <- forM tests $ \(i,n,ts) -> do
-    putStrLn $ showExercise i
+    putStrLn $ showExercise color i
     out <- fold <$> mapM myCheck ts
-    putStrLn $ showOutcome out
+    putStrLn $ showOutcome color out
     return (i,n,out)
   let outcomes = [o | (_,_,o) <- triples]
   putStrLn "===== TOTAL"
-  putStrLn $ showFinal outcomes
+  putStrLn $ showFinal color outcomes
   writeFile "score.json" $ toJSON triples
