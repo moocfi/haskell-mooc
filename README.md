@@ -24,4 +24,17 @@ The material is available as [part1.html](part1.html) in this repository.
 
 ## Exercises
 
-Exercises can be found under exercises/. See material for more info on working on them.
+Exercises can be found under `exercises/`. Exercises are Haskell
+source code files named `Set1.hs`, `Set2.hs` and so on. You complete
+the exercises by editing the file according to the instructions in the
+file. You can check your answers by running
+
+```
+stack runhaskell SetXTest.hs
+```
+
+in the `exercises/` directory. Remember to replace `X` with the number
+of the set you are working on.
+
+
+See [the material](part1.html#working-on-the-exercises) for more info.
