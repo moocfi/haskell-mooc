@@ -4,6 +4,10 @@ University of Helsinki
 
 [Course page](https://haskell.mooc.fi)
 
+[![License: CC BY-NC-SA 4.0](https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png)](http://creativecommonse.org/licenses/by-nc-sa/4.0/)
+
+This work is licensed under a [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-nc-sa/4.0/).
+
 ## About the Beta test
 
 Welcome to the Beta test of this Haskell course! The course material
