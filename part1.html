@@ -3037,7 +3037,7 @@ Because <code>Nothing</code> is a constructor.
 <a class="sourceLine" id="cb361-6" data-line-number="6"><span class="ot">  bitOr ::</span> a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a</a>
 <a class="sourceLine" id="cb361-7" data-line-number="7">  bitOr x y <span class="fu">=</span> bitNot (bitAnd (bitNot x) (bitNot y))</a>
 <a class="sourceLine" id="cb361-8" data-line-number="8"><span class="ot">  bitXor ::</span> a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a</a>
-<a class="sourceLine" id="cb361-9" data-line-number="9">  bitXor x y <span class="fu">=</span> bitAnd (bitOr x y) (bitOr (bitNot x) (botNot y))</a></code></pre></div>
+<a class="sourceLine" id="cb361-9" data-line-number="9">  bitXor x y <span class="fu">=</span> bitAnd (bitOr x y) (bitOr (bitNot x) (bitNot y))</a></code></pre></div>
 <p>which set of operations is <em>not</em> a minimal complete definition of <code>BitOperations</code>?</p>
 <ol class="quiz">
 <li>
