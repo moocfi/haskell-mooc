@@ -14,7 +14,7 @@ Welcome to the Beta test of this Haskell course! The course material
 is finished, but we'd like your feedback on how we can make everything
 better for the real launch of the course. Please give feedback via
 
-- The course [channel on Telegram](https://t.me/joinchat/MxlusFCtiFjOaLOgOAV9kA)
+- The course [channel on Telegram](https://t.me/haskell_mooc_fi)
 - The feedback forms at the end of each lecture
 - You can also email <joel.kaasinen+mooc-feedback@gmail.com>
 
