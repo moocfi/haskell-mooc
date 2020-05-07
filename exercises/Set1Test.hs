@@ -55,7 +55,7 @@ ex4_distance = do
   y1 <- elements [-5..5]
   let x2 = x1+deltax
   let y2 = y1+deltay
-  return $ $(testing [|distance x1 x2 y1 y2|]) (dist=~?)
+  return $ $(testing [|distance x1 y1 x2 y2|]) (dist=~?)
 
 ex5_eeny_even = forAll_ $ \x -> $(testing [|eeny (2*x)|]) (?=="eeny")
 ex5_meeny_odd = forAll_ $ \x -> $(testing [|eeny (2*x+1)|]) (?=="meeny")

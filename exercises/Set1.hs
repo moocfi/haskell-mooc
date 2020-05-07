@@ -47,6 +47,10 @@ quadruple x = todo
 --
 -- PS. if you can't remember how the distance is computed, the formula is:
 --   square root of ((x distance) squared + (y distance) squared)
+--
+-- Examples:
+--   distance 0 0 1 1  ==>  1.4142135...
+--   distance 1 1 4 5  ==>  5.0
 
 distance = todo
 
