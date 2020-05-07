@@ -18,7 +18,7 @@ import Mooc.Todo
 
 ------------------------------------------------------------------------------
 -- Ex 1: given numbers start, count and end, build a list that starts
--- with with count copies of start and ends with end.
+-- with count copies of start and ends with end.
 --
 -- Use recursion and the : operator to build the list.
 --
