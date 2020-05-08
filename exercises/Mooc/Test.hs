@@ -100,8 +100,8 @@ textBlue color = textAttr color "34"
 
 showCheck :: Bool -> Outcome -> String
 showCheck color Todo = "_"
-showCheck color Pass = textBoldGreen color "\x2713"
-showCheck color Fail = textBoldRed color "\x2715"
+showCheck color Pass = textBoldGreen color "1"
+showCheck color Fail = textBoldRed color "0"
 
 showOutcome :: Bool -> Outcome -> String
 showOutcome color Pass = textBoldGreen color "+++++ Pass"
