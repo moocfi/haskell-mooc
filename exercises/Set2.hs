@@ -51,9 +51,14 @@ updateAt i x xs = todo
 
 ------------------------------------------------------------------------------
 -- Ex 4: substring i j s should return the substring of s starting at
--- index i and ending at index j.
+-- index i and ending at (right before) index j. Indexes start from 0.
 --
 -- Remember that strings are lists!
+--
+-- Examples:
+--   substring 2 5 "abcdefgh"  ==>  "cde"
+--   substring 2 2 "abcdefgh"  ==>  ""
+--   substring 0 3 "abcdefgh"  ==>  "abcd"
 
 substring :: Int -> Int -> String -> String
 substring i j s = todo
