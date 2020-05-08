@@ -58,7 +58,7 @@ updateAt i x xs = todo
 -- Examples:
 --   substring 2 5 "abcdefgh"  ==>  "cde"
 --   substring 2 2 "abcdefgh"  ==>  ""
---   substring 0 3 "abcdefgh"  ==>  "abcd"
+--   substring 0 4 "abcdefgh"  ==>  "abcd"
 
 substring :: Int -> Int -> String -> String
 substring i j s = todo
