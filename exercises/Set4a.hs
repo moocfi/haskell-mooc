@@ -194,6 +194,8 @@ transfer from to amount bank = todo
 -- Ex 11: given an Array, find the index of the largest element. You
 -- can assume the Array isn't empty.
 --
+-- You may assume that the largest element is unique.
+--
 -- Hint: check out Data.Array.indices or Data.Array.assocs
 
 maxIndex :: (Ix i, Ord a) => Array i a -> i
