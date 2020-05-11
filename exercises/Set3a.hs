@@ -61,7 +61,10 @@ mapMaybe2 f x y = todo
 -- palindromeHalfs returns the first halfs of all palindromes in its
 -- input.
 --
--- Example:
+-- The first half of a string should include the middle character of
+-- the string if the string has an odd length.
+--
+-- Examples:
 --   palindromeHalfs ["abba", "cat", "racecar"]
 --     ==> ["ab","race"]
 --
@@ -136,8 +139,13 @@ while check update initial = todo
 
 ------------------------------------------------------------------------------
 -- Ex 8: another version of a while loop. This time, the check
--- function returns an Either value. Keep iterating on Right values,
--- stop on a Left value.
+-- function returns an Either value. A Left value means stop, a Right
+-- value means keep looping.
+--
+-- The call `whileEither check x` should call `check x`, and if the
+-- result is a Left, return the contents of the Left. If the result is
+-- a Right, the function should call `check` on the contents of the
+-- Right and so on.
 --
 -- Examples (see definition of step below):
 --   whileEither (step 100) 1   ==> 128
