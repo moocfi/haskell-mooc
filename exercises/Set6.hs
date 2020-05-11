@@ -141,9 +141,15 @@ simplify p = todo
 -- Ex 10: implement the typeclass Num for RationalNumber. The results
 -- of addition an multiplication must be simplified.
 --
+-- Reminders:
+--   * negate x is 0-x
+--   * abs is absolute value
+--   * signum is -1, +1 or 0 depending on the sign of the input
+--
 -- Examples:
---   RationalNumber 1 2 - RationalNumber 1 3 ==> RationalNumber 1 6
+--   RationalNumber 1 3 + RationalNumber 1 6 ==> RationalNumber 1 2
 --   RationalNumber 1 3 * RationalNumber 3 1 ==> RationalNumber 1 1
+--   negate (RationalNumber 2 3)             ==> RationalNumber (-2) 3
 --   fromInteger 17 :: RationalNumber        ==> RationalNumber 17 1
 --   abs (RationalNumber (-3) 2)             ==> RationalNumber 3 2
 --   signum (RationalNumber (-3) 2)          ==> RationalNumber (-1) 1

@@ -68,6 +68,9 @@ substring i j s = todo
 -- off the front _and_ back of a string until the result is a
 -- palindrome.
 --
+-- Hint: remember the function palindrome :: String -> Bool from the
+-- course material!
+--
 -- Examples:
 --   palindromify "ab" ==> ""
 --   palindromify "aaay" ==> "aa"

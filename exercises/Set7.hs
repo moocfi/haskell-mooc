@@ -205,8 +205,8 @@ data PasswordRequirement =
   MinimumLength Int
   | ContainsSome String    -- contains at least one of given characters
   | DoesNotContain String  -- does not contain any of the given characters
-  | And PasswordRequirement PasswordRequirement -- or'ing two requirements
-  | Or PasswordRequirement PasswordRequirement    -- and'ing
+  | And PasswordRequirement PasswordRequirement -- and'ing two requirements
+  | Or PasswordRequirement PasswordRequirement  -- or'ing
   deriving Show
 
 passwordAllowed :: String -> PasswordRequirement -> Bool

@@ -76,10 +76,8 @@ examplePicture1 = Picture f
 --
 -- In addition to the Picture it takes a width and a height.
 --
--- The return type is IO (), which you don't need to worry about right
--- now. A value of type IO () is something that can be executed by
--- Haskell to produce side effects (like the creation of a file in
--- this case).
+-- The return type is IO (). Check Lecture 8 for a short introduction
+-- to IO
 
 render :: Picture -> Int -> Int -> String -> IO ()
 render (Picture f) w h name = writePng name (generateImage (\x y -> colorToPixel (f (Coord x y))) w h)
@@ -92,7 +90,7 @@ render (Picture f) w h name = writePng name (generateImage (\x y -> colorToPixel
 --
 -- This should produce an example1.png file.
 --
--- Remember: You can get open GHCi with `stack ghci Set8Project.hs`
+-- Remember: You can get open GHCi with `stack ghci Set8.hs`
 
 -- For testing purposes, let's also define some functions for drawing
 -- pictures as lists. It's customary to show colours as hexadecimal
@@ -108,7 +106,6 @@ colorToHex (Color r g b) = showHex r ++ showHex g ++ showHex b
 
 getPixel :: Picture -> Int -> Int -> String
 getPixel (Picture f) x y = colorToHex (f (Coord x y))
-
 renderList :: Picture -> (Int,Int) -> (Int,Int) -> [[String]]
 renderList picture (minx,maxx) (miny,maxy) =
   [[getPixel picture x y | x <- [minx..maxx]] | y <- (reverse [miny..maxy])]
@@ -368,10 +365,10 @@ xy = Picture f
 -- The Zoom transform should scale a picture up just like the zoom function above.
 --
 -- The FlipX transform should flip the image along the vertical axis,
--- i.e. map (10,15) to (10,-15).
+-- i.e. map (10,15) to (-10,15).
 --
 -- The FlipY transform should flip the image along the horizontal
--- axis, i.e. map (10,15) to (-10,15).
+-- axis, i.e. map (10,15) to (10,-15).
 --
 -- The FlipXY transform should switch the x and y coordinates, i.e.
 -- map (10,15) to (15,10).
