@@ -6,6 +6,16 @@
 -- you'll be working in a limited environment where almost none of the
 -- standard library is available.
 --
+-- At least the following standard library functions are missing:
+--  * (++)
+--  * head
+--  * tail
+--  * map
+--  * filter
+--  * concat
+--
+-- The (:) operator is available, as is list literal syntax [a,b,c].
+--
 -- The tests will check that you haven't added imports :)
 
 {-# LANGUAGE NoImplicitPrelude #-}
@@ -55,7 +65,7 @@ mylast def xs = todo
 
 ------------------------------------------------------------------------------
 -- Ex 4: safe list indexing. Define a function indexDefault so that
---   indexDefault xs def i
+--   indexDefault xs i def
 -- gets the element at index i in the list xs. If i is not a valid
 -- index, def is returned.
 --
@@ -130,7 +140,11 @@ mymaximum bigger initial xs = todo
 ------------------------------------------------------------------------------
 -- Ex 9: define a version of map that takes a two-argument function
 -- and two lists. Example:
+--
 --   map2 f [x,y,z,w] [a,b,c]  ==> [f x a, f y b, f z c]
+--
+-- If the lists have differing lengths, ignore the trailing elements
+-- of the longer list.
 --
 -- Use recursion and pattern matching. Do not use any library functions.
 
