@@ -2520,7 +2520,7 @@ It turns a list of pairs into a list of elements
 <li>Type variables and names for functions and values start lower case (e.g. <code>a</code>, <code>map</code>, <code>xs</code>)</li>
 <li>Type names and constructor names start with upper case (e.g. <code>Maybe</code>, <code>Just</code>, <code>Card</code>, <code>Heart</code>)</li>
 </ul>
-<p>Note that a type and its constructor can have the same name.</p>
+<p>Note that a type and its constructor can have the same name. This is very common in Haskell code for types that only have one constructor. In this material we try to avoid it to avoid confusion. Here are some examples:</p>
 <div class="sourceCode" id="cb297"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb297-1" data-line-number="1"><span class="kw">data</span> <span class="dt">Pair</span> a <span class="fu">=</span> <span class="dt">Pair</span> a a</a>
 <a class="sourceLine" id="cb297-2" data-line-number="2"><span class="kw">data</span> <span class="dt">Report</span> <span class="fu">=</span> <span class="dt">Report</span> <span class="dt">Int</span> <span class="dt">String</span> <span class="dt">String</span></a></code></pre></div>
 <div class="sourceCode" id="cb298"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb298-1" data-line-number="1"><span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="fu">:</span>t <span class="dt">Pair</span></a>
@@ -2613,7 +2613,7 @@ It turns a list of pairs into a list of elements
 <div class="sourceCode" id="cb310"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb310-1" data-line-number="1"><span class="ot">example ::</span> <span class="dt">Tree</span> <span class="dt">Int</span></a>
 <a class="sourceLine" id="cb310-2" data-line-number="2">example <span class="fu">=</span> (<span class="dt">Node</span> <span class="dv">0</span> (<span class="dt">Node</span> <span class="dv">1</span> (<span class="dt">Node</span> <span class="dv">2</span> <span class="dt">Empty</span> <span class="dt">Empty</span>)</a>
 <a class="sourceLine" id="cb310-3" data-line-number="3">                          (<span class="dt">Node</span> <span class="dv">3</span> <span class="dt">Empty</span> <span class="dt">Empty</span>))</a>
-<a class="sourceLine" id="cb310-4" data-line-number="4">                  (<span class="dt">Node</span> <span class="dv">3</span> <span class="dt">Empty</span> <span class="dt">Empty</span>))</a></code></pre></div>
+<a class="sourceLine" id="cb310-4" data-line-number="4">                  (<span class="dt">Node</span> <span class="dv">4</span> <span class="dt">Empty</span> <span class="dt">Empty</span>))</a></code></pre></div>
 <p>The height of a binary tree is length of the longest path from the root to a leaf. In Haskell terms, it’s how many nested levels of <code>Node</code> constructors you need to build the tree. The height of our example tree is 3. Here’s a function that computes the height of a tree:</p>
 <div class="sourceCode" id="cb311"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb311-1" data-line-number="1"><span class="ot">treeHeight ::</span> <span class="dt">Tree</span> a <span class="ot">-&gt;</span> <span class="dt">Int</span></a>
 <a class="sourceLine" id="cb311-2" data-line-number="2">treeHeight <span class="dt">Empty</span> <span class="fu">=</span> <span class="dv">0</span></a>
@@ -2772,6 +2772,48 @@ Because <code>Nothing</code> returns nothing
 </li>
 <li>
 Because <code>Nothing</code> is a constructor.
+</li>
+</ol>
+<p>If we define <code>data Boing = Frick String Boing (Int -&gt; Bool)</code>, what is the type of <code>Frick</code>?</p>
+<ol class="quiz">
+<li>
+<code>Boing</code>
+</li>
+<li>
+<code>String -&gt; Boing -&gt; Int -&gt; Bool -&gt; Boing</code>
+</li>
+<li class="correct">
+<code>String -&gt; Boing -&gt; (Int -&gt; Bool) -&gt; Boing</code>
+</li>
+</ol>
+<p>If we define <code>data ThreeLists a b c = ThreeLists [a] [b] [c]</code>, what is the type of the constructor <code>ThreeLists</code>?</p>
+<ol class="quiz">
+<li>
+<code>[a] -&gt; [b] -&gt; [c] -&gt; ThreeLists</code>
+</li>
+<li>
+<code>a -&gt; b -&gt; c -&gt; ThreeLists a b c</code>
+</li>
+<li class="correct">
+<code>[a] -&gt; [b] -&gt; [c] -&gt; ThreeLists a b c</code>
+</li>
+<li>
+<code>[a] -&gt; [b] -&gt; [c] -&gt; ThreeLists [a] [b] [c]</code>
+</li>
+</ol>
+<p>If we define <code>data TwoLists a b = TwoList {aList :: [a], bList :: [b]}</code>, what is the type of the function <code>aList</code>?</p>
+<ol class="quiz">
+<li>
+<code>aList</code> is not a function, it is a field
+</li>
+<li class="correct">
+<code>TwoLists a b -&gt; [a]</code>
+</li>
+<li>
+<code>[a] -&gt; TwoLists a b</code>
+</li>
+<li>
+<code>[a]</code>
 </li>
 </ol>
 <h2 id="exercises-4"><span class="header-section-number">5.9</span> Exercises</h2>
