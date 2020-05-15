@@ -239,14 +239,14 @@ fromList :: [(k,v)] -> KeyVals k v
 fromList = todo
 
 ------------------------------------------------------------------------------
--- Exercise 11: The data type Nat is the so called Peano
+-- Ex 11: The data type Nat is the so called Peano
 -- representation for natural numbers. Define functions fromNat and
 -- toNat that convert natural numbers to Ints and vice versa.
 --
 -- Examples:
+--   fromNat (PlusOne (PlusOne (PlusOne Zero)))  ==>  3
 --   toNat 3    ==> Just (PlusOne (PlusOne (PlusOne Zero)))
 --   toNat (-3) ==> Nothing
---   fromNat (PlusOne (PlusOne (PlusOne Zero)))  ==>  3
 --
 
 data Nat = Zero | PlusOne Nat
