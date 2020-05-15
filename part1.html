@@ -298,7 +298,7 @@ Leaving GHCi.</code></pre>
 &quot;sdf&quot;
 Prelude&gt; :t tail &quot;asdf&quot;
 tail &quot;asdf&quot; :: [Char]</code></pre>
-<p>The <code>tail</code> function works on lists an returns all except the first element of the list. Here we see <code>tail</code> applied to <code>&quot;asdf&quot;</code>. We also check the type of the expression, and it is a list of characters, as expected.</p>
+<p>The <code>tail</code> function works on lists and returns all except the first element of the list. Here we see <code>tail</code> applied to <code>&quot;asdf&quot;</code>. We also check the type of the expression, and it is a list of characters, as expected.</p>
 <pre><code>Prelude&gt; :t tail
 tail :: [a] -&gt; [a]</code></pre>
 <p>Finally, here’s the type of the <code>tail</code> function. It takes a list of any type as an argument, and returns a list of the same type.</p>
@@ -669,7 +669,7 @@ Prelude&gt; polynomial 3.0
 <a class="sourceLine" id="cb53-4" data-line-number="4"><span class="ot">g ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span></a>
 <a class="sourceLine" id="cb53-5" data-line-number="5">g x <span class="fu">=</span> x <span class="fu">-</span> <span class="dv">2</span></a></code></pre></div>
 <h3 id="pattern-matching"><span class="header-section-number">1.9.4</span> Pattern matching</h3>
-<p>A definition (of a function) can consist of multiple <em>equations</em>. The equations are matched in order against the arguments until a suitable one is found. This is called <em>pattern matching</em></p>
+<p>A definition (of a function) can consist of multiple <em>equations</em>. The equations are matched in order against the arguments until a suitable one is found. This is called <em>pattern matching</em>.</p>
 <p>Pattern matching in Haskell is very powerful, and we’ll keep learning new things about it along this course, but here are a couple of first examples:</p>
 <div class="sourceCode" id="cb54"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb54-1" data-line-number="1"><span class="ot">greet ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">String</span></a>
 <a class="sourceLine" id="cb54-2" data-line-number="2">greet <span class="st">&quot;Finland&quot;</span> name <span class="fu">=</span> <span class="st">&quot;Hei, &quot;</span> <span class="fu">++</span> name</a>
@@ -921,7 +921,7 @@ Ok, one module loaded.
 <a class="sourceLine" id="cb82-15" data-line-number="15">    a <span class="fu">=</span> <span class="dv">1</span></a>
 <a class="sourceLine" id="cb82-16" data-line-number="16">    b <span class="fu">=</span> <span class="dv">1</span></a></code></pre></div>
 <p>These are not ok:</p>
-<div class="sourceCode" id="cb83"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb83-1" data-line-number="1"><span class="co">-- indentation not increased even thougn expression split on many lines</span></a>
+<div class="sourceCode" id="cb83"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb83-1" data-line-number="1"><span class="co">-- indentation not increased even though expression split on many lines</span></a>
 <a class="sourceLine" id="cb83-2" data-line-number="2">i x <span class="fu">=</span> <span class="kw">let</span> y <span class="fu">=</span> x<span class="fu">+</span>x<span class="fu">+</span>x<span class="fu">+</span>x<span class="fu">+</span>x<span class="fu">+</span>x</a>
 <a class="sourceLine" id="cb83-3" data-line-number="3"><span class="kw">in</span> div y <span class="dv">5</span></a>
 <a class="sourceLine" id="cb83-4" data-line-number="4"></a>
@@ -1041,7 +1041,7 @@ Because <code>`...`</code> is used for delimiting strings.
 <h2 id="working-on-the-exercises"><span class="header-section-number">1.13</span> Working on the exercises</h2>
 <p>The course materials, including exercises, are available in a Git repository on GitHub at <a href="https://github.com/moocfi/haskell-mooc" class="uri">https://github.com/moocfi/haskell-mooc</a>.</p>
 <p>If you’re not familiar with Git, <a href="https://help.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository">this might help</a>.</p>
-<p>Once you’ve cloned the <code>haskell-mooc</code> repository, go into the <code>exercises</code> directory. To download GHC and various libraries needed by this course, run this command in your terminal (this might take a while):</p>
+<p>Once you’ve cloned the <code>haskell-mooc</code> repository, go into the <code>exercises</code> directory. To download dependencies needed for running the exercise tests (like the correct version of GHC and various libraries), run this command in your terminal. This might take a while.</p>
 <div class="sourceCode" id="cb85"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb85-1" data-line-number="1"><span class="ex">stack</span> build</a></code></pre></div>
 <p>You’ll find the first set of exercises in the file <code>Set1.hs</code>. This is a Haskell source file that you should edit according to the instructions in the file itself. You can check your answers by running this command in your terminal:</p>
 <div class="sourceCode" id="cb86"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb86-1" data-line-number="1"><span class="ex">stack</span> runhaskell Set1Test.hs</a></code></pre></div>
