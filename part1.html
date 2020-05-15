@@ -134,22 +134,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="#type-classes"><span class="toc-section-number">4.3</span> Type classes</a></li>
 <li><a href="#type-constraints"><span class="toc-section-number">4.4</span> Type constraints</a></li>
 <li><a href="#standard-type-classes"><span class="toc-section-number">4.5</span> Standard type classes</a></li>
-<li><a href="#more-data-structures"><span class="toc-section-number">4.6</span> More data structures</a></li>
-<li><a href="#reading-docs"><span class="toc-section-number">4.7</span> Reading docs</a></li>
-<li><a href="#quiz-3"><span class="toc-section-number">4.8</span> Quiz</a></li>
-<li><a href="#exercises-3"><span class="toc-section-number">4.9</span> Exercises</a></li>
+<li><a href="#sidenote-the-case-of-expression"><span class="toc-section-number">4.6</span> Sidenote: The case-of expression</a></li>
+<li><a href="#more-data-structures"><span class="toc-section-number">4.7</span> More data structures</a></li>
+<li><a href="#reading-docs"><span class="toc-section-number">4.8</span> Reading docs</a></li>
+<li><a href="#quiz-3"><span class="toc-section-number">4.9</span> Quiz</a></li>
+<li><a href="#exercises-3"><span class="toc-section-number">4.10</span> Exercises</a></li>
 </ul></li>
 <li><a href="#lecture-5-you-need-string-for-a-knot"><span class="toc-section-number">5</span> Lecture 5: You Need String for a Knot</a><ul>
 <li><a href="#algebraic-datatypes"><span class="toc-section-number">5.1</span> Algebraic Datatypes</a></li>
-<li><a href="#sidenote-the-case-of-expression"><span class="toc-section-number">5.2</span> Sidenote: The case-of expression</a></li>
-<li><a href="#type-parameters"><span class="toc-section-number">5.3</span> Type parameters</a></li>
-<li><a href="#recursive-types"><span class="toc-section-number">5.4</span> Recursive types</a></li>
-<li><a href="#record-syntax"><span class="toc-section-number">5.5</span> Record Syntax</a></li>
-<li><a href="#algebraic-datatypes-summary"><span class="toc-section-number">5.6</span> Algebraic Datatypes: Summary</a></li>
-<li><a href="#sidenote-other-ways-of-defining-types"><span class="toc-section-number">5.7</span> Sidenote: other ways of defining types</a></li>
-<li><a href="#how-do-algebraic-datatypes-work"><span class="toc-section-number">5.8</span> How do algebraic datatypes work?</a></li>
-<li><a href="#quiz-4"><span class="toc-section-number">5.9</span> Quiz</a></li>
-<li><a href="#exercises-4"><span class="toc-section-number">5.10</span> Exercises</a></li>
+<li><a href="#type-parameters"><span class="toc-section-number">5.2</span> Type parameters</a></li>
+<li><a href="#recursive-types"><span class="toc-section-number">5.3</span> Recursive types</a></li>
+<li><a href="#record-syntax"><span class="toc-section-number">5.4</span> Record Syntax</a></li>
+<li><a href="#algebraic-datatypes-summary"><span class="toc-section-number">5.5</span> Algebraic Datatypes: Summary</a></li>
+<li><a href="#sidenote-other-ways-of-defining-types"><span class="toc-section-number">5.6</span> Sidenote: other ways of defining types</a></li>
+<li><a href="#how-do-algebraic-datatypes-work"><span class="toc-section-number">5.7</span> How do algebraic datatypes work?</a></li>
+<li><a href="#quiz-4"><span class="toc-section-number">5.8</span> Quiz</a></li>
+<li><a href="#exercises-4"><span class="toc-section-number">5.9</span> Exercises</a></li>
 </ul></li>
 <li><a href="#lecture-6-working-class-hero"><span class="toc-section-number">6</span> Lecture 6: Working Class Hero</a><ul>
 <li><a href="#the-syntax-of-classes-and-instances"><span class="toc-section-number">6.1</span> The syntax of classes and instances</a></li>
@@ -2214,82 +2214,110 @@ Returns the second element of a list
 <a class="sourceLine" id="cb259-3" data-line-number="3">length <span class="dt">Nothing</span>      <span class="fu">==&gt;</span> <span class="dv">0</span></a>
 <a class="sourceLine" id="cb259-4" data-line-number="4">length (<span class="dt">Just</span> <span class="ch">&#39;a&#39;</span>)   <span class="fu">==&gt;</span> <span class="dv">1</span></a></code></pre></div>
 <p>We’ll encounter another foldable type soon.</p>
-<h2 id="more-data-structures"><span class="header-section-number">4.6</span> More data structures</h2>
+<h2 id="sidenote-the-case-of-expression"><span class="header-section-number">4.6</span> Sidenote: The case-of expression</h2>
+<p>We’ve seen pattern matching in function arguments, but there’s also a way to pattern match in an expression. It looks like this:</p>
+<div class="sourceCode" id="cb260"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb260-1" data-line-number="1"><span class="kw">case</span> <span class="fu">&lt;</span>value<span class="fu">&gt;</span> <span class="kw">of</span> <span class="fu">&lt;</span>pattern<span class="fu">&gt;</span> <span class="ot">-&gt;</span> <span class="fu">&lt;</span>expression<span class="fu">&gt;</span></a>
+<a class="sourceLine" id="cb260-2" data-line-number="2">                <span class="fu">&lt;</span>pattern<span class="fu">&gt;</span> <span class="ot">-&gt;</span> <span class="fu">&lt;</span>expression<span class="fu">&gt;</span></a></code></pre></div>
+<p>As an example let’s rewrite the <code>describe</code> example from the first lecture using <code>case</code>:</p>
+<div class="sourceCode" id="cb261"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb261-1" data-line-number="1"><span class="ot">describe ::</span> <span class="dt">Integer</span> <span class="ot">-&gt;</span> <span class="dt">String</span></a>
+<a class="sourceLine" id="cb261-2" data-line-number="2">describe <span class="dv">0</span> <span class="fu">=</span> <span class="st">&quot;zero&quot;</span></a>
+<a class="sourceLine" id="cb261-3" data-line-number="3">describe <span class="dv">1</span> <span class="fu">=</span> <span class="st">&quot;one&quot;</span></a>
+<a class="sourceLine" id="cb261-4" data-line-number="4">describe <span class="dv">2</span> <span class="fu">=</span> <span class="st">&quot;an even prime&quot;</span></a>
+<a class="sourceLine" id="cb261-5" data-line-number="5">describe n <span class="fu">=</span> <span class="st">&quot;the number &quot;</span> <span class="fu">++</span> show n</a></code></pre></div>
+<div class="sourceCode" id="cb262"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb262-1" data-line-number="1"><span class="ot">describe ::</span> <span class="dt">Integer</span> <span class="ot">-&gt;</span> <span class="dt">String</span></a>
+<a class="sourceLine" id="cb262-2" data-line-number="2">describe n <span class="fu">=</span> <span class="kw">case</span> n <span class="kw">of</span> <span class="dv">0</span> <span class="ot">-&gt;</span> <span class="st">&quot;zero&quot;</span></a>
+<a class="sourceLine" id="cb262-3" data-line-number="3">                       <span class="dv">1</span> <span class="ot">-&gt;</span> <span class="st">&quot;one&quot;</span></a>
+<a class="sourceLine" id="cb262-4" data-line-number="4">                       <span class="dv">2</span> <span class="ot">-&gt;</span> <span class="st">&quot;an even prime&quot;</span></a>
+<a class="sourceLine" id="cb262-5" data-line-number="5">                       n <span class="ot">-&gt;</span> <span class="st">&quot;the number &quot;</span> <span class="fu">++</span> show n</a></code></pre></div>
+<p>A more interesting example is when the value were pattern matching on is not a function argument. For example:</p>
+<div class="sourceCode" id="cb263"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb263-1" data-line-number="1"><span class="ot">search ::</span> <span class="dt">Show</span> a <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> <span class="dt">Bool</span>) <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> <span class="dt">String</span></a>
+<a class="sourceLine" id="cb263-2" data-line-number="2">search p xs <span class="fu">=</span> <span class="kw">case</span> filter p xs <span class="kw">of</span> [] <span class="ot">-&gt;</span> <span class="st">&quot;not found&quot;</span></a>
+<a class="sourceLine" id="cb263-3" data-line-number="3">                                  (x<span class="fu">:</span>_) <span class="ot">-&gt;</span> <span class="st">&quot;found &quot;</span> <span class="fu">++</span> show x</a></code></pre></div>
+<div class="sourceCode" id="cb264"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb264-1" data-line-number="1"><span class="dt">Prelude</span><span class="fu">&gt;</span> search even [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>]</a>
+<a class="sourceLine" id="cb264-2" data-line-number="2"><span class="st">&quot;found 2&quot;</span></a>
+<a class="sourceLine" id="cb264-3" data-line-number="3"><span class="dt">Prelude</span><span class="fu">&gt;</span> search even [<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">7</span>]</a>
+<a class="sourceLine" id="cb264-4" data-line-number="4"><span class="st">&quot;not found&quot;</span></a></code></pre></div>
+<p>If we wanted to write <code>search</code> using normal pattern matching, we would need a helper function:</p>
+<div class="sourceCode" id="cb265"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb265-1" data-line-number="1"><span class="ot">search ::</span> <span class="dt">Show</span> a <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> <span class="dt">Bool</span>) <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> <span class="dt">String</span></a>
+<a class="sourceLine" id="cb265-2" data-line-number="2">search p xs <span class="fu">=</span> searchResult (filter p xs)</a>
+<a class="sourceLine" id="cb265-3" data-line-number="3">  <span class="kw">where</span> searchResult [] <span class="fu">=</span> <span class="st">&quot;not found&quot;</span></a>
+<a class="sourceLine" id="cb265-4" data-line-number="4">        searchResult (x<span class="fu">:</span>_) <span class="fu">=</span> <span class="st">&quot;found &quot;</span> <span class="fu">++</span> show x</a></code></pre></div>
+<h2 id="more-data-structures"><span class="header-section-number">4.7</span> More data structures</h2>
 <p>Now that we are familiar with the standard type classes, we can look at one of their applications: the <code>Map</code> and <code>Array</code> data structures.</p>
-<h3 id="data.map"><span class="header-section-number">4.6.1</span> <code>Data.Map</code></h3>
+<h3 id="data.map"><span class="header-section-number">4.7.1</span> <code>Data.Map</code></h3>
 <p>The <code>Data.Map</code> module defines the <code>Map</code> type. Maps are search trees for key-value pairs. One way to look at this is that a value of type <code>Map k v</code> is roughly the same as a value of type <code>[(k,v)]</code>, a list of pairs. However, the operations on a map are more efficient than operations on a list.</p>
 <p>Since <code>Data.Map</code> contains some function with the same names as <code>Prelude</code> functions, the namespace needs to be imported <em>qualified</em>:</p>
-<div class="sourceCode" id="cb260"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb260-1" data-line-number="1"><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.Map</span> <span class="kw">as</span> <span class="dt">Map</span></a></code></pre></div>
+<div class="sourceCode" id="cb266"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb266-1" data-line-number="1"><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.Map</span> <span class="kw">as</span> <span class="dt">Map</span></a></code></pre></div>
 <p>Now we can refer to the map type as <code>Map.Map</code>, and to various map functions like <code>Map.insert</code>. Here are the most important functions for maps:</p>
-<div class="sourceCode" id="cb261"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb261-1" data-line-number="1"><span class="co">-- Create a Map from a list of key-value pairs</span></a>
-<a class="sourceLine" id="cb261-2" data-line-number="2">Map.fromList<span class="ot"> ::</span> <span class="dt">Ord</span> k <span class="ot">=&gt;</span> [(k, a)] <span class="ot">-&gt;</span> <span class="dt">Map.Map</span> k a</a>
-<a class="sourceLine" id="cb261-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb261-4" data-line-number="4"><span class="co">-- Insert a value into a map. Overrides any previous value with the same key.</span></a>
-<a class="sourceLine" id="cb261-5" data-line-number="5"><span class="co">-- Returns a new map. Does not mutate the given map.</span></a>
-<a class="sourceLine" id="cb261-6" data-line-number="6">Map.insert<span class="ot"> ::</span> <span class="dt">Ord</span> k <span class="ot">=&gt;</span> k <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> <span class="dt">Map.Map</span> k a <span class="ot">-&gt;</span> <span class="dt">Map.Map</span> k a</a>
-<a class="sourceLine" id="cb261-7" data-line-number="7"></a>
-<a class="sourceLine" id="cb261-8" data-line-number="8"><span class="co">-- Get a value from a map using a key. Returns Nothing if the key was not present in the map.</span></a>
-<a class="sourceLine" id="cb261-9" data-line-number="9">Map.lookup<span class="ot"> ::</span> <span class="dt">Ord</span> k <span class="ot">=&gt;</span> k <span class="ot">-&gt;</span> <span class="dt">Map.Map</span> k a <span class="ot">-&gt;</span> <span class="dt">Maybe</span> a</a>
-<a class="sourceLine" id="cb261-10" data-line-number="10"></a>
-<a class="sourceLine" id="cb261-11" data-line-number="11"><span class="co">-- An empty map</span></a>
-<a class="sourceLine" id="cb261-12" data-line-number="12">Map.empty<span class="ot"> ::</span> <span class="dt">Map.Map</span> k a</a></code></pre></div>
+<div class="sourceCode" id="cb267"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb267-1" data-line-number="1"><span class="co">-- Create a Map from a list of key-value pairs</span></a>
+<a class="sourceLine" id="cb267-2" data-line-number="2">Map.fromList<span class="ot"> ::</span> <span class="dt">Ord</span> k <span class="ot">=&gt;</span> [(k, a)] <span class="ot">-&gt;</span> <span class="dt">Map.Map</span> k a</a>
+<a class="sourceLine" id="cb267-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb267-4" data-line-number="4"><span class="co">-- Insert a value into a map. Overrides any previous value with the same key.</span></a>
+<a class="sourceLine" id="cb267-5" data-line-number="5"><span class="co">-- Returns a new map. Does not mutate the given map.</span></a>
+<a class="sourceLine" id="cb267-6" data-line-number="6">Map.insert<span class="ot"> ::</span> <span class="dt">Ord</span> k <span class="ot">=&gt;</span> k <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> <span class="dt">Map.Map</span> k a <span class="ot">-&gt;</span> <span class="dt">Map.Map</span> k a</a>
+<a class="sourceLine" id="cb267-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb267-8" data-line-number="8"><span class="co">-- Get a value from a map using a key. Returns Nothing if the key was not present in the map.</span></a>
+<a class="sourceLine" id="cb267-9" data-line-number="9">Map.lookup<span class="ot"> ::</span> <span class="dt">Ord</span> k <span class="ot">=&gt;</span> k <span class="ot">-&gt;</span> <span class="dt">Map.Map</span> k a <span class="ot">-&gt;</span> <span class="dt">Maybe</span> a</a>
+<a class="sourceLine" id="cb267-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb267-11" data-line-number="11"><span class="co">-- An empty map</span></a>
+<a class="sourceLine" id="cb267-12" data-line-number="12">Map.empty<span class="ot"> ::</span> <span class="dt">Map.Map</span> k a</a></code></pre></div>
 <p>The <code>Ord</code> constraint for the key type of the map is needed because maps are implemented as <em>ordered binary search trees</em>.</p>
 <p>Here’s an example of representing a bank as a <code>Map String Int</code> (map from account name to account balance), and withdrawing some money from an account:</p>
-<div class="sourceCode" id="cb262"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb262-1" data-line-number="1"><span class="ot">withdraw ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Map.Map</span> <span class="dt">String</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Map.Map</span> <span class="dt">String</span> <span class="dt">Int</span></a>
-<a class="sourceLine" id="cb262-2" data-line-number="2">withdraw account amount bank <span class="fu">=</span></a>
-<a class="sourceLine" id="cb262-3" data-line-number="3">  <span class="kw">case</span> Map.lookup account bank <span class="kw">of</span></a>
-<a class="sourceLine" id="cb262-4" data-line-number="4">    <span class="dt">Nothing</span>  <span class="ot">-&gt;</span> bank                                   <span class="co">-- account not found, no change</span></a>
-<a class="sourceLine" id="cb262-5" data-line-number="5">    <span class="dt">Just</span> sum <span class="ot">-&gt;</span> Map.insert account (sum<span class="fu">-</span>amount) bank   <span class="co">-- set new balance</span></a></code></pre></div>
+<div class="sourceCode" id="cb268"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb268-1" data-line-number="1"><span class="ot">withdraw ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Map.Map</span> <span class="dt">String</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Map.Map</span> <span class="dt">String</span> <span class="dt">Int</span></a>
+<a class="sourceLine" id="cb268-2" data-line-number="2">withdraw account amount bank <span class="fu">=</span></a>
+<a class="sourceLine" id="cb268-3" data-line-number="3">  <span class="kw">case</span> Map.lookup account bank <span class="kw">of</span></a>
+<a class="sourceLine" id="cb268-4" data-line-number="4">    <span class="dt">Nothing</span>  <span class="ot">-&gt;</span> bank                                   <span class="co">-- account not found, no change</span></a>
+<a class="sourceLine" id="cb268-5" data-line-number="5">    <span class="dt">Just</span> sum <span class="ot">-&gt;</span> Map.insert account (sum<span class="fu">-</span>amount) bank   <span class="co">-- set new balance</span></a></code></pre></div>
 <p>Here’s how you might use the <code>withdraw</code> function in <code>GHCi</code>. Note how the maps get printed as <code>fromList</code> invocations. Also note how calling <code>withdraw ... bank</code> returns a <em>new</em> bank and doesn’t change the existing bank. Maps are <em>immutable</em> just like other Haskell data structures like lists.</p>
-<div class="sourceCode" id="cb263"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb263-1" data-line-number="1"><span class="dt">GHCi</span><span class="fu">&gt;</span> <span class="kw">let</span> bank <span class="fu">=</span> Map.fromList [(<span class="st">&quot;Bob&quot;</span>,<span class="dv">100</span>),(<span class="st">&quot;Mike&quot;</span>,<span class="dv">50</span>)]</a>
-<a class="sourceLine" id="cb263-2" data-line-number="2"><span class="dt">GHCi</span><span class="fu">&gt;</span> withdraw <span class="st">&quot;Bob&quot;</span> <span class="dv">80</span> bank</a>
-<a class="sourceLine" id="cb263-3" data-line-number="3">fromList [(<span class="st">&quot;Bob&quot;</span>,<span class="dv">20</span>),(<span class="st">&quot;Mike&quot;</span>,<span class="dv">50</span>)]</a>
-<a class="sourceLine" id="cb263-4" data-line-number="4"><span class="dt">GHCi</span><span class="fu">&gt;</span> withdraw <span class="st">&quot;Bozo&quot;</span> <span class="dv">1000</span> bank</a>
-<a class="sourceLine" id="cb263-5" data-line-number="5">fromList [(<span class="st">&quot;Bob&quot;</span>,<span class="dv">100</span>),(<span class="st">&quot;Mike&quot;</span>,<span class="dv">50</span>)]</a>
-<a class="sourceLine" id="cb263-6" data-line-number="6"><span class="dt">GHCi</span><span class="fu">&gt;</span> bank</a>
-<a class="sourceLine" id="cb263-7" data-line-number="7">fromList [(<span class="st">&quot;Bob&quot;</span>,<span class="dv">100</span>),(<span class="st">&quot;Mike&quot;</span>,<span class="dv">50</span>)]</a></code></pre></div>
+<div class="sourceCode" id="cb269"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb269-1" data-line-number="1"><span class="dt">GHCi</span><span class="fu">&gt;</span> <span class="kw">let</span> bank <span class="fu">=</span> Map.fromList [(<span class="st">&quot;Bob&quot;</span>,<span class="dv">100</span>),(<span class="st">&quot;Mike&quot;</span>,<span class="dv">50</span>)]</a>
+<a class="sourceLine" id="cb269-2" data-line-number="2"><span class="dt">GHCi</span><span class="fu">&gt;</span> withdraw <span class="st">&quot;Bob&quot;</span> <span class="dv">80</span> bank</a>
+<a class="sourceLine" id="cb269-3" data-line-number="3">fromList [(<span class="st">&quot;Bob&quot;</span>,<span class="dv">20</span>),(<span class="st">&quot;Mike&quot;</span>,<span class="dv">50</span>)]</a>
+<a class="sourceLine" id="cb269-4" data-line-number="4"><span class="dt">GHCi</span><span class="fu">&gt;</span> withdraw <span class="st">&quot;Bozo&quot;</span> <span class="dv">1000</span> bank</a>
+<a class="sourceLine" id="cb269-5" data-line-number="5">fromList [(<span class="st">&quot;Bob&quot;</span>,<span class="dv">100</span>),(<span class="st">&quot;Mike&quot;</span>,<span class="dv">50</span>)]</a>
+<a class="sourceLine" id="cb269-6" data-line-number="6"><span class="dt">GHCi</span><span class="fu">&gt;</span> bank</a>
+<a class="sourceLine" id="cb269-7" data-line-number="7">fromList [(<span class="st">&quot;Bob&quot;</span>,<span class="dv">100</span>),(<span class="st">&quot;Mike&quot;</span>,<span class="dv">50</span>)]</a></code></pre></div>
 <p><code>Data.Map</code> defines all sorts of useful higher-order functions for updating maps. We can rewrite the <code>withdraw</code> function using <code>Data.Map.adjust</code>:</p>
-<div class="sourceCode" id="cb264"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb264-1" data-line-number="1"><span class="ot">withdraw ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Map.Map</span> <span class="dt">String</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Map.Map</span> <span class="dt">String</span> <span class="dt">Int</span></a>
-<a class="sourceLine" id="cb264-2" data-line-number="2">withdraw account amount bank <span class="fu">=</span> Map.adjust (\x <span class="ot">-&gt;</span> x<span class="fu">-</span>amount) account bank</a></code></pre></div>
+<div class="sourceCode" id="cb270"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb270-1" data-line-number="1"><span class="ot">withdraw ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Map.Map</span> <span class="dt">String</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Map.Map</span> <span class="dt">String</span> <span class="dt">Int</span></a>
+<a class="sourceLine" id="cb270-2" data-line-number="2">withdraw account amount bank <span class="fu">=</span> Map.adjust (\x <span class="ot">-&gt;</span> x<span class="fu">-</span>amount) account bank</a></code></pre></div>
 <p><strong>Note!</strong> There are separate <code>Data.Map.Strict</code> and <code>Data.Map.Lazy</code> implementations. When you import <code>Data.Map</code> you get <code>Data.Map.Lazy</code>. You can find the documentation for all the <code>Data.Map</code> functions in <a href="https://hackage.haskell.org/package/containers-0.6.2.1/docs/Data-Map-Lazy.html">the docs for <code>Data.Map.Lazy</code></a>. We won’t go into their differences here, but mostly you shold use <code>Data.Map.Strict</code> in real code.</p>
-<h3 id="data.array"><span class="header-section-number">4.6.2</span> <code>Data.Array</code></h3>
+<h3 id="data.array"><span class="header-section-number">4.7.2</span> <code>Data.Array</code></h3>
 <p>Another type that works kind of like a list but is more efficient for some operations is the array. Arrays are familiar from many other programming languages, but Haskell arrays are a bit different.</p>
 <p>Unlike the <code>Data.Map</code> module, the <code>Data.Array</code> can just be imported normally:</p>
-<div class="sourceCode" id="cb265"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb265-1" data-line-number="1"><span class="kw">import</span> <span class="dt">Data.Array</span></a></code></pre></div>
+<div class="sourceCode" id="cb271"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb271-1" data-line-number="1"><span class="kw">import</span> <span class="dt">Data.Array</span></a></code></pre></div>
 <p>Now we can look at the type of the <code>array</code> function that constructs an array.</p>
-<div class="sourceCode" id="cb266"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb266-1" data-line-number="1"><span class="ot">array ::</span> <span class="dt">Ix</span> i <span class="ot">=&gt;</span> (i, i) <span class="ot">-&gt;</span> [(i, e)] <span class="ot">-&gt;</span> <span class="dt">Array</span> i e</a></code></pre></div>
+<div class="sourceCode" id="cb272"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb272-1" data-line-number="1"><span class="ot">array ::</span> <span class="dt">Ix</span> i <span class="ot">=&gt;</span> (i, i) <span class="ot">-&gt;</span> [(i, e)] <span class="ot">-&gt;</span> <span class="dt">Array</span> i e</a></code></pre></div>
 <p>There are a couple of things to notice here. First of all, the <code>Array</code> type is parameterized by <em>two</em> types: the index type and the element type. Most other programming languages only parameterize arrays with the element type, but the index type is always <code>int</code>. In Haskell, we can have, for example, an <code>Array Char Int</code>: an array indexed by characters, or <code>Array Bool String</code>, an array indexed by booleans, or even <code>Array (Int,Int) Int</code>, a two-dimensional array of ints.</p>
 <p>Not all types can be index types. Only types that are similar to integers are suitable. That is the reason for the <code>Ix i</code> class constraint. The <code>Ix</code> class collects all the types that can be used as array indexes.</p>
 <p>Secondly, the <code>array</code> function takes an extra <code>(i,i)</code> parameter. These are the minimun and maximum indexes of the array. Unlike some other languages, where arrays always start at index 0 or 1, in Haskell you can define an array that starts from 7 and goes to 11. So here’s that array:</p>
-<div class="sourceCode" id="cb267"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb267-1" data-line-number="1"><span class="ot">myArray ::</span> <span class="dt">Array</span> <span class="dt">Int</span> <span class="dt">String</span></a>
-<a class="sourceLine" id="cb267-2" data-line-number="2">myArray <span class="fu">=</span> array (<span class="dv">7</span>,<span class="dv">11</span>) [(<span class="dv">7</span>,<span class="st">&quot;seven&quot;</span>), (<span class="dv">8</span>,<span class="st">&quot;eight&quot;</span>), (<span class="dv">9</span>,<span class="st">&quot;nine&quot;</span>), (<span class="dv">10</span>,<span class="st">&quot;ten&quot;</span>), (<span class="dv">11</span>,<span class="st">&quot;ELEVEN&quot;</span>)]</a></code></pre></div>
+<div class="sourceCode" id="cb273"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb273-1" data-line-number="1"><span class="ot">myArray ::</span> <span class="dt">Array</span> <span class="dt">Int</span> <span class="dt">String</span></a>
+<a class="sourceLine" id="cb273-2" data-line-number="2">myArray <span class="fu">=</span> array (<span class="dv">7</span>,<span class="dv">11</span>) [(<span class="dv">7</span>,<span class="st">&quot;seven&quot;</span>), (<span class="dv">8</span>,<span class="st">&quot;eight&quot;</span>), (<span class="dv">9</span>,<span class="st">&quot;nine&quot;</span>), (<span class="dv">10</span>,<span class="st">&quot;ten&quot;</span>), (<span class="dv">11</span>,<span class="st">&quot;ELEVEN&quot;</span>)]</a></code></pre></div>
 <p>Listing all the indices and elements in order can be a bit cumbersome, so there’s also the <code>listArray</code> constructor that just takes a list of elements in order:</p>
-<div class="sourceCode" id="cb268"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb268-1" data-line-number="1"><span class="ot">listArray ::</span> <span class="dt">Ix</span> i <span class="ot">=&gt;</span> (i, i) <span class="ot">-&gt;</span> [e] <span class="ot">-&gt;</span> <span class="dt">Array</span> i e</a></code></pre></div>
-<div class="sourceCode" id="cb269"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb269-1" data-line-number="1"><span class="ot">myArray ::</span> <span class="dt">Array</span> <span class="dt">Int</span> <span class="dt">String</span></a>
-<a class="sourceLine" id="cb269-2" data-line-number="2">myArray <span class="fu">=</span> listArray (<span class="dv">7</span>,<span class="dv">11</span>) [<span class="st">&quot;seven&quot;</span>, <span class="st">&quot;eight&quot;</span>, <span class="st">&quot;nine&quot;</span>, <span class="st">&quot;ten&quot;</span>, <span class="st">&quot;ELEVEN&quot;</span>]</a></code></pre></div>
+<div class="sourceCode" id="cb274"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb274-1" data-line-number="1"><span class="ot">listArray ::</span> <span class="dt">Ix</span> i <span class="ot">=&gt;</span> (i, i) <span class="ot">-&gt;</span> [e] <span class="ot">-&gt;</span> <span class="dt">Array</span> i e</a></code></pre></div>
+<div class="sourceCode" id="cb275"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb275-1" data-line-number="1"><span class="ot">myArray ::</span> <span class="dt">Array</span> <span class="dt">Int</span> <span class="dt">String</span></a>
+<a class="sourceLine" id="cb275-2" data-line-number="2">myArray <span class="fu">=</span> listArray (<span class="dv">7</span>,<span class="dv">11</span>) [<span class="st">&quot;seven&quot;</span>, <span class="st">&quot;eight&quot;</span>, <span class="st">&quot;nine&quot;</span>, <span class="st">&quot;ten&quot;</span>, <span class="st">&quot;ELEVEN&quot;</span>]</a></code></pre></div>
 <p>Arrays are used with two new operators:</p>
-<div class="sourceCode" id="cb270"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb270-1" data-line-number="1"><span class="co">-- Array lookup</span></a>
-<a class="sourceLine" id="cb270-2" data-line-number="2"><span class="ot">(!) ::</span> <span class="dt">Ix</span> i <span class="ot">=&gt;</span> <span class="dt">Array</span> i e <span class="ot">-&gt;</span> i <span class="ot">-&gt;</span> e</a>
-<a class="sourceLine" id="cb270-3" data-line-number="3"><span class="co">-- Array update</span></a>
-<a class="sourceLine" id="cb270-4" data-line-number="4"><span class="ot">(//) ::</span> <span class="dt">Ix</span> i <span class="ot">=&gt;</span> <span class="dt">Array</span> i e <span class="ot">-&gt;</span> [(i, e)] <span class="ot">-&gt;</span> <span class="dt">Array</span> i e</a></code></pre></div>
+<div class="sourceCode" id="cb276"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb276-1" data-line-number="1"><span class="co">-- Array lookup</span></a>
+<a class="sourceLine" id="cb276-2" data-line-number="2"><span class="ot">(!) ::</span> <span class="dt">Ix</span> i <span class="ot">=&gt;</span> <span class="dt">Array</span> i e <span class="ot">-&gt;</span> i <span class="ot">-&gt;</span> e</a>
+<a class="sourceLine" id="cb276-3" data-line-number="3"><span class="co">-- Array update</span></a>
+<a class="sourceLine" id="cb276-4" data-line-number="4"><span class="ot">(//) ::</span> <span class="dt">Ix</span> i <span class="ot">=&gt;</span> <span class="dt">Array</span> i e <span class="ot">-&gt;</span> [(i, e)] <span class="ot">-&gt;</span> <span class="dt">Array</span> i e</a></code></pre></div>
 <p>Here’s an example <code>GHCi</code> session:</p>
-<div class="sourceCode" id="cb271"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb271-1" data-line-number="1"><span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="kw">import</span> <span class="dt">Data.Array</span></a>
-<a class="sourceLine" id="cb271-2" data-line-number="2"><span class="dt">Prelude</span> <span class="dt">Data.Array</span><span class="fu">&gt;</span> <span class="kw">let</span> myArray <span class="fu">=</span> listArray (<span class="dv">7</span>,<span class="dv">11</span>) [<span class="st">&quot;seven&quot;</span>, <span class="st">&quot;eight&quot;</span>, <span class="st">&quot;nine&quot;</span>, <span class="st">&quot;ten&quot;</span>, <span class="st">&quot;ELEVEN&quot;</span>]</a>
-<a class="sourceLine" id="cb271-3" data-line-number="3"><span class="dt">Prelude</span> <span class="dt">Data.Array</span><span class="fu">&gt;</span> myArray</a>
-<a class="sourceLine" id="cb271-4" data-line-number="4">array (<span class="dv">7</span>,<span class="dv">11</span>) [(<span class="dv">7</span>,<span class="st">&quot;seven&quot;</span>),(<span class="dv">8</span>,<span class="st">&quot;eight&quot;</span>),(<span class="dv">9</span>,<span class="st">&quot;nine&quot;</span>),(<span class="dv">10</span>,<span class="st">&quot;ten&quot;</span>),(<span class="dv">11</span>,<span class="st">&quot;ELEVEN&quot;</span>)]</a>
-<a class="sourceLine" id="cb271-5" data-line-number="5"><span class="dt">Prelude</span> <span class="dt">Data.Array</span><span class="fu">&gt;</span> myArray <span class="fu">!</span> <span class="dv">8</span></a>
-<a class="sourceLine" id="cb271-6" data-line-number="6"><span class="st">&quot;eight&quot;</span></a>
-<a class="sourceLine" id="cb271-7" data-line-number="7"><span class="dt">Prelude</span> <span class="dt">Data.Array</span><span class="fu">&gt;</span> myArray <span class="fu">//</span> [(<span class="dv">8</span>,<span class="st">&quot;ocho&quot;</span>),(<span class="dv">9</span>,<span class="st">&quot;nueve&quot;</span>)]</a>
-<a class="sourceLine" id="cb271-8" data-line-number="8">array (<span class="dv">7</span>,<span class="dv">11</span>) [(<span class="dv">7</span>,<span class="st">&quot;seven&quot;</span>),(<span class="dv">8</span>,<span class="st">&quot;ocho&quot;</span>),(<span class="dv">9</span>,<span class="st">&quot;nueve&quot;</span>),(<span class="dv">10</span>,<span class="st">&quot;ten&quot;</span>),(<span class="dv">11</span>,<span class="st">&quot;ELEVEN&quot;</span>)]</a></code></pre></div>
+<div class="sourceCode" id="cb277"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb277-1" data-line-number="1"><span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="kw">import</span> <span class="dt">Data.Array</span></a>
+<a class="sourceLine" id="cb277-2" data-line-number="2"><span class="dt">Prelude</span> <span class="dt">Data.Array</span><span class="fu">&gt;</span> <span class="kw">let</span> myArray <span class="fu">=</span> listArray (<span class="dv">7</span>,<span class="dv">11</span>) [<span class="st">&quot;seven&quot;</span>, <span class="st">&quot;eight&quot;</span>, <span class="st">&quot;nine&quot;</span>, <span class="st">&quot;ten&quot;</span>, <span class="st">&quot;ELEVEN&quot;</span>]</a>
+<a class="sourceLine" id="cb277-3" data-line-number="3"><span class="dt">Prelude</span> <span class="dt">Data.Array</span><span class="fu">&gt;</span> myArray</a>
+<a class="sourceLine" id="cb277-4" data-line-number="4">array (<span class="dv">7</span>,<span class="dv">11</span>) [(<span class="dv">7</span>,<span class="st">&quot;seven&quot;</span>),(<span class="dv">8</span>,<span class="st">&quot;eight&quot;</span>),(<span class="dv">9</span>,<span class="st">&quot;nine&quot;</span>),(<span class="dv">10</span>,<span class="st">&quot;ten&quot;</span>),(<span class="dv">11</span>,<span class="st">&quot;ELEVEN&quot;</span>)]</a>
+<a class="sourceLine" id="cb277-5" data-line-number="5"><span class="dt">Prelude</span> <span class="dt">Data.Array</span><span class="fu">&gt;</span> myArray <span class="fu">!</span> <span class="dv">8</span></a>
+<a class="sourceLine" id="cb277-6" data-line-number="6"><span class="st">&quot;eight&quot;</span></a>
+<a class="sourceLine" id="cb277-7" data-line-number="7"><span class="dt">Prelude</span> <span class="dt">Data.Array</span><span class="fu">&gt;</span> myArray <span class="fu">//</span> [(<span class="dv">8</span>,<span class="st">&quot;ocho&quot;</span>),(<span class="dv">9</span>,<span class="st">&quot;nueve&quot;</span>)]</a>
+<a class="sourceLine" id="cb277-8" data-line-number="8">array (<span class="dv">7</span>,<span class="dv">11</span>) [(<span class="dv">7</span>,<span class="st">&quot;seven&quot;</span>),(<span class="dv">8</span>,<span class="st">&quot;ocho&quot;</span>),(<span class="dv">9</span>,<span class="st">&quot;nueve&quot;</span>),(<span class="dv">10</span>,<span class="st">&quot;ten&quot;</span>),(<span class="dv">11</span>,<span class="st">&quot;ELEVEN&quot;</span>)]</a></code></pre></div>
 <p>You might be wondering why the <code>(//)</code> operator does multiple updates at once. The reason is the main weakness of Haskell arrays: immutability. Since arrays can’t be changed in place, <code>(//)</code> must copy the whole array. This is why in Haskell it’s often preferable to use lists or maps to store data that needs to be updated. Arrays are still useful when you can construct then once and then do lots of lookups. We’ll get back to how Haskell data structures work in the next lecture.</p>
 <p><strong>Note!</strong> In this course we’ll use only <code>Array</code>, a simple array type that’s specified in the Haskell standard. There are many other array types like the mutable <code>IOArray</code> and the somewhat obscure <code>DiffArray</code>. There are also type classes for arrays like <code>IArray</code> and <code>MArray</code>. In addition to arrays there is a <a href="https://hackage.haskell.org/package/vector">wide family of <code>Vector</code> types</a> that can be more practical than <code>Array</code> for real programs.</p>
-<h3 id="sidenote-folding-over-maps-arrays"><span class="header-section-number">4.6.3</span> Sidenote: folding over Maps &amp; Arrays</h3>
+<h3 id="sidenote-folding-over-maps-arrays"><span class="header-section-number">4.7.3</span> Sidenote: folding over Maps &amp; Arrays</h3>
 <p>The <code>Map</code> and <code>Array</code> type are instances of <code>Foldable</code> just like lists are! This means you can use functions like <code>length</code> and <code>foldr</code> on them:</p>
-<div class="sourceCode" id="cb272"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb272-1" data-line-number="1">length (array (<span class="dv">7</span>,<span class="dv">11</span>) [(<span class="dv">7</span>,<span class="st">&quot;seven&quot;</span>),(<span class="dv">8</span>,<span class="st">&quot;eight&quot;</span>),(<span class="dv">9</span>,<span class="st">&quot;nine&quot;</span>),(<span class="dv">10</span>,<span class="st">&quot;ten&quot;</span>),(<span class="dv">11</span>,<span class="st">&quot;ELEVEN&quot;</span>)])</a>
-<a class="sourceLine" id="cb272-2" data-line-number="2">  <span class="fu">==&gt;</span> <span class="dv">5</span></a>
-<a class="sourceLine" id="cb272-3" data-line-number="3">foldr (<span class="fu">+</span>) <span class="dv">0</span> (Map.fromList [(<span class="st">&quot;banana&quot;</span>,<span class="dv">3</span>),(<span class="st">&quot;egg&quot;</span>,<span class="dv">7</span>)])</a>
-<a class="sourceLine" id="cb272-4" data-line-number="4">  <span class="fu">==&gt;</span> <span class="dv">10</span></a></code></pre></div>
-<h2 id="reading-docs"><span class="header-section-number">4.7</span> Reading docs</h2>
+<div class="sourceCode" id="cb278"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb278-1" data-line-number="1">length (array (<span class="dv">7</span>,<span class="dv">11</span>) [(<span class="dv">7</span>,<span class="st">&quot;seven&quot;</span>),(<span class="dv">8</span>,<span class="st">&quot;eight&quot;</span>),(<span class="dv">9</span>,<span class="st">&quot;nine&quot;</span>),(<span class="dv">10</span>,<span class="st">&quot;ten&quot;</span>),(<span class="dv">11</span>,<span class="st">&quot;ELEVEN&quot;</span>)])</a>
+<a class="sourceLine" id="cb278-2" data-line-number="2">  <span class="fu">==&gt;</span> <span class="dv">5</span></a>
+<a class="sourceLine" id="cb278-3" data-line-number="3">foldr (<span class="fu">+</span>) <span class="dv">0</span> (Map.fromList [(<span class="st">&quot;banana&quot;</span>,<span class="dv">3</span>),(<span class="st">&quot;egg&quot;</span>,<span class="dv">7</span>)])</a>
+<a class="sourceLine" id="cb278-4" data-line-number="4">  <span class="fu">==&gt;</span> <span class="dv">10</span></a></code></pre></div>
+<h2 id="reading-docs"><span class="header-section-number">4.8</span> Reading docs</h2>
 <p>Haskell libraries tend to have pretty good docs. We’ve linked to docs via Hackage (<a href="https://hackage.haskell.org" class="uri">https://hackage.haskell.org</a>) previously, but it’s important to know how to find the docs by your self too. The tool for generating Haskell documentation is called <em>Haddock</em> so sometimes Haskell docs are referred to as <em>haddocks</em>.</p>
 <p>Hackage is the Haskell package repository (just like <a href="https://pypi.org/">PyPI</a> for Python, Maven Central for Java or <a href="https://npmjs.com">NPM</a> for Javascript). In addition to the actual packages, it hosts documentation for them. Most of the modules that we use on this course are in the package called <code>base</code>. You can browse the docs for the base package at <a href="http://hackage.haskell.org/package/base" class="uri">http://hackage.haskell.org/package/base</a>.</p>
 <p>When you’re not quite sure where the function you’re looking for is, Hoogle (<a href="https://hoogle.haskell.org/" class="uri">https://hoogle.haskell.org/</a>) can help. Hoogle is a search engine for Haskell documentation. It is a great resource when you need to check what was the type of <code>foldr</code> or which packages contain a function named <code>reverse</code>.</p>
@@ -2298,7 +2326,7 @@ Returns the second element of a list
 stack haddock --open &lt;package&gt;</code></pre>
 <p>This has the added benefit of getting exactly the right version of the documentation.</p>
 <p>In summary, here are the main ways of reading Haskell library documentation: - If you know the name of the package you browse the docs via <a href="https://hackage.haskell.org/" class="uri">https://hackage.haskell.org/</a> - If you know the name of the function you can find it using <a href="https://hoogle.haskell.org/" class="uri">https://hoogle.haskell.org/</a> - If you’re using <code>stack</code> you can use <code>stack haddock --open</code> or <code>stack haddock --open &lt;package&gt;</code> to open docs in your browser</p>
-<h2 id="quiz-3"><span class="header-section-number">4.8</span> Quiz</h2>
+<h2 id="quiz-3"><span class="header-section-number">4.9</span> Quiz</h2>
 <p>What is the type of <code>swap . id . swap</code>?</p>
 <ol class="quiz">
 <li class="correct">
@@ -2371,8 +2399,20 @@ It turns a list of pairs into a list of elements
 <code>(Foldable t, Eq a, Num a) =&gt; Bool -&gt; [ a ] -&gt; Bool</code>
 </li>
 </ol>
+<p>What is the type of <code>\x -&gt; case x of (True, &quot;Foo&quot;) -&gt; show True ++ &quot;Foo&quot;</code>?</p>
+<ol class="quiz">
+<li>
+<code>Either Bool String -&gt; String</code>
+</li>
+<li class="correct">
+<code>(Bool, String) -&gt; String</code>
+</li>
+<li>
+<code>Show a =&gt; (Bool, String) -&gt; a</code>
+</li>
+</ol>
 <!-- TODO more, maybe some Array and Map questions -->
-<h2 id="exercises-3"><span class="header-section-number">4.9</span> Exercises</h2>
+<h2 id="exercises-3"><span class="header-section-number">4.10</span> Exercises</h2>
 <ul>
 <li><a href="https://github.com/moocfi/haskell-mooc/blob/master/exercises/Set4a.hs">Set4a</a>: type classes</li>
 <li><a href="https://github.com/moocfi/haskell-mooc/blob/master/exercises/Set4b.hs">Set4b</a>: folds</li>
@@ -2385,96 +2425,68 @@ It turns a list of pairs into a list of elements
 </ul>
 <h2 id="algebraic-datatypes"><span class="header-section-number">5.1</span> Algebraic Datatypes</h2>
 <p>Haskell has a system called <em>algebraic datatypes</em> for defining new types. This sounds fancy, but is rather simple. Let’s dive in by looking at the standard library definitions of some familiar types:</p>
-<div class="sourceCode" id="cb274"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb274-1" data-line-number="1"><span class="kw">data</span> <span class="dt">Bool</span> <span class="fu">=</span> <span class="dt">True</span> <span class="fu">|</span> <span class="dt">False</span></a>
-<a class="sourceLine" id="cb274-2" data-line-number="2"><span class="kw">data</span> <span class="dt">Ordering</span> <span class="fu">=</span> <span class="dt">LT</span> <span class="fu">|</span> <span class="dt">EQ</span> <span class="fu">|</span> <span class="dt">GT</span></a></code></pre></div>
+<div class="sourceCode" id="cb280"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb280-1" data-line-number="1"><span class="kw">data</span> <span class="dt">Bool</span> <span class="fu">=</span> <span class="dt">True</span> <span class="fu">|</span> <span class="dt">False</span></a>
+<a class="sourceLine" id="cb280-2" data-line-number="2"><span class="kw">data</span> <span class="dt">Ordering</span> <span class="fu">=</span> <span class="dt">LT</span> <span class="fu">|</span> <span class="dt">EQ</span> <span class="fu">|</span> <span class="dt">GT</span></a></code></pre></div>
 <p>With this syntax you too can define types:</p>
-<div class="sourceCode" id="cb275"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb275-1" data-line-number="1"><span class="co">-- definition of a type with three values</span></a>
-<a class="sourceLine" id="cb275-2" data-line-number="2"><span class="kw">data</span> <span class="dt">Color</span> <span class="fu">=</span> <span class="dt">Red</span> <span class="fu">|</span> <span class="dt">Green</span> <span class="fu">|</span> <span class="dt">Blue</span></a>
-<a class="sourceLine" id="cb275-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb275-4" data-line-number="4"><span class="co">-- a function that uses pattern matching on our new type</span></a>
-<a class="sourceLine" id="cb275-5" data-line-number="5"><span class="ot">rgb ::</span> <span class="dt">Color</span> <span class="ot">-&gt;</span> [<span class="dt">Double</span>]</a>
-<a class="sourceLine" id="cb275-6" data-line-number="6">rgb <span class="dt">Red</span> <span class="fu">=</span> [<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>]</a>
-<a class="sourceLine" id="cb275-7" data-line-number="7">rgb <span class="dt">Green</span> <span class="fu">=</span> [<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>]</a>
-<a class="sourceLine" id="cb275-8" data-line-number="8">rgb <span class="dt">Blue</span> <span class="fu">=</span> [<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>]</a></code></pre></div>
-<div class="sourceCode" id="cb276"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb276-1" data-line-number="1"><span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="fu">:</span>t <span class="dt">Red</span></a>
-<a class="sourceLine" id="cb276-2" data-line-number="2"><span class="dt">Red</span><span class="ot"> ::</span> <span class="dt">Color</span></a>
-<a class="sourceLine" id="cb276-3" data-line-number="3"><span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="fu">:</span>t [<span class="dt">Red</span>,<span class="dt">Blue</span>,<span class="dt">Green</span>]</a>
-<a class="sourceLine" id="cb276-4" data-line-number="4">[<span class="dt">Red</span>,<span class="dt">Blue</span>,<span class="dt">Green</span>]<span class="ot"> ::</span> [<span class="dt">Color</span>]</a>
-<a class="sourceLine" id="cb276-5" data-line-number="5"><span class="dt">Prelude</span><span class="fu">&gt;</span> rgb <span class="dt">Red</span></a>
-<a class="sourceLine" id="cb276-6" data-line-number="6">[<span class="fl">1.0</span>,<span class="fl">0.0</span>,<span class="fl">0.0</span>]</a></code></pre></div>
+<div class="sourceCode" id="cb281"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb281-1" data-line-number="1"><span class="co">-- definition of a type with three values</span></a>
+<a class="sourceLine" id="cb281-2" data-line-number="2"><span class="kw">data</span> <span class="dt">Color</span> <span class="fu">=</span> <span class="dt">Red</span> <span class="fu">|</span> <span class="dt">Green</span> <span class="fu">|</span> <span class="dt">Blue</span></a>
+<a class="sourceLine" id="cb281-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb281-4" data-line-number="4"><span class="co">-- a function that uses pattern matching on our new type</span></a>
+<a class="sourceLine" id="cb281-5" data-line-number="5"><span class="ot">rgb ::</span> <span class="dt">Color</span> <span class="ot">-&gt;</span> [<span class="dt">Double</span>]</a>
+<a class="sourceLine" id="cb281-6" data-line-number="6">rgb <span class="dt">Red</span> <span class="fu">=</span> [<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>]</a>
+<a class="sourceLine" id="cb281-7" data-line-number="7">rgb <span class="dt">Green</span> <span class="fu">=</span> [<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>]</a>
+<a class="sourceLine" id="cb281-8" data-line-number="8">rgb <span class="dt">Blue</span> <span class="fu">=</span> [<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>]</a></code></pre></div>
+<div class="sourceCode" id="cb282"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb282-1" data-line-number="1"><span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="fu">:</span>t <span class="dt">Red</span></a>
+<a class="sourceLine" id="cb282-2" data-line-number="2"><span class="dt">Red</span><span class="ot"> ::</span> <span class="dt">Color</span></a>
+<a class="sourceLine" id="cb282-3" data-line-number="3"><span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="fu">:</span>t [<span class="dt">Red</span>,<span class="dt">Blue</span>,<span class="dt">Green</span>]</a>
+<a class="sourceLine" id="cb282-4" data-line-number="4">[<span class="dt">Red</span>,<span class="dt">Blue</span>,<span class="dt">Green</span>]<span class="ot"> ::</span> [<span class="dt">Color</span>]</a>
+<a class="sourceLine" id="cb282-5" data-line-number="5"><span class="dt">Prelude</span><span class="fu">&gt;</span> rgb <span class="dt">Red</span></a>
+<a class="sourceLine" id="cb282-6" data-line-number="6">[<span class="fl">1.0</span>,<span class="fl">0.0</span>,<span class="fl">0.0</span>]</a></code></pre></div>
 <h3 id="fields"><span class="header-section-number">5.1.1</span> Fields</h3>
 <p>Types like <code>Bool</code>, <code>Ordering</code> and <code>Color</code> that just list a bunch of constants are called <em>enumerations</em> or <em>enums</em> in Haskell and other languages. Enums are useful, but you need other types as well. Here we define a type for reports containing an id number, a title, and a body:</p>
-<div class="sourceCode" id="cb277"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb277-1" data-line-number="1"><span class="kw">data</span> <span class="dt">Report</span> <span class="fu">=</span> <span class="dt">ConstructReport</span> <span class="dt">Int</span> <span class="dt">String</span> <span class="dt">String</span></a></code></pre></div>
+<div class="sourceCode" id="cb283"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb283-1" data-line-number="1"><span class="kw">data</span> <span class="dt">Report</span> <span class="fu">=</span> <span class="dt">ConstructReport</span> <span class="dt">Int</span> <span class="dt">String</span> <span class="dt">String</span></a></code></pre></div>
 <p>This is how you create a report:</p>
-<div class="sourceCode" id="cb278"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb278-1" data-line-number="1"><span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="fu">:</span>t <span class="dt">ConstructReport</span> <span class="dv">1</span> <span class="st">&quot;Title&quot;</span> <span class="st">&quot;This is the body.&quot;</span></a>
-<a class="sourceLine" id="cb278-2" data-line-number="2"><span class="dt">ConstructReport</span> <span class="dv">1</span> <span class="st">&quot;Title&quot;</span> <span class="st">&quot;This is the body.&quot;</span><span class="ot"> ::</span> <span class="dt">Report</span></a></code></pre></div>
+<div class="sourceCode" id="cb284"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb284-1" data-line-number="1"><span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="fu">:</span>t <span class="dt">ConstructReport</span> <span class="dv">1</span> <span class="st">&quot;Title&quot;</span> <span class="st">&quot;This is the body.&quot;</span></a>
+<a class="sourceLine" id="cb284-2" data-line-number="2"><span class="dt">ConstructReport</span> <span class="dv">1</span> <span class="st">&quot;Title&quot;</span> <span class="st">&quot;This is the body.&quot;</span><span class="ot"> ::</span> <span class="dt">Report</span></a></code></pre></div>
 <p>You can access the fields with pattern matching:</p>
-<div class="sourceCode" id="cb279"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb279-1" data-line-number="1"><span class="ot">reportContents ::</span> <span class="dt">Report</span> <span class="ot">-&gt;</span> <span class="dt">String</span></a>
-<a class="sourceLine" id="cb279-2" data-line-number="2">reportContents (<span class="dt">ConstructReport</span> id title contents) <span class="fu">=</span> contents</a>
-<a class="sourceLine" id="cb279-3" data-line-number="3"><span class="ot">setReportContents ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Report</span> <span class="ot">-&gt;</span> <span class="dt">Report</span></a>
-<a class="sourceLine" id="cb279-4" data-line-number="4">setReportContents contents (<span class="dt">ConstructReport</span> id title _contents) <span class="fu">=</span> <span class="dt">ConstructReport</span> id title contents</a></code></pre></div>
+<div class="sourceCode" id="cb285"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb285-1" data-line-number="1"><span class="ot">reportContents ::</span> <span class="dt">Report</span> <span class="ot">-&gt;</span> <span class="dt">String</span></a>
+<a class="sourceLine" id="cb285-2" data-line-number="2">reportContents (<span class="dt">ConstructReport</span> id title contents) <span class="fu">=</span> contents</a>
+<a class="sourceLine" id="cb285-3" data-line-number="3"><span class="ot">setReportContents ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Report</span> <span class="ot">-&gt;</span> <span class="dt">Report</span></a>
+<a class="sourceLine" id="cb285-4" data-line-number="4">setReportContents contents (<span class="dt">ConstructReport</span> id title _contents) <span class="fu">=</span> <span class="dt">ConstructReport</span> id title contents</a></code></pre></div>
 <h3 id="constructors"><span class="header-section-number">5.1.2</span> Constructors</h3>
 <p>The things on the right hand side of a <code>data</code> declaration are called <em>constructors</em>. <code>True</code>, <code>False</code>, <code>Red</code> and <code>ConstructReport</code> are all examples of constructors. A type can have multiple constructors, and a constructor can have zero or more fields.</p>
 <p>Here is a datatype for a standard playing card. It has five constructors, of which <code>Joker</code> has zero fields and the others have one field.</p>
-<div class="sourceCode" id="cb280"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb280-1" data-line-number="1"><span class="kw">data</span> <span class="dt">Card</span> <span class="fu">=</span> <span class="dt">Joker</span> <span class="fu">|</span> <span class="dt">Heart</span> <span class="dt">Int</span> <span class="fu">|</span> <span class="dt">Club</span> <span class="dt">Int</span> <span class="fu">|</span> <span class="dt">Spade</span> <span class="dt">Int</span> <span class="fu">|</span> <span class="dt">Diamond</span> <span class="dt">Int</span></a></code></pre></div>
+<div class="sourceCode" id="cb286"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb286-1" data-line-number="1"><span class="kw">data</span> <span class="dt">Card</span> <span class="fu">=</span> <span class="dt">Joker</span> <span class="fu">|</span> <span class="dt">Heart</span> <span class="dt">Int</span> <span class="fu">|</span> <span class="dt">Club</span> <span class="dt">Int</span> <span class="fu">|</span> <span class="dt">Spade</span> <span class="dt">Int</span> <span class="fu">|</span> <span class="dt">Diamond</span> <span class="dt">Int</span></a></code></pre></div>
 <p>Constructors with fields have function type and can be used wherever functions can:</p>
-<div class="sourceCode" id="cb281"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb281-1" data-line-number="1"><span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="fu">:</span>t <span class="dt">Heart</span></a>
-<a class="sourceLine" id="cb281-2" data-line-number="2"><span class="dt">Heart</span><span class="ot"> ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Card</span></a>
-<a class="sourceLine" id="cb281-3" data-line-number="3"><span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="fu">:</span>t <span class="dt">Club</span></a>
-<a class="sourceLine" id="cb281-4" data-line-number="4"><span class="dt">Club</span><span class="ot"> ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Card</span></a>
-<a class="sourceLine" id="cb281-5" data-line-number="5"><span class="dt">Prelude</span><span class="fu">&gt;</span> map <span class="dt">Heart</span> [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>]</a>
-<a class="sourceLine" id="cb281-6" data-line-number="6">[<span class="dt">Heart</span> <span class="dv">1</span>,<span class="dt">Heart</span> <span class="dv">2</span>,<span class="dt">Heart</span> <span class="dv">3</span>]</a>
-<a class="sourceLine" id="cb281-7" data-line-number="7"><span class="dt">Prelude</span><span class="fu">&gt;</span> (<span class="dt">Heart</span> <span class="fu">.</span> (\x <span class="ot">-&gt;</span> x<span class="fu">+</span><span class="dv">1</span>)) <span class="dv">3</span></a>
-<a class="sourceLine" id="cb281-8" data-line-number="8"><span class="dt">Heart</span> <span class="dv">4</span></a></code></pre></div>
+<div class="sourceCode" id="cb287"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb287-1" data-line-number="1"><span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="fu">:</span>t <span class="dt">Heart</span></a>
+<a class="sourceLine" id="cb287-2" data-line-number="2"><span class="dt">Heart</span><span class="ot"> ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Card</span></a>
+<a class="sourceLine" id="cb287-3" data-line-number="3"><span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="fu">:</span>t <span class="dt">Club</span></a>
+<a class="sourceLine" id="cb287-4" data-line-number="4"><span class="dt">Club</span><span class="ot"> ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Card</span></a>
+<a class="sourceLine" id="cb287-5" data-line-number="5"><span class="dt">Prelude</span><span class="fu">&gt;</span> map <span class="dt">Heart</span> [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>]</a>
+<a class="sourceLine" id="cb287-6" data-line-number="6">[<span class="dt">Heart</span> <span class="dv">1</span>,<span class="dt">Heart</span> <span class="dv">2</span>,<span class="dt">Heart</span> <span class="dv">3</span>]</a>
+<a class="sourceLine" id="cb287-7" data-line-number="7"><span class="dt">Prelude</span><span class="fu">&gt;</span> (<span class="dt">Heart</span> <span class="fu">.</span> (\x <span class="ot">-&gt;</span> x<span class="fu">+</span><span class="dv">1</span>)) <span class="dv">3</span></a>
+<a class="sourceLine" id="cb287-8" data-line-number="8"><span class="dt">Heart</span> <span class="dv">4</span></a></code></pre></div>
 <h3 id="sidenote-deriving"><span class="header-section-number">5.1.3</span> Sidenote: deriving</h3>
 <p>By the way, there’s something missing from our <code>Card</code> type. Look at how it behaves compared to <code>Ordering</code> and <code>Bool</code>:</p>
-<div class="sourceCode" id="cb282"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb282-1" data-line-number="1"><span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="dt">EQ</span></a>
-<a class="sourceLine" id="cb282-2" data-line-number="2"><span class="dt">EQ</span></a>
-<a class="sourceLine" id="cb282-3" data-line-number="3"><span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="dt">True</span></a>
-<a class="sourceLine" id="cb282-4" data-line-number="4"><span class="dt">True</span></a>
-<a class="sourceLine" id="cb282-5" data-line-number="5"><span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="dt">Joker</span></a>
-<a class="sourceLine" id="cb282-6" data-line-number="6"><span class="fu">&lt;</span>interactive<span class="fu">&gt;:</span><span class="dv">1</span><span class="fu">:</span><span class="dv">0</span><span class="fu">:</span></a>
-<a class="sourceLine" id="cb282-7" data-line-number="7">    <span class="dt">No</span> <span class="kw">instance</span> for (<span class="dt">Show</span> <span class="dt">Card</span>)</a>
-<a class="sourceLine" id="cb282-8" data-line-number="8">      arising from a use <span class="kw">of</span> <span class="ot">`print&#39; at &lt;interactive&gt;:1:0-4</span></a>
-<a class="sourceLine" id="cb282-9" data-line-number="9"><span class="ot">    Possible fix: add an instance declaration for (Show Card)</span></a>
-<a class="sourceLine" id="cb282-10" data-line-number="10"><span class="ot">    In a stmt of a &#39;do&#39; expression: print it</span></a></code></pre></div>
+<div class="sourceCode" id="cb288"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb288-1" data-line-number="1"><span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="dt">EQ</span></a>
+<a class="sourceLine" id="cb288-2" data-line-number="2"><span class="dt">EQ</span></a>
+<a class="sourceLine" id="cb288-3" data-line-number="3"><span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="dt">True</span></a>
+<a class="sourceLine" id="cb288-4" data-line-number="4"><span class="dt">True</span></a>
+<a class="sourceLine" id="cb288-5" data-line-number="5"><span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="dt">Joker</span></a>
+<a class="sourceLine" id="cb288-6" data-line-number="6"><span class="fu">&lt;</span>interactive<span class="fu">&gt;:</span><span class="dv">1</span><span class="fu">:</span><span class="dv">0</span><span class="fu">:</span></a>
+<a class="sourceLine" id="cb288-7" data-line-number="7">    <span class="dt">No</span> <span class="kw">instance</span> for (<span class="dt">Show</span> <span class="dt">Card</span>)</a>
+<a class="sourceLine" id="cb288-8" data-line-number="8">      arising from a use <span class="kw">of</span> <span class="ot">`print&#39; at &lt;interactive&gt;:1:0-4</span></a>
+<a class="sourceLine" id="cb288-9" data-line-number="9"><span class="ot">    Possible fix: add an instance declaration for (Show Card)</span></a>
+<a class="sourceLine" id="cb288-10" data-line-number="10"><span class="ot">    In a stmt of a &#39;do&#39; expression: print it</span></a></code></pre></div>
 <p>The problem is that Haskell does not know how to print the types we defined. As the error says, they are not part of the <code>Show</code> class. The easy solution is to just add a <code>deriving Show</code> after the type definition:</p>
-<div class="sourceCode" id="cb283"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb283-1" data-line-number="1"><span class="kw">data</span> <span class="dt">Card</span> <span class="fu">=</span> <span class="dt">Joker</span> <span class="fu">|</span> <span class="dt">Heart</span> <span class="dt">Int</span> <span class="fu">|</span> <span class="dt">Club</span> <span class="dt">Int</span> <span class="fu">|</span> <span class="dt">Spade</span> <span class="dt">Int</span> <span class="fu">|</span> <span class="dt">Diamond</span> <span class="dt">Int</span></a>
-<a class="sourceLine" id="cb283-2" data-line-number="2">  <span class="kw">deriving</span> <span class="dt">Show</span></a></code></pre></div>
-<div class="sourceCode" id="cb284"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb284-1" data-line-number="1"><span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="dt">Joker</span></a>
-<a class="sourceLine" id="cb284-2" data-line-number="2"><span class="dt">Joker</span></a></code></pre></div>
+<div class="sourceCode" id="cb289"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb289-1" data-line-number="1"><span class="kw">data</span> <span class="dt">Card</span> <span class="fu">=</span> <span class="dt">Joker</span> <span class="fu">|</span> <span class="dt">Heart</span> <span class="dt">Int</span> <span class="fu">|</span> <span class="dt">Club</span> <span class="dt">Int</span> <span class="fu">|</span> <span class="dt">Spade</span> <span class="dt">Int</span> <span class="fu">|</span> <span class="dt">Diamond</span> <span class="dt">Int</span></a>
+<a class="sourceLine" id="cb289-2" data-line-number="2">  <span class="kw">deriving</span> <span class="dt">Show</span></a></code></pre></div>
+<div class="sourceCode" id="cb290"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb290-1" data-line-number="1"><span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="dt">Joker</span></a>
+<a class="sourceLine" id="cb290-2" data-line-number="2"><span class="dt">Joker</span></a></code></pre></div>
 <p>The <code>deriving</code> syntax is a way to automatically make your class a member of certain basic type classes, most notably <code>Read</code>, <code>Show</code> and <code>Eq</code>. We’ll talk more about what this means later.</p>
-<h2 id="sidenote-the-case-of-expression"><span class="header-section-number">5.2</span> Sidenote: The case-of expression</h2>
-<p>We’ve seen pattern matching in function arguments, but there’s also a way to pattern match in an expression. It looks like this:</p>
-<div class="sourceCode" id="cb285"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb285-1" data-line-number="1"><span class="kw">case</span> <span class="fu">&lt;</span>value<span class="fu">&gt;</span> <span class="kw">of</span> <span class="fu">&lt;</span>pattern<span class="fu">&gt;</span> <span class="ot">-&gt;</span> <span class="fu">&lt;</span>expression<span class="fu">&gt;</span></a>
-<a class="sourceLine" id="cb285-2" data-line-number="2">                <span class="fu">&lt;</span>pattern<span class="fu">&gt;</span> <span class="ot">-&gt;</span> <span class="fu">&lt;</span>expression<span class="fu">&gt;</span></a></code></pre></div>
-<p>As an example let’s rewrite the <code>describe</code> example from the first lecture using <code>case</code>:</p>
-<div class="sourceCode" id="cb286"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb286-1" data-line-number="1"><span class="ot">describe ::</span> <span class="dt">Integer</span> <span class="ot">-&gt;</span> <span class="dt">String</span></a>
-<a class="sourceLine" id="cb286-2" data-line-number="2">describe <span class="dv">0</span> <span class="fu">=</span> <span class="st">&quot;zero&quot;</span></a>
-<a class="sourceLine" id="cb286-3" data-line-number="3">describe <span class="dv">1</span> <span class="fu">=</span> <span class="st">&quot;one&quot;</span></a>
-<a class="sourceLine" id="cb286-4" data-line-number="4">describe <span class="dv">2</span> <span class="fu">=</span> <span class="st">&quot;an even prime&quot;</span></a>
-<a class="sourceLine" id="cb286-5" data-line-number="5">describe n <span class="fu">=</span> <span class="st">&quot;the number &quot;</span> <span class="fu">++</span> show n</a></code></pre></div>
-<div class="sourceCode" id="cb287"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb287-1" data-line-number="1"><span class="ot">describe ::</span> <span class="dt">Integer</span> <span class="ot">-&gt;</span> <span class="dt">String</span></a>
-<a class="sourceLine" id="cb287-2" data-line-number="2">describe n <span class="fu">=</span> <span class="kw">case</span> n <span class="kw">of</span> <span class="dv">0</span> <span class="ot">-&gt;</span> <span class="st">&quot;zero&quot;</span></a>
-<a class="sourceLine" id="cb287-3" data-line-number="3">                       <span class="dv">1</span> <span class="ot">-&gt;</span> <span class="st">&quot;one&quot;</span></a>
-<a class="sourceLine" id="cb287-4" data-line-number="4">                       <span class="dv">2</span> <span class="ot">-&gt;</span> <span class="st">&quot;an even prime&quot;</span></a>
-<a class="sourceLine" id="cb287-5" data-line-number="5">                       n <span class="ot">-&gt;</span> <span class="st">&quot;the number &quot;</span> <span class="fu">++</span> show n</a></code></pre></div>
-<p>A more interesting example is when the value were pattern matching on is not a function argument. For example:</p>
-<div class="sourceCode" id="cb288"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb288-1" data-line-number="1"><span class="ot">search ::</span> <span class="dt">Show</span> a <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> <span class="dt">Bool</span>) <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> <span class="dt">String</span></a>
-<a class="sourceLine" id="cb288-2" data-line-number="2">search p xs <span class="fu">=</span> <span class="kw">case</span> filter p xs <span class="kw">of</span> [] <span class="ot">-&gt;</span> <span class="st">&quot;not found&quot;</span></a>
-<a class="sourceLine" id="cb288-3" data-line-number="3">                                  (x<span class="fu">:</span>_) <span class="ot">-&gt;</span> <span class="st">&quot;found &quot;</span> <span class="fu">++</span> show x</a></code></pre></div>
-<div class="sourceCode" id="cb289"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb289-1" data-line-number="1"><span class="dt">Prelude</span><span class="fu">&gt;</span> search even [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>]</a>
-<a class="sourceLine" id="cb289-2" data-line-number="2"><span class="st">&quot;found 2&quot;</span></a>
-<a class="sourceLine" id="cb289-3" data-line-number="3"><span class="dt">Prelude</span><span class="fu">&gt;</span> search even [<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">7</span>]</a>
-<a class="sourceLine" id="cb289-4" data-line-number="4"><span class="st">&quot;not found&quot;</span></a></code></pre></div>
-<p>If we wanted to write <code>search</code> using normal pattern matching, we would need a helper function:</p>
-<div class="sourceCode" id="cb290"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb290-1" data-line-number="1"><span class="ot">search ::</span> <span class="dt">Show</span> a <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> <span class="dt">Bool</span>) <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> <span class="dt">String</span></a>
-<a class="sourceLine" id="cb290-2" data-line-number="2">search p xs <span class="fu">=</span> searchResult (filter p xs)</a>
-<a class="sourceLine" id="cb290-3" data-line-number="3">  <span class="kw">where</span> searchResult [] <span class="fu">=</span> <span class="st">&quot;not found&quot;</span></a>
-<a class="sourceLine" id="cb290-4" data-line-number="4">        searchResult (x<span class="fu">:</span>_) <span class="fu">=</span> <span class="st">&quot;found &quot;</span> <span class="fu">++</span> show x</a></code></pre></div>
-<h2 id="type-parameters"><span class="header-section-number">5.3</span> Type parameters</h2>
+<h2 id="type-parameters"><span class="header-section-number">5.2</span> Type parameters</h2>
 <p>We introduced type parameters and parametric polymorphism when introducing lists in Lecture 2. Since then, we’ve seen other parameterized types like <code>Maybe</code> and <code>Either</code>. Now we’ll learn how we can define our own parameterized types.</p>
-<h3 id="defining-parameterized-types"><span class="header-section-number">5.3.1</span> Defining parameterized types</h3>
+<h3 id="defining-parameterized-types"><span class="header-section-number">5.2.1</span> Defining parameterized types</h3>
 <p>The definition for <code>Maybe</code> is:</p>
 <div class="sourceCode" id="cb291"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb291-1" data-line-number="1"><span class="kw">data</span> <span class="dt">Maybe</span> a <span class="fu">=</span> <span class="dt">Nothing</span> <span class="fu">|</span> <span class="dt">Just</span> a</a></code></pre></div>
 <p>What’s <code>a</code>? We define a parameterized type by mentioning a <em>type variable</em> (<code>a</code> in this case) on the left side of the <code>=</code> sign. We can then use the same type variable in fields for our constructors. This is analogous to polymorphic functions. Instead of defining separate functions</p>
@@ -2500,7 +2512,7 @@ It turns a list of pairs into a list of elements
 <a class="sourceLine" id="cb295-6" data-line-number="6"><span class="dv">3</span></a>
 <a class="sourceLine" id="cb295-7" data-line-number="7"><span class="dt">Prelude</span><span class="fu">&gt;</span> getDescription (<span class="dt">Describe</span> <span class="dv">3</span> <span class="st">&quot;a number&quot;</span>)</a>
 <a class="sourceLine" id="cb295-8" data-line-number="8"><span class="st">&quot;a number&quot;</span></a></code></pre></div>
-<h3 id="syntactic-note"><span class="header-section-number">5.3.2</span> Syntactic note</h3>
+<h3 id="syntactic-note"><span class="header-section-number">5.2.2</span> Syntactic note</h3>
 <p>In the above definitions, we’ve used <code>a</code> as a type variable. However any word that starts with a lower case letter is fine. We could have defined <code>Maybe</code> like this:</p>
 <div class="sourceCode" id="cb296"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb296-1" data-line-number="1"><span class="kw">data</span> <span class="dt">Maybe</span> theType <span class="fu">=</span> <span class="dt">Nothing</span> <span class="fu">|</span> <span class="dt">Just</span> theType</a></code></pre></div>
 <p>The rules for Haskell identifiers are:</p>
@@ -2521,10 +2533,10 @@ It turns a list of pairs into a list of elements
 <a class="sourceLine" id="cb299-5" data-line-number="5"><span class="dt">Prelude</span><span class="fu">&gt;</span><span class="ot"> undefined ::</span> <span class="dt">Nothing</span>               <span class="co">-- trying to use a constructor as a type</span></a>
 <a class="sourceLine" id="cb299-6" data-line-number="6"><span class="fu">&lt;</span>interactive<span class="fu">&gt;:</span><span class="dv">2</span><span class="fu">:</span><span class="dv">14</span><span class="fu">:</span> error<span class="fu">:</span></a>
 <a class="sourceLine" id="cb299-7" data-line-number="7">    <span class="dt">Not</span> <span class="kw">in</span> scope<span class="fu">:</span> <span class="kw">type</span> constructor or <span class="kw">class</span> ‘<span class="dt">Nothing</span>’</a></code></pre></div>
-<h3 id="sidenote-multiple-type-parameters"><span class="header-section-number">5.3.3</span> Sidenote: multiple type parameters</h3>
+<h3 id="sidenote-multiple-type-parameters"><span class="header-section-number">5.2.3</span> Sidenote: multiple type parameters</h3>
 <p>Types can have multiple type parameters. The syntax is similar to defining functions with many arguments. Here’s the definition of the standard <code>Either</code> type:</p>
 <div class="sourceCode" id="cb300"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb300-1" data-line-number="1"><span class="kw">data</span> <span class="dt">Either</span> a b <span class="fu">=</span> <span class="dt">Left</span> a <span class="fu">|</span> <span class="dt">Right</span> b</a></code></pre></div>
-<h2 id="recursive-types"><span class="header-section-number">5.4</span> Recursive types</h2>
+<h2 id="recursive-types"><span class="header-section-number">5.3</span> Recursive types</h2>
 <p>So far, all of the types we’ve defined have been of constant size. We can represent one report or one colour, but how could we represent a collection of things? We could use lists of course, but could we define a list type ourselves?</p>
 <p>Just like Haskell functions, Haskell data types can be <em>recursive</em>. This is no weirder than having an object in Java or Python that refers to another object of the same class. This is how you define a list of integers:</p>
 <div class="sourceCode" id="cb301"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb301-1" data-line-number="1"><span class="kw">data</span> <span class="dt">IntList</span> <span class="fu">=</span> <span class="dt">Empty</span> <span class="fu">|</span> <span class="dt">Node</span> <span class="dt">Int</span> <span class="dt">IntList</span></a>
@@ -2587,7 +2599,7 @@ It turns a list of pairs into a list of elements
 <a class="sourceLine" id="cb307-7" data-line-number="7">    • <span class="dt">In</span> the second argument <span class="kw">of</span> ‘<span class="dt">Node</span>’, namely ‘(<span class="dt">Node</span> <span class="st">&quot;foo&quot;</span> <span class="dt">Empty</span>)’</a>
 <a class="sourceLine" id="cb307-8" data-line-number="8">      <span class="dt">In</span> the expression<span class="fu">:</span> <span class="dt">Node</span> <span class="dt">True</span> (<span class="dt">Node</span> <span class="st">&quot;foo&quot;</span> <span class="dt">Empty</span>)</a>
 <a class="sourceLine" id="cb307-9" data-line-number="9">      <span class="dt">In</span> an equation for ‘it’<span class="fu">:</span> it <span class="fu">=</span> <span class="dt">Node</span> <span class="dt">True</span> (<span class="dt">Node</span> <span class="st">&quot;foo&quot;</span> <span class="dt">Empty</span>)</a></code></pre></div>
-<h3 id="example-growing-a-tree"><span class="header-section-number">5.4.1</span> Example: Growing a tree</h3>
+<h3 id="example-growing-a-tree"><span class="header-section-number">5.3.1</span> Example: Growing a tree</h3>
 <p>Just like a list, we can also represent a binary tree:</p>
 <div class="sourceCode" id="cb308"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb308-1" data-line-number="1"><span class="kw">data</span> <span class="dt">Tree</span> a <span class="fu">=</span> <span class="dt">Node</span> a (<span class="dt">Tree</span> a) (<span class="dt">Tree</span> a) <span class="fu">|</span> <span class="dt">Empty</span></a></code></pre></div>
 <p>Our tree contains - nodes, which contain a value of type <code>a</code> and two child trees - empty trees</p>
@@ -2633,7 +2645,7 @@ It turns a list of pairs into a list of elements
 <a class="sourceLine" id="cb313-11" data-line-number="11">  <span class="fu">|</span> x <span class="fu">&lt;</span> y <span class="fu">=</span> <span class="dt">Node</span> y (insert x l) r</a>
 <a class="sourceLine" id="cb313-12" data-line-number="12">  <span class="fu">|</span> x <span class="fu">&gt;</span> y <span class="fu">=</span> <span class="dt">Node</span> y l (insert x r)</a>
 <a class="sourceLine" id="cb313-13" data-line-number="13">  <span class="fu">|</span> otherwise <span class="fu">=</span> <span class="dt">Node</span> y l r</a></code></pre></div>
-<h2 id="record-syntax"><span class="header-section-number">5.5</span> Record Syntax</h2>
+<h2 id="record-syntax"><span class="header-section-number">5.4</span> Record Syntax</h2>
 <p>If some fields need to be accessed often, it can be convenient to have helper functions for reading those fields. For instance, the type <code>Person</code> might have multiple fields:</p>
 <div class="sourceCode" id="cb314"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb314-1" data-line-number="1"><span class="kw">data</span> <span class="dt">Person</span> <span class="fu">=</span> <span class="dt">MkPerson</span> <span class="dt">String</span> <span class="dt">Int</span> <span class="dt">String</span> <span class="dt">String</span> <span class="dt">String</span> <span class="kw">deriving</span> <span class="dt">Show</span></a></code></pre></div>
 <p>A list of persons might look like the following:</p>
@@ -2674,7 +2686,7 @@ It turns a list of pairs into a list of elements
 <a class="sourceLine" id="cb322-5" data-line-number="5">      x <span class="fu">:</span> query xs</a>
 <a class="sourceLine" id="cb322-6" data-line-number="6">  <span class="fu">|</span> otherwise <span class="fu">=</span> query xs</a></code></pre></div>
 <p>You’ll probably agree that the code looks more pleasant now.</p>
-<h2 id="algebraic-datatypes-summary"><span class="header-section-number">5.6</span> Algebraic Datatypes: Summary</h2>
+<h2 id="algebraic-datatypes-summary"><span class="header-section-number">5.5</span> Algebraic Datatypes: Summary</h2>
 <ul>
 <li>Types are defined like this</li>
 </ul>
@@ -2702,13 +2714,13 @@ It turns a list of pairs into a list of elements
 </ul>
 <div class="sourceCode" id="cb327"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb327-1" data-line-number="1"><span class="kw">data</span> <span class="dt">TypeName</span> <span class="fu">=</span> <span class="dt">Constructor</span> {<span class="ot"> field1 ::</span> <span class="dt">Field1Type</span>,<span class="ot"> field2 ::</span> <span class="dt">Field2Type</span> }</a></code></pre></div>
 <p>this gives you accessor functions like <code>field1 :: TypeName -&gt; Field1Type</code> for free.</p>
-<h2 id="sidenote-other-ways-of-defining-types"><span class="header-section-number">5.7</span> Sidenote: other ways of defining types</h2>
+<h2 id="sidenote-other-ways-of-defining-types"><span class="header-section-number">5.6</span> Sidenote: other ways of defining types</h2>
 <p>In addition to the <code>data</code> keyword, there are two additional ways of defining types in Haskell.</p>
 <p>The <code>newtype</code> keyword works like <code>data</code>, but you can only have a single constructor with a single field. It’s sometimes wise to use <code>newtype</code> for performance resons, but we’ll get back to those in part 2.</p>
 <p>The <code>type</code> keyword introduces a <em>type alias</em>. Type aliases don’t affect type checking, they just offer a shorthand for writing types. For example the familiar <code>String</code> type is an alias for <code>[Char]</code>:</p>
 <div class="sourceCode" id="cb328"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb328-1" data-line-number="1"><span class="kw">type</span> <span class="dt">String</span> <span class="fu">=</span> [<span class="dt">Char</span>]</a></code></pre></div>
 <p>This means that whenever the compiler reads <code>String</code>, it just immediately replaces it with <code>[Char]</code>. Type aliases seem useful, but they can easily make reading type errors harder.</p>
-<h2 id="how-do-algebraic-datatypes-work"><span class="header-section-number">5.8</span> How do algebraic datatypes work?</h2>
+<h2 id="how-do-algebraic-datatypes-work"><span class="header-section-number">5.7</span> How do algebraic datatypes work?</h2>
 <p>Remember how lists were represented in memory as linked lists? Let’s look in more detail at what algebraic datatypes look like in memory.</p>
 <p>Haskell data forms <em>directed graphs</em> in memory. Every constructor is a node, every field is an edge. Names (of variables) are pointers into this graph. Different names can <em>share</em> parts of the structure. Here’s an example with lists. Note how the last two elements of <code>x</code> are shared with <code>y</code> and <code>z</code>.</p>
 <div class="sourceCode" id="cb329"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb329-1" data-line-number="1">     code                       memory</a>
@@ -2749,19 +2761,7 @@ It turns a list of pairs into a list of elements
 <a class="sourceLine" id="cb333-9" data-line-number="9">       <span class="fu">/</span>    \                 <span class="fu">/</span>     \</a>
 <a class="sourceLine" id="cb333-10" data-line-number="10">   <span class="dt">Empty</span>   <span class="dt">Empty</span>           <span class="dt">Empty</span>   <span class="dt">Empty</span></a></code></pre></div>
 <p>Note how the old and the new tree share the subtree with 3 and 4 since it wasn’t changed, but the node 7 that was “changed” and all nodes above it get copied.</p>
-<h2 id="quiz-4"><span class="header-section-number">5.9</span> Quiz</h2>
-<p>What is the type of <code>\x -&gt; case x of (True, &quot;Foo&quot;) -&gt; show True ++ &quot;Foo&quot;</code>?</p>
-<ol class="quiz">
-<li>
-<code>Either Bool String -&gt; String</code>
-</li>
-<li class="correct">
-<code>(Bool, String) -&gt; String</code>
-</li>
-<li>
-<code>Show a =&gt; (Bool, String) -&gt; a</code>
-</li>
-</ol>
+<h2 id="quiz-4"><span class="header-section-number">5.8</span> Quiz</h2>
 <p>Why can’t we <code>map Nothing</code>?</p>
 <ol class="quiz">
 <li class="correct">
@@ -2774,7 +2774,7 @@ Because <code>Nothing</code> returns nothing
 Because <code>Nothing</code> is a constructor.
 </li>
 </ol>
-<h2 id="exercises-4"><span class="header-section-number">5.10</span> Exercises</h2>
+<h2 id="exercises-4"><span class="header-section-number">5.9</span> Exercises</h2>
 <ul>
 <li><a href="https://github.com/moocfi/haskell-mooc/blob/master/exercises/Set5a.hs">Set5a</a>: using and defining algebraic datatypes</li>
 <li><a href="https://github.com/moocfi/haskell-mooc/blob/master/exercises/Set5b.hs">Set5b</a>: playing with binary trees</li>
