@@ -1406,6 +1406,7 @@ Because <code>Nothing</code> is a constructor
 </ul>
 <p>Remember to give <a href="https://forms.gle/YCo2jAaUTg9vER7G6">feedback</a>!</p>
 <h1 id="lecture-3-catamorphic"><span class="header-section-number">3</span> Lecture 3: Catamorphic</h1>
+<!-- TODO name of lecture is too obscure, and also folds are only introduced in Lecture 4 -->
 <ul>
 <li>Lists, lists, lists</li>
 <li>Functionality</li>
@@ -1526,10 +1527,10 @@ Prelude&gt; map (add 3) [1,2,3]
 <a class="sourceLine" id="cb148-2" data-line-number="2"><span class="dt">True</span></a>
 <a class="sourceLine" id="cb148-3" data-line-number="3"><span class="dt">Prelude</span><span class="fu">&gt;</span> between <span class="dv">3</span> <span class="dv">6</span> <span class="dv">8</span></a>
 <a class="sourceLine" id="cb148-4" data-line-number="4"><span class="dt">False</span></a></code></pre></div>
-<p>We can give <code>inOrder</code> less arguments and get back new functions, just like we saw with <code>add</code>:</p>
-<div class="sourceCode" id="cb149"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb149-1" data-line-number="1"><span class="dt">Prelude</span><span class="fu">&gt;</span> (inOrder <span class="dv">1</span> <span class="dv">5</span>) <span class="dv">2</span></a>
+<p>We can give <code>between</code> less arguments and get back new functions, just like we saw with <code>add</code>:</p>
+<div class="sourceCode" id="cb149"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb149-1" data-line-number="1"><span class="dt">Prelude</span><span class="fu">&gt;</span> (between <span class="dv">1</span> <span class="dv">5</span>) <span class="dv">2</span></a>
 <a class="sourceLine" id="cb149-2" data-line-number="2"><span class="dt">True</span></a>
-<a class="sourceLine" id="cb149-3" data-line-number="3"><span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="kw">let</span> f <span class="fu">=</span> inOrder <span class="dv">1</span> <span class="dv">5</span> <span class="kw">in</span> f <span class="dv">2</span></a>
+<a class="sourceLine" id="cb149-3" data-line-number="3"><span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="kw">let</span> f <span class="fu">=</span> between <span class="dv">1</span> <span class="dv">5</span> <span class="kw">in</span> f <span class="dv">2</span></a>
 <a class="sourceLine" id="cb149-4" data-line-number="4"><span class="dt">True</span></a>
 <a class="sourceLine" id="cb149-5" data-line-number="5"><span class="dt">Prelude</span><span class="fu">&gt;</span> map (between <span class="dv">1</span> <span class="dv">3</span>) [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>]</a>
 <a class="sourceLine" id="cb149-6" data-line-number="6">[<span class="dt">False</span>,<span class="dt">True</span>,<span class="dt">False</span>]</a></code></pre></div>
@@ -1554,6 +1555,7 @@ Prelude&gt; map (add 3) [1,2,3]
 <a class="sourceLine" id="cb152-5" data-line-number="5"><span class="dt">Prelude</span><span class="fu">&gt;</span> map (<span class="dv">1</span><span class="fu">/</span>) [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>]</a>
 <a class="sourceLine" id="cb152-6" data-line-number="6">[<span class="fl">1.0</span>,<span class="fl">0.5</span>,<span class="fl">0.3333333333333333</span>,<span class="fl">0.25</span>,<span class="fl">0.2</span>]</a></code></pre></div>
 <h2 id="prefix-and-infix-notations"><span class="header-section-number">3.3</span> Prefix and Infix Notations</h2>
+<p>Normal Haskell operators are applied with <em>prefix notation</em>, which is just a fancy way to say that the function name comes before the arguments. In contrast, operators are applied with <em>infix notation</em> – the name of the function comes between the arguments.</p>
 <p>An infix operator can be converted into a prefix function by adding parentheses around it. For instance,</p>
 <div class="sourceCode" id="cb153"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb153-1" data-line-number="1">(<span class="fu">+</span>) <span class="dv">1</span> <span class="dv">2</span> <span class="fu">==&gt;</span> <span class="dv">1</span> <span class="fu">+</span> <span class="dv">2</span> <span class="fu">==&gt;</span> <span class="dv">3</span></a></code></pre></div>
 <p>This is useful especially when an operator needs to be passed as an argument to another function.</p>
@@ -1577,7 +1579,7 @@ Prelude&gt; map (add 3) [1,2,3]
 <a class="sourceLine" id="cb155-11" data-line-number="11">    • <span class="dt">Relevant</span> bindings include</a>
 <a class="sourceLine" id="cb155-12" data-line-number="12"><span class="ot">        it ::</span> (a <span class="ot">-&gt;</span> b <span class="ot">-&gt;</span> c) <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> [b] <span class="ot">-&gt;</span> [c]</a>
 <a class="sourceLine" id="cb155-13" data-line-number="13">          (bound at <span class="fu">&lt;</span>interactive<span class="fu">&gt;:</span><span class="dv">1</span><span class="fu">:</span><span class="dv">1</span>)</a></code></pre></div>
-<p>The reason for this weird-looking error is that GHCI got confused and thought that we were somehow trying to add <code>zipWith</code> and <code>[0,2,5,3] [1,3,3]</code> together. Logically, it deduced that <code>[0,2,5,3]</code> must be a function since it’s being applied to <code>[1,3,3]</code> (remember that functions bind tighter than operators).</p>
+<p>The reason for this weird-looking error is that GHCi got confused and thought that we were somehow trying to add <code>zipWith</code> and <code>[0,2,5,3] [1,3,3]</code> together. Logically, it deduced that <code>[0,2,5,3]</code> must be a function since it’s being applied to <code>[1,3,3]</code> (remember that functions bind tighter than operators).</p>
 <p>Unfortunately, error messages can sometimes be obscure, since the compiler cannot always know the “real” cause of the error (which is in this case was omitting the parentheses). Weird error messages are frustrating, but only the programmer knows what was the original intent behind the code.</p>
 <p>Another nice feature of Haskell is the syntax for applying a binary function as if it was an infix operator, by surrounding it with backticks (`). For example:</p>
 <div class="sourceCode" id="cb156"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb156-1" data-line-number="1"><span class="dv">6</span> <span class="ot">`div`</span> <span class="dv">2</span> <span class="fu">==&gt;</span> div <span class="dv">6</span> <span class="dv">2</span> <span class="fu">==&gt;</span> <span class="dv">3</span></a>
