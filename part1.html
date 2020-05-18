@@ -1227,7 +1227,7 @@ cabal v2-exec runhaskell Set1Test.hs</code></pre>
 <p>The function <code>tail</code> takes a list, and returns a list of the same type. If we apply <code>tail</code> to a list of booleans, the return value will also be a list of booleans.</p>
 <div class="sourceCode" id="cb108"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb108-1" data-line-number="1">tail<span class="ot"> ::</span> [a] <span class="ot">-&gt;</span> [a]</a>
 <a class="sourceLine" id="cb108-2" data-line-number="2">tail [<span class="dt">True</span>,<span class="dt">False</span>]<span class="ot"> ::</span> [<span class="dt">Bool</span>]</a></code></pre></div>
-<p>If types don’t match, we get a type error. Consider the operator <code>++</code> which takes two lists of the same type, as we can see from its type <code>[a] -&gt; [a] -&gt; [a]</code>. If we try to apply <code>++</code> to a list of booleans and a list of characters we get an error. This what happens in GHCi:</p>
+<p>If types don’t match, we get a type error. Consider the operator <code>++</code> which takes two lists of the same type, as we can see from its type <code>[a] -&gt; [a] -&gt; [a]</code>. If we try to apply <code>++</code> to a list of booleans and a list of characters we get an error. This is what happens in GHCi:</p>
 <pre><code>Prelude&gt; [True,False] ++ &quot;Moi&quot;
 
 &lt;interactive&gt;:1:16:
@@ -1289,11 +1289,10 @@ cabal v2-exec runhaskell Set1Test.hs</code></pre>
 <a class="sourceLine" id="cb113-3" data-line-number="3">intOrZero (<span class="dt">Just</span> i) <span class="fu">=</span> i</a>
 <a class="sourceLine" id="cb113-4" data-line-number="4"></a>
 <a class="sourceLine" id="cb113-5" data-line-number="5"><span class="ot">safeHead ::</span> [a] <span class="ot">-&gt;</span> <span class="dt">Maybe</span> a</a>
-<a class="sourceLine" id="cb113-6" data-line-number="6">safeHead [] <span class="fu">=</span> <span class="dt">Nothing</span></a>
-<a class="sourceLine" id="cb113-7" data-line-number="7">safeHead (x<span class="fu">:</span>_) <span class="fu">=</span> <span class="dt">Just</span> x</a>
-<a class="sourceLine" id="cb113-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb113-9" data-line-number="9"><span class="ot">headOrZero ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span></a>
-<a class="sourceLine" id="cb113-10" data-line-number="10">headOrZero xs <span class="fu">=</span> intOrZero (safeHead xs)</a></code></pre></div>
+<a class="sourceLine" id="cb113-6" data-line-number="6">safeHead xs <span class="fu">=</span> <span class="kw">if</span> null xs <span class="kw">then</span> <span class="dt">Nothing</span> <span class="kw">else</span> <span class="dt">Just</span> (head xs)</a>
+<a class="sourceLine" id="cb113-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb113-8" data-line-number="8"><span class="ot">headOrZero ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span></a>
+<a class="sourceLine" id="cb113-9" data-line-number="9">headOrZero xs <span class="fu">=</span> intOrZero (safeHead xs)</a></code></pre></div>
 <div class="sourceCode" id="cb114"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb114-1" data-line-number="1">headOrZero []  <span class="fu">==&gt;</span> intOrZero (safeHead [])  <span class="fu">==&gt;</span> intOrZero <span class="dt">Nothing</span>  <span class="fu">==&gt;</span> <span class="dv">0</span></a>
 <a class="sourceLine" id="cb114-2" data-line-number="2">headOrZero [<span class="dv">1</span>] <span class="fu">==&gt;</span> intOrZero (safeHead [<span class="dv">1</span>]) <span class="fu">==&gt;</span> intOrZero (<span class="dt">Just</span> <span class="dv">1</span>) <span class="fu">==&gt;</span> <span class="dv">1</span></a></code></pre></div>
 <h2 id="sidenote-constructors"><span class="header-section-number">2.6</span> Sidenote: Constructors</h2>
@@ -1350,7 +1349,7 @@ One
 <li>
 Two
 </ol>
-<p>Why is <code>Nothing 1</code> not a well-typed expression?</p>
+<p>Why does the expression <code>Nothing 1</code> cause a type error?</p>
 <ol class="quiz">
 <li class="correct">
 Because <code>Nothing</code> takes no arguments
@@ -1374,7 +1373,7 @@ Because <code>Nothing</code> is a constructor
 <code>Bool -&gt; Bool -&gt; Either String Bool</code>
 </li>
 </ol>
-<p>Which of the following functions could have the type <code>(Bool, Int) -&gt; [Bool]</code></p>
+<p>Which of the following functions could have the type <code>Bool -&gt; Int -&gt; [Bool]</code></p>
 <ol class="quiz">
 <li>
 <code>f x y = [0, y]</code>
@@ -1875,15 +1874,15 @@ Prelude&gt; map (add 3) [1,2,3]
 <code>f x = (\y -&gt; x) x</code>
 </li>
 </ol>
-<p>Which one of the following functions is not correctly typed?</p>
+<p>Which one of the following functions is correctly typed?</p>
 <ol class="quiz">
 <li>
 <code>f x y = not x; f :: (Bool -&gt; Bool) -&gt; Bool</code>
 </li>
-<li class="correct">
+<li>
 <code>f x = x ++ &quot;a&quot;; f :: Char -&gt; String</code>
 </li>
-<li>
+<li class="correct">
 <code>f x = 'a' : x; f :: String -&gt; String</code>
 </li>
 </ol>
