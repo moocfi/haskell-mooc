@@ -11,7 +11,7 @@
 --  * null
 
 
-module Set2 where
+module Set2a where
 
 import Mooc.Todo
 
@@ -64,12 +64,24 @@ substring :: Int -> Int -> String -> String
 substring i j s = todo
 
 ------------------------------------------------------------------------------
--- Ex 5: implement the function palindromify that chops a character
+-- Ex 5: check if a string is a palindrome. A palindrome is a string
+-- that is the same when read backwards.
+--
+-- Hint! There's a really simple solution to this. Don't overthink it!
+--
+-- Examples:
+--   isPalindrome ""         ==>  True
+--   isPalindrome "ABBA"     ==>  True
+--   isPalindrome "racecar"  ==>  True
+--   isPalindrome "AB"       ==>  False
+
+isPalindrome :: String -> Bool
+isPalindrome str = todo
+
+------------------------------------------------------------------------------
+-- Ex 6: implement the function palindromify that chops a character
 -- off the front _and_ back of a string until the result is a
 -- palindrome.
---
--- Hint: remember the function palindrome :: String -> Bool from the
--- course material!
 --
 -- Examples:
 --   palindromify "ab" ==> ""
@@ -81,7 +93,7 @@ palindromify :: String -> String
 palindromify s = todo
 
 ------------------------------------------------------------------------------
--- Ex 6: implement safe integer devision, that is, a function that
+-- Ex 7: implement safe integer devision, that is, a function that
 -- returns a Just result normally, but Nothing if the divisor is zero.
 --
 -- Remember that integer division can be done with the div function.
@@ -94,7 +106,7 @@ safeDiv :: Integer -> Integer -> Maybe Integer
 safeDiv x y = todo
 
 ------------------------------------------------------------------------------
--- Ex 7: implement a function greet that greets a person given a first
+-- Ex 8: implement a function greet that greets a person given a first
 -- name and possibly a last name. The last name is represented as a
 -- Maybe String value.
 --
@@ -106,8 +118,8 @@ greet :: String -> Maybe String -> String
 greet first last = todo
 
 ------------------------------------------------------------------------------
--- Ex 8: safe list indexing. Define a function safeIndex so that
---   safeIndex xs i
+-- Ex 9: safe list indexing. Define a function safeIndex so that
+--   sefeIndex xs i
 -- gets the element at index i in the list xs. If i is not a valid
 -- index, Nothing is returned.
 --
@@ -122,7 +134,7 @@ safeIndex :: [a] -> Int -> Maybe a
 safeIndex xs i = todo
 
 ------------------------------------------------------------------------------
--- Ex 9: another variant of safe division. This time you should use
+-- Ex 10: another variant of safe division. This time you should use
 -- Either to return a string error message.
 --
 -- Examples:
@@ -133,7 +145,7 @@ eitherDiv :: Integer -> Integer -> Either String Integer
 eitherDiv x y = todo
 
 ------------------------------------------------------------------------------
--- Ex 10: implement the function addEithers, which combines two values of type
+-- Ex 11: implement the function addEithers, which combines two values of type
 -- Either String Int into one like this:
 --
 -- - If both inputs were Ints, sum the Ints
