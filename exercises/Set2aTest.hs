@@ -63,7 +63,7 @@ ex4_substring = forAll_ $ \(prefix :: String, target, suffix) ->
   $(testing [|substring (length prefix) (length prefix + length target) (prefix ++ target ++ suffix)|]) (?==target)
 
 ex5_isPalindrome = forAllBlind word $ \w1 ->
-  forAllBlind (word `suchThat` ((/=last w1).last) `suchThat` ((>1).length)) $ \w2 ->
+  forAllBlind (word `suchThat` ((/=head w1).last) `suchThat` ((>1).length)) $ \w2 ->
   conjoin [$(testing [|isPalindrome (w1 ++ w2)|]) (?==False)
           ,$(testing [|isPalindrome (w1 ++ reverse w1)|]) (?==True)
           ,head w2 /= last w2 ==> $(testing [|isPalindrome (w1 ++ w2 ++ reverse w1)|]) (?==False)
