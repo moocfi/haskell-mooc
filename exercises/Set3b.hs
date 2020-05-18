@@ -13,8 +13,11 @@
 --  * map
 --  * filter
 --  * concat
+--  * (!!)
 --
 -- The (:) operator is available, as is list literal syntax [a,b,c].
+--
+-- Feel free to use if-then-else, guards, and ordering functions (< and > etc.).
 --
 -- The tests will check that you haven't added imports :)
 
@@ -88,7 +91,7 @@ indexDefault xs i def = todo
 -- Ex 5: define a function that checks if the given list is in
 -- increasing order.
 --
--- Use only pattern matching and recursion.
+-- Use pattern matching and recursion to iterate through the list.
 
 sorted :: [Int] -> Bool
 sorted xs = todo
@@ -159,7 +162,7 @@ map2 f as bs = todo
 -- maybeMap is given a list ([a]) and a function of type a -> Maybe b.
 -- This function is called for all values in the list. If the function
 -- returns Just x, x will be in the result list. If the function
--- returns Nothing, nothing gets added to the result list.
+-- returns Nothing, no value gets added to the result list.
 --
 -- Examples:
 --

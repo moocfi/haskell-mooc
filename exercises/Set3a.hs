@@ -113,14 +113,15 @@ capitalize = todo
 --   * the function takeWhile
 
 powers :: Int -> Int -> [Int]
-powers n max = todo
+powers k max = todo
 
 ------------------------------------------------------------------------------
--- Ex 7: implement a functional while loop. That is, a function while
--- that that takes an updating function, a checking function and an
+-- Ex 7: implement a functional while loop. While should be a function
+-- that that takes a checking function, an updating function, and an
 -- initial value. While should repeatedly apply the updating function
--- to the initial value as long as the value passes the checking function.
--- Finally, the value that doesn't pass the check is returned.
+-- to the initial value as long as the value passes the checking
+-- function. Finally, the value that doesn't pass the check is
+-- returned.
 --
 -- Examples:
 --
@@ -142,14 +143,14 @@ while check update initial = todo
 -- function returns an Either value. A Left value means stop, a Right
 -- value means keep looping.
 --
--- The call `whileEither check x` should call `check x`, and if the
+-- The call `whileRight check x` should call `check x`, and if the
 -- result is a Left, return the contents of the Left. If the result is
 -- a Right, the function should call `check` on the contents of the
 -- Right and so on.
 --
 -- Examples (see definition of step below):
---   whileEither (step 100) 1   ==> 128
---   whileEither (step 1000) 3  ==> 1536
+--   whileRight (step 100) 1   ==> 128
+--   whileRight (step 1000) 3  ==> 1536
 
 whileRight :: (a -> Either b a) -> a -> b
 whileRight f x = todo
