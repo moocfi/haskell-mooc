@@ -70,11 +70,12 @@ capitalizeOne (c:cs) = oneof [return (toUpper c:cs)
 ex3 = property $ do
   name <- word
   diff <- word `suchThat` (/=name)
-  namev1 <- Name <$> capitalizeOne name
-  namev2 <- Name <$> capitalizeOne name
-  diffv1 <- Name <$> capitalizeOne diff
-  return $ conjoin [testEquals namev1 namev2 True
-                   ,testEquals namev1 diffv1 False]
+  namev1 <- capitalizeOne name
+  namev2 <- capitalizeOne name
+  diffv1 <- capitalizeOne diff
+  return $ conjoin [testEquals (Name namev1) (Name namev2) True
+                   ,testEquals (Name namev1) (Name diffv1) False
+                   ,testEquals (Name namev1) (Name (namev1++diff)) False]
 
 fromList = foldr LNode Empty
 
