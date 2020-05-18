@@ -139,6 +139,8 @@ eitherDiv x y = todo
 -- - If both inputs were Ints, sum the Ints
 -- - Otherwise, return the first argument that was not an Int
 --
+-- Hint! Remember pattern matching
+--
 -- Exmaples:
 --
 -- addEithers (Right 1) (Right 2) ==> Right 3
