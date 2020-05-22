@@ -83,7 +83,7 @@ rangeOf :: [a] -> a
 rangeOf = todo
 
 ------------------------------------------------------------------------------
--- Ex 5: given a list of lists, return the longest lists. If there
+-- Ex 5: given a list of lists, return the longest list. If there
 -- are multiple lists of the same length, return the list that has
 -- the smallest _first element_.
 --
