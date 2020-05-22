@@ -8,7 +8,8 @@ body { padding-left: 5%;
 
     div#everything { overflow: hidden;
                      display: flex;
-                     max-height: 100vh; }
+                     max-height: 100vh;
+                     width: 100%; }
 
     div#text-container { overflow-y: scroll;
                          flex-grow: 1;
