@@ -13,28 +13,6 @@ import Mooc.Test
 
 import Set6
 
-main = score tests
-
-tests = [(1,"Eq Country",[ex1])
-        ,(2,"Ord Country",[ex2])
-        ,(3,"Eq Name",[ex3])
-        ,(4,"Eq List",[ex4_eq, ex4_neq])
-        ,(5,"Price",[ex5_egg, ex5_milk])
-        ,(6,"Price List",[ex6_egg, ex6_milk])
-        ,(7,"Ord Number",[ex7_eq_check, ex7_finite, ex7_infinite])
-        ,(8,"Eq RationalNumber",[ex8_refl, ex8_eq])
-        ,(9,"simplify",[ex9_prime, ex9_eq])
-        ,(10,"Num RationalNumber",[ex10_add_zero, ex10_add_commut, ex10_add_whole, ex10_add
-                                  ,ex10_multiply_one, ex10_multiply_commut, ex10_multiply_inverse, ex10_multiply
-                                  ,ex10_abs
-                                  ,ex10_signum_abs
-                                  ,ex10_fromInteger
-                                  ,ex10_negate
-                                  ])
-        ]
-
--- -- -- -- -- -- -- --
-
 testEquals x y exp = $(testing [|x == y|]) (?==exp)
 
 ex1 = conjoin [testEquals Finland Finland True
@@ -219,7 +197,7 @@ ex10_multiply = $(withInstance "Num" "RationalNumber" [|(*) :: RationalNumber ->
 ex10_abs = $(withInstance "Num" "RationalNumber" [|abs :: RationalNumber -> RationalNumber|]) $ \abs ->
   forAllBlind genSimpl $ \r@(RationalNumber p q) ->
   conjoin [$(testing [|abs (RationalNumber (-p) q)|]) (exactly r)
-         ,$(testing [|abs r|]) (exactly r)]
+          ,$(testing [|abs r|]) (exactly r)]
 
 ex10_signum_abs = $(withInstance "Num" "RationalNumber" [|abs :: RationalNumber -> RationalNumber|]) $ \abs ->
   forAll_ $ \r ->
@@ -236,3 +214,76 @@ ex10_negate = $(withInstance "Num" "RationalNumber" [|negate :: RationalNumber -
   forAll_ $ \r ->
   counterexample ("("++show r++") + negate ("++show r++")") $
   exactly (RationalNumber 0 1) (r + negate r)
+
+ex11_integer = $(withInstance "Addable" "Integer" [|(zero::Integer,add::Integer->Integer->Integer)|]) $ \(zero,add) ->
+  forAll_ $ \(x::Integer,y) ->
+  conjoin [$(testing [|add x y|]) (?==x+y)
+          ,$(testing [|add zero x|]) (?==x)]
+
+ex11_list = $(withInstance1 "Addable" "[]" [|(zero::[Bool],add::[Bool]->[Bool]->[Bool])|]) $ \(zero,add) ->
+  forAll_ $ \(x::[Bool],y) ->
+  conjoin [$(testing [|add x y|]) (?==x++y)
+          ,$(testing [|add zero x|]) (?==x)
+          ,$(testing [|add x zero|]) (?==x)]
+
+ex12_step_color = $(withInstance "Cycle" "Color" [|step|]) $ \step ->
+  conjoin [$(testing [|step Red|]) (?==Green)
+          ,$(testing [|step Green|]) (?==Blue)
+          ,$(testing [|step Blue|]) (?==Red)]
+
+ex12_step_suit = $(withInstance "Cycle" "Suit" [|step|]) $ \step ->
+  conjoin [$(testing [|step Club|]) (?==Spade)
+          ,$(testing [|step Spade|]) (?==Diamond)
+          ,$(testing [|step Diamond|]) (?==Heart)
+          ,$(testing [|step Heart|]) (?==Club)]
+
+ex12_stepMany_color = $(withInstance "Cycle" "Color" [|stepMany|]) $ \stepMany ->
+  property $ do
+    let vals = [Red,Green,Blue]
+    i <- choose (0,2)
+    j <- choose (0,20)
+    return $ $(testing [|stepMany j (vals!!i)|]) (?==vals!!(mod (i+j) 3))
+
+ex12_stepMany_suit = $(withInstance "Cycle" "Suit" [|stepMany|]) $ \stepMany ->
+  property $ do
+    let vals = [Club,Spade,Diamond,Heart]
+    i <- choose (0,3)
+    j <- choose (0,20)
+    return $ $(testing [|stepMany j (vals!!i)|]) (?==vals!!(mod (i+j) 4))
+
+ex12_stepMany_class = $(classContains "Cycle" "stepMany")
+
+$(defineInstance "Cycle" ''Int "step" [|succ|])
+
+$(return []) -- hack to make next test see instance
+
+ex12_stepMany_default = counterexample "After defining\n  instance Cycle Int where step = succ" $
+  $(withInstance "Cycle" "Int" [|stepMany|]) $ \stepMany ->
+  forAllBlind (choose (0,100::Int)) $ \n ->
+  forAllBlind (choose (0,100::Int)) $ \m ->
+  $(testing [|stepMany n m|]) (?==n+m)
+
+-- -- -- -- -- -- -- -- tests need to be defined after TH splice above
+
+main = score tests
+
+tests = [(1,"Eq Country",[ex1])
+        ,(2,"Ord Country",[ex2])
+        ,(3,"Eq Name",[ex3])
+        ,(4,"Eq List",[ex4_eq, ex4_neq])
+        ,(5,"Price",[ex5_egg, ex5_milk])
+        ,(6,"Price List",[ex6_egg, ex6_milk])
+        ,(7,"Ord Number",[ex7_eq_check, ex7_finite, ex7_infinite])
+        ,(8,"Eq RationalNumber",[ex8_refl, ex8_eq])
+        ,(9,"simplify",[ex9_prime, ex9_eq])
+        ,(10,"Num RationalNumber",[ex10_add_zero, ex10_add_commut, ex10_add_whole, ex10_add
+                                  ,ex10_multiply_one, ex10_multiply_commut, ex10_multiply_inverse, ex10_multiply
+                                  ,ex10_abs
+                                  ,ex10_signum_abs
+                                  ,ex10_fromInteger
+                                  ,ex10_negate
+                                  ])
+        ,(11,"Addable",[ex11_integer, ex11_list])
+        ,(12,"Cycle",[ex12_step_color, ex12_step_suit, ex12_stepMany_color, ex12_stepMany_suit
+                     ,ex12_stepMany_class, ex12_stepMany_default])
+        ]

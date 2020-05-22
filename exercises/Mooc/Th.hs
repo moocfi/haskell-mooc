@@ -3,7 +3,7 @@
 module Mooc.Th (testing, testing',
                 isDefined, withDefined, hasType, importsOnly, show',
                 reifyType, DataType(..), FieldType(..), Constructor(..),
-                withInstance, withInstance1)
+                withInstance, withInstance1, classContains, defineInstance)
 where
 
 import Data.Char
@@ -124,6 +124,17 @@ withInstance cln typn val = do
                              then [|\k -> k $val|]
                              else [|\k -> counterexample ("Type "++typn++" is not an instance of class "++cln) (property False)|]
 
+classContains :: String -> String -> Q Exp
+classContains cln varn = do
+  var <- lookupValueName varn
+  case var of
+    Nothing -> [|counterexample ("Function "++varn++" not found") (property False)|]
+    Just cl -> do
+      info <- reify cl
+      case info of
+        (ClassOpI _ _ parent) -> let pn = nameBase parent in [|counterexample ("Function "++varn++ "is in the wrong class!") (pn ?== cln)|]
+        _ -> [|counterexample ("Function "++varn++" is not a method of class "++cln) (property False)|]
+
 lookupConstructor :: String -> Q (Maybe Type)
 lookupConstructor "[]" = return (Just ListT)
 lookupConstructor x = (fmap.fmap) ConT $ lookupTypeName x
@@ -139,6 +150,14 @@ withInstance1 cln typn val = do
                            if b
                              then [|\k -> k $val|]
                              else [|\k -> counterexample ("Type "++typn++" is not an instance of class "++cln) (property False)|]
+
+defineInstance :: String -> Name -> String -> Q Exp -> Q [Dec]
+defineInstance cln typn methodn body = do
+  cl <- lookupTypeName cln
+  --let method = Name (OccName methodn) NameS
+  case cl of
+    Nothing -> return []
+    (Just c) -> sequence [instanceD (cxt []) (appT (conT c) (conT typn)) [funD (mkName methodn) [clause [] (normalB body) []]]]
 
 -- verbose testing
 

@@ -162,3 +162,42 @@ instance Num RationalNumber where
   signum q = todo
   fromInteger x = todo
   negate q = todo
+
+------------------------------------------------------------------------------
+-- Ex 11: a class for adding things. Define a class Addable with a
+-- constant `zero` and a function `add`. Define instances of Addable
+-- for Integers and lists. Numbers are added with the usual addition,
+-- while lists are added by catenating them. Pick a value for `zero`
+-- such that: `add zero x == x`
+--
+-- Examples:
+--   add 1 2                ==>  3
+--   add 1 zero             ==>  1
+--   add [1,2] [3,4]        ==>  [1,2,3,4]
+--   add zero [True,False]  ==>  [True,False]
+
+
+------------------------------------------------------------------------------
+-- Ex 12: cycling. Implement a type class Cycle that contains a
+-- function `step` that cycles through the values of the type.
+-- Implement instances for Color and Suit that work like this:
+--
+--   step Red ==> Green
+--   step Green ==> Blue
+--   step Blue ==> Red
+--
+-- The suit instance should cycle suits in the order Club, Spade,
+-- Diamond, Heart, Club.
+--
+-- Also add a function `stepMany` and give it a default implementation
+-- using `step`. The function `stepMany` should take multiple
+-- (determined by an Int argument) steps like this:
+--
+--   cycleMany 2 Club ==> Diamond
+--   cycleMany 2 Diamond ==> Club
+
+data Color = Red | Green | Blue
+  deriving (Show, Eq)
+data Suit = Club | Spade | Diamond | Heart
+  deriving (Show, Eq)
+
