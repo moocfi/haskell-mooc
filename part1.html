@@ -3006,7 +3006,7 @@ Because <code>Nothing</code> is a constructor.
 <a class="sourceLine" id="cb348-16" data-line-number="16">          <span class="fu">|</span> otherwise <span class="fu">=</span>  x</a>
 <a class="sourceLine" id="cb348-17" data-line-number="17">  min x y <span class="fu">|</span> x <span class="fu">&lt;=</span> y    <span class="fu">=</span>  x</a>
 <a class="sourceLine" id="cb348-18" data-line-number="18">          <span class="fu">|</span> otherwise <span class="fu">=</span>  y</a></code></pre></div>
-<p>With this definition it’s really hard to know what the minimal complete definition is. Luckily the [docs tell us][ord-docs] “Minimal complete definition: either compare or &lt;=.”</p>
+<p>With this definition it’s really hard to know what the minimal complete definition is. Luckily the <a href="https://hackage.haskell.org/package/base-4.12.0.0/docs/Prelude.html#t:Ord">docs tell us</a> “Minimal complete definition: either compare or &lt;=.”</p>
 <p>As a final word on default implementations, if there is never a need to override the default definition, the function can be moved out of the class for simplicity. Consider a class like <code>Combine</code> below:</p>
 <div class="sourceCode" id="cb349"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb349-1" data-line-number="1"><span class="kw">class</span> <span class="dt">Combine</span> a <span class="kw">where</span></a>
 <a class="sourceLine" id="cb349-2" data-line-number="2"><span class="ot">  combine ::</span> a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a</a>
