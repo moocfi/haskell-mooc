@@ -25,7 +25,7 @@ import Mooc.Todo
 ------------------------------------------------------------------------------
 -- Ex 3: Here's the definition for a datatype ShoppingEntry that
 -- represents an entry in a shopping basket. It has an item name (a
--- String), an item price (a Double) and a count (Int). You'll also
+-- String), an item price (a Double) and a count (an Int). You'll also
 -- find two examples of ShoppingEntry values.
 --
 -- Implement the functions totalPrice and buyOneMore below.
