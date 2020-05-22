@@ -193,8 +193,8 @@ instance Num RationalNumber where
 -- using `step`. The function `stepMany` should take multiple
 -- (determined by an Int argument) steps like this:
 --
---   cycleMany 2 Club ==> Diamond
---   cycleMany 2 Diamond ==> Club
+--   stepMany 2 Club ==> Diamond
+--   stepMany 3 Diamond ==> Spade
 
 data Color = Red | Green | Blue
   deriving (Show, Eq)
