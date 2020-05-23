@@ -1774,7 +1774,7 @@ Prelude&gt; map (add 3) [1,2,3]
 <a class="sourceLine" id="cb194-4" data-line-number="4"><span class="kw">in</span> iterate tail (length xs) xs</a>
 <a class="sourceLine" id="cb194-5" data-line-number="5">  <span class="fu">==&gt;</span> [<span class="st">&quot;terve&quot;</span>,<span class="st">&quot;erve&quot;</span>,<span class="st">&quot;rve&quot;</span>,<span class="st">&quot;ve&quot;</span>,<span class="st">&quot;e&quot;</span>,<span class="st">&quot;&quot;</span>]</a></code></pre></div>
 <p>Here’s a more complicated example: splitting a string into pieces at a given character:</p>
-<div class="sourceCode" id="cb195"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb195-1" data-line-number="1"><span class="ot">split ::</span> <span class="dt">Char</span> <span class="ot">-&gt;</span> [<span class="dt">String</span>] <span class="ot">-&gt;</span> [[<span class="dt">String</span>]]</a>
+<div class="sourceCode" id="cb195"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb195-1" data-line-number="1"><span class="ot">split ::</span> <span class="dt">Char</span> <span class="ot">-&gt;</span> <span class="dt">String</span> <span class="ot">-&gt;</span> [<span class="dt">String</span>]</a>
 <a class="sourceLine" id="cb195-2" data-line-number="2">split c [] <span class="fu">=</span> []</a>
 <a class="sourceLine" id="cb195-3" data-line-number="3">split c xs <span class="fu">=</span> start <span class="fu">:</span> split c (drop <span class="dv">1</span> rest)</a>
 <a class="sourceLine" id="cb195-4" data-line-number="4">  <span class="kw">where</span> start <span class="fu">=</span> takeWhile (<span class="fu">/=</span>c) xs</a>
