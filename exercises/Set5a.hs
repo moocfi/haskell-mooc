@@ -136,7 +136,7 @@ study = todo
 
 ------------------------------------------------------------------------------
 -- Ex 7: define a datatype UpDown that represents a counter that can
--- either be in incresing or decreasing mode. Also implement the
+-- either be in increasing or decreasing mode. Also implement the
 -- functions zero, toggle, tick and get below.
 --
 -- NB! Define _two_ constructors for your datatype (feel free to name the
