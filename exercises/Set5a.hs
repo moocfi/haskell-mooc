@@ -51,7 +51,7 @@ twoBananas = MkShoppingEntry "Banana" 1.1 2
 totalPrice :: ShoppingEntry -> Double
 totalPrice = todo
 
--- buyOneMore should increment the count in an entry buy one
+-- buyOneMore should increment the count in an entry by one
 --
 -- Example:
 --   buyOneMore twoBananas    ==> MkShoppingEntry "Banana" 1.1 3
