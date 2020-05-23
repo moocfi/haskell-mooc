@@ -45,7 +45,7 @@ twoBananas = MkShoppingEntry "Banana" 1.1 2
 -- Double
 --
 -- Examples:
---   totalPrice threeApplies  ==> 1.5
+--   totalPrice threeApples  ==> 1.5
 --   totalPrice twoBananas    ==> 2.2
 
 totalPrice :: ShoppingEntry -> Double
