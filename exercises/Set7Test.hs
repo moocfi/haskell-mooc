@@ -161,7 +161,7 @@ ex8_multiply2 =
   compute2 (mul2 i j) ?== (i*j)
 
 ex8_show1 =
-  $(hasType "show1" [t|Operation1 -> [Char]|]) $ \show1 ->
+  $(hasType "show1" [t|Operation1 -> String|]) $ \show1 ->
   forAllBlind smallInt $ \i ->
   forAllBlind smallInt $ \j ->
   conjoin [$(testing [|show1 (Add1 i j)|]) (?==show i++"+"++show j)
@@ -169,7 +169,7 @@ ex8_show1 =
 
 ex8_show1_multiply1 =
   $(hasType "Multiply1" [t|Int -> Int -> Operation1|]) $ \mul1 ->
-  $(hasType "show1" [t|Operation1 -> [Char]|]) $ \show1 ->
+  $(hasType "show1" [t|Operation1 -> String|]) $ \show1 ->
   forAllBlind smallInt $ \i ->
   forAllBlind smallInt $ \j ->
   counterexample ("show1 (Multiply1 " ++ show i ++ " " ++ show j ++ ")") $
