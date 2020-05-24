@@ -3420,7 +3420,7 @@ If I define an instance for <code>Num</code>, I also get an instance for <code>F
 <p>Remember to give <a href="https://forms.gle/YCo2jAaUTg9vER7G6">feedback</a>!</p>
 <h1 id="lecture-8-the-aftertaste"><span class="header-section-number">8</span> Lecture 8: The Aftertaste</h1>
 <h2 id="a-taste-of-io"><span class="header-section-number">8.1</span> A taste of IO</h2>
-<p>This course has been centered about pure functional programming. We’ve done lots of arithmetic, reversed lists, worked with binary trees, but so far we haven’t been able to affect the world outside our GHCi.</p>
+<p>This course has been centered around pure functional programming. We’ve done lots of arithmetic, reversed lists, worked with binary trees, but so far we haven’t been able to affect the world outside our GHCi.</p>
 <p>Things like reading input, writing to a file, or talking over the network are <em>side effects</em>. Side effects can’t be represented with pure functional code. A function like</p>
 <div class="sourceCode" id="cb395"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb395-1" data-line-number="1"><span class="ot">readInputFromTheUser ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">String</span></a></code></pre></div>
 <p>can’t be pure, because if it were, <code>readInputFromUser &quot;What is your name?&quot;</code> would always have to return the same result. However, representing side-effects and impurity in a pure language <em>is</em> possible. There are many ways of doing it, and the Haskell way is to use <em>Monads</em>.</p>
