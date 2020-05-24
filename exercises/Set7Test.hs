@@ -226,8 +226,8 @@ tree leaf node cs = node (tree leaf node lefts) (tree leaf node rights)
 
 special = elements "0123456789!#%&/()="
 
-ex9_large = forAllShrink_ (listOf special) $ \forbidden ->
-  forAllShrink_ (listOf special) $ \required' ->
+ex9_large = forAllBlind (listOf special) $ \forbidden ->
+  forAllBlind (listOf special) $ \required' ->
   forAllShrink_ (listOf (choose ('a','z'))) $ \base ->
   let required = filter (not . flip elem forbidden) required'
       rules = And (tree ContainsSome Or required) (tree DoesNotContain And forbidden)
