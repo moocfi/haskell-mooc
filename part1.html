@@ -3277,6 +3277,7 @@ If I define an instance for <code>Num</code>, I also get an instance for <code>F
 <a class="sourceLine" id="cb372-6" data-line-number="6">toList (x <span class="fu">:|</span> xs) <span class="fu">=</span> x <span class="fu">:</span> xs</a></code></pre></div>
 <p>In summary, if you write types that represent all possible cases for your values, and then write functions that handle those cases, your code will be simple and correct.</p>
 <h2 id="monoids"><span class="header-section-number">7.3</span> Monoids</h2>
+<!-- TODO: move to the end of the lecture? -->
 <h3 id="what"><span class="header-section-number">7.3.1</span> What?</h3>
 <p>A simple but useful abstraction that Haskell libraries use is that of the <em>monoid</em>. (Not to be confused with a <em>monad</em>!) In Haskell terms, <code>Monoid</code> is a type class that contains the function <code>&lt;&gt;</code> and the constant <code>mempty</code>.</p>
 <p>The <code>&lt;&gt;</code> operation is meant to be <em>associative</em> that is, <code>x &lt;&gt; (y &lt;&gt; z) == (x &lt;&gt; y) &lt;&gt; z</code>. Familiar examples of associative operations include <code>+</code>, <code>*</code>, <code>++</code>, <code>max</code>, etc.</p>
