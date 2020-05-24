@@ -167,6 +167,8 @@ compute1 :: Operation1 -> Int
 compute1 (Add1 i j) = i+j
 compute1 (Subtract1 i j) = i-j
 
+show1 :: Operation1 -> String
+show1 = todo
 
 data Add2 = Add2 Int Int
   deriving Show
