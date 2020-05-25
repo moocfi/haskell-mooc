@@ -1681,8 +1681,6 @@ Prelude&gt; map (add 3) [1,2,3]
 <a class="sourceLine" id="cb173-3" data-line-number="3">  <span class="fu">==&gt;</span> [reverse <span class="st">&quot;string&quot;</span>, take <span class="dv">2</span> <span class="st">&quot;string&quot;</span>, drop <span class="dv">2</span> <span class="st">&quot;string&quot;</span>]</a>
 <a class="sourceLine" id="cb173-4" data-line-number="4">  <span class="fu">==&gt;</span> [<span class="st">&quot;gnirts&quot;</span>, <span class="st">&quot;st&quot;</span>, <span class="st">&quot;ring&quot;</span>]</a></code></pre></div>
 <!-- `zipWith (.)` would be an example on using `.` as a function. -->
-<!-- TODO: We could add a `foldr (.)` example to the fold chapter, e.g.
-     `foldr (.) id [(+1), (*2), (3-)]`. -->
 <p>If this seems complicated, don’t worry. You don’t need to use <code>.</code> and <code>$</code> in your own code until you’re comfortable with them. However, you’ll bump into <code>.</code> and <code>$</code> when reading Haskell examples and code on the internet, so it’s good to know about them.</p>
 <h2 id="example-rewriting-whatfollows"><span class="header-section-number">3.6</span> Example: rewriting <code>whatFollows</code></h2>
 <p>Now, let’s rewrite the <code>whatFollows</code> example from earlier using the tools we just saw. Here’s the original version:</p>

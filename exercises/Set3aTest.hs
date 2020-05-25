@@ -2,6 +2,7 @@
 
 module Set3aTest where
 
+--import Control.Monad
 import Data.Char
 import Data.List
 import Test.QuickCheck
@@ -24,7 +25,9 @@ tests = [(1,"maxBy",[ex1_maxBy])
         ,(9,"joinToLength",[ex9_1])
         ,(10,"+|+",[ex10])
         ,(11,"sumRights",[ex11])
-        ,(12,"interpreter",[ex12_interpreter_1, ex12_interpreter_2])
+        ,(12,"multiCompose",[ex12_empty, ex12_scalability, ex12_arithmetic, ex12_strings])
+        ,(13,"multiApp",[ex13_empty, ex13_scalability, ex13_arithmetic, ex13_strings])
+        ,(14,"interpreter",[ex14_interpreter_1, ex14_interpreter_2])
         ]
 
 -- -- -- -- -- --
@@ -163,7 +166,66 @@ ex11 = property $ do
   input <- shuffle (map Right is ++ map Left es)
   return $ $(testing [|sumRights input|]) (?==sum is)
 
-ex12_interpreter_1 = property $ do
+ex12_empty = property $ do
+  n <- choose (0,9) :: Gen Int
+  let input  = multiCompose [] n
+      output = n
+  return $ counterexample ("multiCompose [] " ++ show n)
+         $ input ?== output
+
+ex12_scalability = property $ do
+  n <- choose (0,9) :: Gen Int
+  let input  = multiCompose (replicate n succ) 0
+      output = n
+  return $ counterexample ("multiCompose (replicate " ++ show n ++ " succ) 0")
+         $ input ?== output
+
+ex12_arithmetic = property $ do
+  n  <- choose (0,5) :: Gen Int
+  let input  = multiCompose [(3*), (^2), (+1)] n
+      output = ((3*) . (^2) . (+1)) n
+  return $ counterexample ("multiCompose [(3*), (^2), (+1)] " ++ show n)
+         $ input ?== output
+
+ex12_strings = property $ do
+  s <- listOf letter `suchThat` (\t -> length t > 1)
+  let input  = multiCompose [(++"xy"), reverse, tail, reverse] s
+      output = (++"xy") . reverse . tail . reverse $ s
+  return $ counterexample ("multiCompose [(++\"xy\"), reverse, tail, reverse] " ++ show s)
+         $ input ?== output
+
+ex13_empty = property $ do
+  n <- choose (0,9) :: Gen Int
+  let input  = multiApp id [] n
+      output = [] :: [Int]
+  return $ counterexample ("multiApp id [] " ++ show n)
+         $ input ?== output
+
+ex13_scalability = property $ do
+  n <- choose (0,9) :: Gen Int
+  k <- choose (0,9) :: Gen Int
+  let input  = multiApp sum (replicate n succ) k
+      output = n*(k+1)
+  return $ counterexample ("multiApp sum (replicate " ++ show n ++ " succ) " ++ show k)
+         $ input ?== output
+
+ex13_arithmetic = property $ do
+  n  <- choose (0,9) :: Gen Int
+  let gs     = [(+1), (*2), (`div`2), (^2)]
+      input  = multiApp sum gs n
+      output = (n + 1) + (n * 2) + (n `div` 2) + n^2
+  return $ counterexample ("multiApp sum [(+1), (*2), (`div`2), (^2)]" ++ show n)
+         $ input ?== output
+
+ex13_strings = property $ do
+  words <- vectorOf 3 word
+  let gs     = [(\xs -> [head xs]), tail, reverse]
+      input  = multiApp id gs words
+      output = [[head words], tail words, reverse words]
+  return $ counterexample ("multiApp id [(\\xs -> [head xs]), tail, reverse]" ++ show words)
+         $ input ?== output
+
+ex14_interpreter_1 = property $ do
   up <- choose (0,10)
   right <- choose (0,10)
   down <- choose (1,3)
@@ -177,7 +239,7 @@ ex12_interpreter_1 = property $ do
   return $ counterexample ("interpreter "++show input) $
     interpreter input ?== output
 
-ex12_interpreter_2 = property $ do
+ex14_interpreter_2 = property $ do
   nums <- vectorOf 4 $ choose (0,10)
   let diffs = zipWith (-) nums (0:nums)
       f x | x<0 = replicate (negate x) "down"

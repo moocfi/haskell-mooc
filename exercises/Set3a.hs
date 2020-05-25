@@ -117,7 +117,7 @@ powers k max = todo
 
 ------------------------------------------------------------------------------
 -- Ex 7: implement a functional while loop. While should be a function
--- that that takes a checking function, an updating function, and an
+-- that takes a checking function, an updating function, and an
 -- initial value. While should repeatedly apply the updating function
 -- to the initial value as long as the value passes the checking
 -- function. Finally, the value that doesn't pass the check is
@@ -178,7 +178,8 @@ joinToLength = todo
 -- Ex 10: implement the operator +|+ that returns a list with the first
 -- elements of its input lists.
 --
--- Give +|+ a type signature.
+-- Give +|+ a type signature. NB: It needs to be of the form (+|+) :: x,
+-- with the parentheses because +|+ is an infix operator.
 --
 -- Examples:
 --   [1,2,3] +|+ [4,5,6]  ==> [1,4]
@@ -204,7 +205,43 @@ sumRights :: [Either a Int] -> Int
 sumRights = todo
 
 ------------------------------------------------------------------------------
--- Ex 12: in this exercise you get to implement an interpreter for a
+-- Ex 12: recall the binary function composition operation
+-- (f . g) x = f (g x). In this exercise, your task is to define a function
+-- that takes any number of functions given as a list and composes them in the
+-- same order than they appear in the list.
+--
+-- Examples:
+--   multiCompose [] "foo" ==> "foo"
+--   multiCompose [] 1     ==> 1
+--   multiCompose [(++"bar")] "foo" ==> "foobar"
+--   multiCompose [reverse, tail, (++"bar")] "foo" ==> "raboo"
+--   multiCompose [(3*), (2^), (+1)] 0 ==> 6
+--   multiCompose [(+1), (2^), (3*)] 0 ==> 2
+
+multiCompose fs = todo
+
+------------------------------------------------------------------------------
+-- Ex 13: let's consider another way to compose multiple functions. Given
+-- some function f, a list of functions gs, and some value x, define
+-- a composition operation that applies each function g in gs to x and then
+-- f to the resulting list. Give also the type annotation for multiApp.
+--
+-- Examples:
+--   multiApp id [] [] ==> []
+--   multiApp id [] 7  ==> []
+--   multiApp id [id, reverse, tail] "This is a test"
+--       ==> ["This is a test","tset a si sihT","his is a test"]
+--   multiApp unwords
+--            [head, head . tail, head . tail . tail]
+--            ["Lorem", "ipsum", "dolor"]
+--       ==> "Lorem ipsum dolor"
+--   multiApp (map (*2)) [(1+), (^3), (+2)] 1 ==> [4,2,6]
+--   multiApp reverse [tail, take 2, reverse] "foo" ==> ["oof","fo","oo"]
+
+multiApp = todo
+
+------------------------------------------------------------------------------
+-- Ex 14: in this exercise you get to implement an interpreter for a
 -- simple language. You should keep track of the x and y coordinates,
 -- and interpret the following commands:
 --
