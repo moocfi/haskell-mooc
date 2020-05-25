@@ -170,7 +170,8 @@ freqs xs = todo
 --
 -- However, the function should not perform the transfer if
 -- * the from account doesn't exist,
--- * the to account doesn't exist
+-- * the to account doesn't exist,
+-- * the sum is negative,
 -- * or the from account doesn't have enough money.
 --
 -- Hint: there are many ways to implement this logic. Map.member or

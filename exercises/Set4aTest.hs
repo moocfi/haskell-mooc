@@ -187,7 +187,8 @@ ex10_notEnough = property $
      thirdBal <- choose (0,100)
      amount <- choose (1,100)
      let inp = Map.fromList [(from,fromBal),(to,toBal),(third,thirdBal)]
-     return $ $(testing [|transfer from to (fromBal+amount) inp|]) (?==inp)
+     return $ conjoin [$(testing [|transfer from to (fromBal+amount) inp|]) (?==inp)
+                      ,$(testing [|transfer from to (negate amount) inp|]) (?==inp)]
 
 ex11_bool = property $
   do small <- choose (0,100::Int)
