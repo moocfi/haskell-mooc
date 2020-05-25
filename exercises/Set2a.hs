@@ -93,7 +93,7 @@ palindromify :: String -> String
 palindromify s = todo
 
 ------------------------------------------------------------------------------
--- Ex 7: implement safe integer devision, that is, a function that
+-- Ex 7: implement safe integer division, that is, a function that
 -- returns a Just result normally, but Nothing if the divisor is zero.
 --
 -- Remember that integer division can be done with the div function.
@@ -119,7 +119,7 @@ greet first last = todo
 
 ------------------------------------------------------------------------------
 -- Ex 9: safe list indexing. Define a function safeIndex so that
---   sefeIndex xs i
+--   safeIndex xs i
 -- gets the element at index i in the list xs. If i is not a valid
 -- index, Nothing is returned.
 --

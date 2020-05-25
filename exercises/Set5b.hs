@@ -5,7 +5,7 @@ module Set5b where
 
 import Mooc.Todo
 
--- These next exercises use the binary tree type defined like this:
+-- The next exercises use the binary tree type defined like this:
 
 data Tree a = Empty | Node a (Tree a) (Tree a)
   deriving (Show, Eq)
@@ -67,7 +67,7 @@ mapTree f t = todo
 ------------------------------------------------------------------------------
 -- Ex 6: given a value and a tree, build a new tree that is the same,
 -- except all nodes that contain the value have been removed. Also
--- remove the subnodes of the removed noded.
+-- remove the subnodes of the removed nodes.
 --
 -- Examples:
 --

@@ -119,8 +119,8 @@ instance Eq RationalNumber where
   p == q = todo
 
 ------------------------------------------------------------------------------
--- Ex 9: the purpose of the simplfy function is to turn a rational number into
--- its simplest form, i.e.
+-- Ex 9: the purpose of the simplify function is to turn a rational
+-- number into its simplest form, i.e.
 --
 --     ca         a
 --    ----  ==>  ---.
