@@ -175,7 +175,7 @@ ex12_empty = property $ do
 
 ex12_scalability = property $ do
   n <- choose (0,9) :: Gen Int
-  let input  = multiCompose (replicate n succ) 0
+  let input  = multiCompose (replicate n (succ::Int->Int)) 0
       output = n
   return $ counterexample ("multiCompose (replicate " ++ show n ++ " succ) 0")
          $ input ?== output
@@ -204,7 +204,7 @@ ex13_empty = property $ do
 ex13_scalability = property $ do
   n <- choose (0,9) :: Gen Int
   k <- choose (0,9) :: Gen Int
-  let input  = multiApp sum (replicate n succ) k
+  let input  = multiApp (sum::[Int]->Int) (replicate n (succ::Int->Int)) k
       output = n*(k+1)
   return $ counterexample ("multiApp sum (replicate " ++ show n ++ " succ) " ++ show k)
          $ input ?== output
@@ -212,7 +212,7 @@ ex13_scalability = property $ do
 ex13_arithmetic = property $ do
   n  <- choose (0,9) :: Gen Int
   let gs     = [(+1), (*2), (`div`2), (^2)]
-      input  = multiApp sum gs n
+      input  = multiApp (sum::[Int]->Int) gs n
       output = (n + 1) + (n * 2) + (n `div` 2) + n^2
   return $ counterexample ("multiApp sum [(+1), (*2), (`div`2), (^2)]" ++ show n)
          $ input ?== output
