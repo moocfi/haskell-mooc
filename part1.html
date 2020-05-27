@@ -215,7 +215,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><strong>Strongly typed</strong> - every Haskell value and expression has a type. The compiler checks the types at compile-time and guarantees that no type errors can happen at runtime. This means no AttributeErrors (a la Python), ClassCastExceptions (a la Java) or segmentation faults (a la C). The Haskell type system is very powerful and can help you design better programs.</p>
 <p><strong>Type inferred</strong> - in addition to checking the types, the compiler can deduce the types for most programs. This makes working with a strongly typed language easier. Indeed, most Haskell functions can be written completely without types. However programmers can still give functions and values type annotations to make finding type errors easier. Type annotations also make reading programs easier.</p>
 <p><strong>Garbage-collected</strong> - like most high-level languages these days, Haskell has automatic memory management via garbage collection. This means that the programmer doesn’t need to worry about allocating or freeing memory, the language runtime handles all of it automatically.</p>
-<p>You’ll learn what these terms mean in practice during this course. Don’t worry if they sound abstract right now.</p>
+<p><strong>Compiled</strong> - even though we mostly use Haskell via the interactive GHCi environment on this course, Haskell is a compiled language. Haskell programs can be compiled to very efficient binaries, and the GHC compiler is very good at optimising functional code into performant machine code.</p>
+<p>You’ll learn what these terms mean in practice during this course. Don’t worry if some of them sound abstract right now.</p>
 <p>See also: <a href="https://wiki.haskell.org/Functional_programming">The Haskell Wiki page on Functional programming</a>.</p>
 <h3 id="features"><span class="header-section-number">1.3.1</span> Features</h3>
 <p>Here’s a showcase of some of the Haskell’s cool features:</p>
@@ -260,6 +261,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>2010’s: GHC development, Haskell Platform, Haskell Stack</li>
 </ul>
 <p>The word haskel in means wisdom in Hebrew, but the name of the Haskell programming language comes from the logician Haskell Curry. The name Haskell comes from the Old Norse words áss (god) and ketill (helmet).</p>
+<h3 id="uses-of-haskell"><span class="header-section-number">1.3.3</span> Uses of Haskell</h3>
+<p>Here are some examples of software projects that were written in Haskell.</p>
+<ul>
+<li>The <a href="https://en.wikipedia.org/wiki/Darcs">Darcs</a> distributed version control system</li>
+<li>The <a href="https://engineering.fb.com/security/fighting-spam-with-haskell/">Sigma spam-prevention tool at Facebook</a></li>
+<li>The implementations of the <a href="https://www.purescript.org/">PureScript</a> and <a href="https://elm-lang.org/">Elm</a> programming languages are written in Haskell</li>
+<li>The <a href="https://pandoc.org/">Pandoc</a> tool for converting between different document formats – it’s also used to produce this course material</li>
+<li>The <a href="http://postgrest.org/">PostgREST</a> server that exposes a HTTP REST API for a PostgreSQL database</li>
+<li>Functional consulting companies like <a href="https://galois.com/">Galois</a> and <a href="https://well-typed.com/">Well-Typed</a> have a long history of developing critical systems for clients in Haskell</li>
+</ul>
+<p>See <a href="http://wiki.haskell.org/Haskell_in_industry">The Haskell Wiki</a> and <a href="https://serokell.io/blog/top-software-written-in-haskell">this blog post</a> for more!</p>
 <h2 id="running-haskell"><span class="header-section-number">1.4</span> Running Haskell</h2>
 <p>The easiest way to get Haskell is to install the <code>stack</code> tool, see <a href="http://haskellstack.org" class="uri">http://haskellstack.org</a>. The exercises on this course are intended to work with Stack, so you should use it for now.</p>
 <p>By the way, if you’re interested in what Stack is, and how it relates to other Haskell tools like Cabal and GHC, <a href="https://www.quora.com/What-is-the-difference-between-Cabal-and-Stack-in-Haskell-projects-Which-one-do-you-recommend-and-why">read more here</a> or <a href="https://docs.haskellstack.org/en/stable/faq/">here</a>. We’ll get back to Haskell packages and using them in detail in part 2 of the course.</p>
