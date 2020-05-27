@@ -1,10 +1,13 @@
 body { padding-left: 5%;
+       padding-right: 5%;
        margin: 0 0 0 0;
        font-family: sans-serif;
        background: #fffcec;
        color: #222; }
 
 @media (min-width: 800px) {
+
+    body { padding-right: 0; }
 
     div#everything { overflow: hidden;
                      display: flex;
