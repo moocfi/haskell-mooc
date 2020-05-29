@@ -1,10 +1,14 @@
-body { padding-left: 5%;
-       margin: 0 0 0 0;
+body { margin: 0 0 0 0;
        font-family: sans-serif;
        background: #fffcec;
        color: #222; }
 
+div#text { padding-left: 5%;
+           padding-right: 5%; }
+
 @media (min-width: 800px) {
+
+    body { padding-right: 0% }
 
     div#everything { overflow: hidden;
                      display: flex;
@@ -17,7 +21,7 @@ body { padding-left: 5%;
 
     div#text { margin-left: auto;
                margin-right: auto;
-               max-width: 100%; }
+               max-width: 90%; /* 100% - padding */ }
 
     nav#TOC { overflow-y: scroll;
               order: 2; }
