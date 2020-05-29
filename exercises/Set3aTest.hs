@@ -26,7 +26,7 @@ tests = [(1,"maxBy",[ex1_maxBy])
         ,(10,"+|+",[ex10])
         ,(11,"sumRights",[ex11])
         ,(12,"multiCompose",[ex12_empty, ex12_scalability, ex12_arithmetic, ex12_strings])
-        ,(13,"multiApp",[ex13_empty, ex13_scalability, ex13_arithmetic, ex13_strings])
+        ,(13,"multiApp",[ex13_empty, ex13_scalability, ex13_arithmetic, ex13_strings, ex13_mixed])
         ,(14,"interpreter",[ex14_interpreter_1, ex14_interpreter_2])
         ]
 
@@ -224,6 +224,9 @@ ex13_strings = property $ do
       output = [[head words], tail words, reverse words]
   return $ counterexample ("multiApp id [(\\xs -> [head xs]), tail, reverse]" ++ show words)
          $ input ?== output
+
+ex13_mixed = counterexample ("multiApp sum [head, last] [1,2,3,4]") $
+             multiApp (sum::[Int]->Int) [head, last] [1::Int,2,3,4] ?== 5
 
 ex14_interpreter_1 = property $ do
   up <- choose (0,10)
