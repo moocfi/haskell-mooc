@@ -94,7 +94,7 @@ rangeOf = todo
 --
 -- Examples:
 --   longest [[1,2,3],[4,5],[6]] ==> [1,2,3]
---   longest ["abc","def","axx"] ==> "def"
+--   longest ["bcd","def","ab"] ==> "bcd"
 
 longest = todo
 
@@ -140,7 +140,7 @@ average xs = todo
 -- Hint: Map.findWithDefault can make this simpler
 --
 -- Examples:
---   winner (fromList [("Bob",3470),("Jane",2130),("Lisa",9448)]) "Jane" "Lisa"
+--   winner (Map.fromList [("Bob",3470),("Jane",2130),("Lisa",9448)]) "Jane" "Lisa"
 --     ==> "Lisa"
 --   winner (Map.fromList [("Bob",5899),("Lisa",5899),("Mike",13607)]) "Bob" "Lisa"
 --     ==> "Bob"
