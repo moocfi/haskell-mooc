@@ -5,6 +5,8 @@ module Set7 where
 import Mooc.Todo
 import Data.List
 import Data.List.NonEmpty (NonEmpty ((:|)))
+import Data.Monoid
+import Data.Semigroup
 
 ------------------------------------------------------------------------------
 -- Ex 1: you'll find below the types Time, Distance and Velocity,
