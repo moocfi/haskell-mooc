@@ -46,8 +46,8 @@ treeMax = todo
 --
 -- Examples:
 --   allValues (>0) Empty  ==>  True
---   allValues (>0) (Node 1 (Node 2 Empty Empty))  ==>  True
---   allValues (>0) (Node 1 (Node 0 Empty Empty))  ==>  False
+--   allValues (>0) (Node 1 Empty (Node 2 Empty Empty))  ==>  True
+--   allValues (>0) (Node 1 Empty (Node 0 Empty Empty))  ==>  False
 
 allValues :: (a -> Bool) -> Tree a -> Bool
 allValues condition tree = todo
@@ -162,9 +162,9 @@ data Step = StepL | StepR
 -- tree (i.e. hit a Empty).
 --
 -- Examples:
---   walk [] (Node 1 (Node 2 Empty Empty))       ==>  Just 1
---   walk [StepL] (Node 1 (Node 2 Empty Empty))  ==>  Just 2
---   walk [StepL,StepL] (Node 1 (Node 2 Empty Empty))  ==>  Nothing
+--   walk [] (Node 1 (Node 2 Empty Empty) Empty)       ==>  Just 1
+--   walk [StepL] (Node 1 (Node 2 Empty Empty) Empty)  ==>  Just 2
+--   walk [StepL,StepL] (Node 1 (Node 2 Empty Empty) Empty)  ==>  Nothing
 
 walk :: [Step] -> Tree a -> Maybe a
 walk = todo
@@ -178,14 +178,14 @@ walk = todo
 --
 -- Examples:
 --   set [] 1 (Node 0 Empty Empty)  ==>  (Node 1 Empty Empty)
---   set [StepL,StepL] 1 (Node (Node 0 (Node 0 Empty Empty)
---                                     (Node 0 Empty Empty))
---                             (Node 0 Empty Empty))
---                  ==>  (Node (Node 0 (Node 1 Empty Empty)
---                                     (Node 0 Empty Empty))
---                             (Node 0 Empty Empty))
+--   set [StepL,StepL] 1 (Node 0 (Node 0 (Node 0 Empty Empty)
+--                                       (Node 0 Empty Empty))
+--                               (Node 0 Empty Empty))
+--                  ==>  (Node 0 (Node 0 (Node 1 Empty Empty)
+--                                       (Node 0 Empty Empty))
+--                               (Node 0 Empty Empty))
 --
---   set [StepL,StepR] 1 (Node 0 Empty Empty)  ==>   (Node 0 Empty Empty)
+--   set [StepL,StepR] 1 (Node 0 Empty Empty)  ==>  (Node 0 Empty Empty)
 
 set :: [Step] -> a -> Tree a -> Tree a
 set path val tree = todo
