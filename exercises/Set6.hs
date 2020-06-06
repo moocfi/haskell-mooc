@@ -153,7 +153,7 @@ simplify p = todo
 --   fromInteger 17 :: RationalNumber        ==> RationalNumber 17 1
 --   abs (RationalNumber (-3) 2)             ==> RationalNumber 3 2
 --   signum (RationalNumber (-3) 2)          ==> RationalNumber (-1) 1
---   signum (RationalNumber 0 0)             ==> RationalNumber 0 0
+--   signum (RationalNumber 0 2)             ==> RationalNumber 0 1
 
 instance Num RationalNumber where
   p + q = todo
