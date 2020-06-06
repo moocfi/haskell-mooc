@@ -1646,7 +1646,9 @@ Prelude&gt; map (add 3) [1,2,3]
 <a class="sourceLine" id="cb160-6" data-line-number="6">[<span class="st">&quot;ABBA&quot;</span>,<span class="st">&quot;otto&quot;</span>,<span class="st">&quot;anna&quot;</span>]</a>
 <a class="sourceLine" id="cb160-7" data-line-number="7"><span class="dt">Prelude</span><span class="fu">&gt;</span> (\x y <span class="ot">-&gt;</span> x<span class="fu">^</span><span class="dv">2</span><span class="fu">+</span>y<span class="fu">^</span><span class="dv">2</span>) <span class="dv">2</span> <span class="dv">3</span>           <span class="co">-- multiple arguments</span></a>
 <a class="sourceLine" id="cb160-8" data-line-number="8"><span class="dv">13</span></a></code></pre></div>
-<p>By the way, lambda expressions are quite powerful constructs which have a deep theory of their own, known as Lambda calculus. Some even consider purely functional programming languages such as Haskell to be typed extensions of Lambda calculus with extra syntax.</p>
+<p>The Haskell syntax for lambdas is a bit surprising. The backslash character (<code>\</code>) stands for the greek letter lambda (λ). The Haskell expression <code>\x -&gt; x+1</code> is trying to mimic the mathematical notation <em>λx. x+1</em>. Other languages use syntax like <code>x =&gt; x+1</code> (JavaScript) or <code>lambda x: x+1</code> (Python).</p>
+<p><strong>Note!</strong> you never <em>need</em> to use a lambda expression. You can always instead define the function normally using <code>let</code> or <code>where</code>.</p>
+<p>By the way, lambda expressions are quite powerful constructs which have a deep theory of their own, known as <a href="https://en.wikipedia.org/wiki/Lambda_calculus">Lambda calculus</a>. Some even consider purely functional programming languages such as Haskell to be typed extensions of Lambda calculus with extra syntax.</p>
 <h2 id="sidenote-the-.-and-operators"><span class="header-section-number">3.5</span> Sidenote: the <code>.</code> and <code>$</code> operators</h2>
 <p>The two most common operators in Haskell codebases are probably <code>.</code> and <code>$</code>. They are useful when writing code that uses higher-order functions. The first of these, the <code>.</code> operator, is the <em>function composition</em> operator. Here’s its type</p>
 <div class="sourceCode" id="cb161"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb161-1" data-line-number="1"><span class="ot">(.) ::</span> (b <span class="ot">-&gt;</span> c) <span class="ot">-&gt;</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> c</a></code></pre></div>
@@ -1857,6 +1859,14 @@ Prelude&gt; map (add 3) [1,2,3]
 <a class="sourceLine" id="cb208-4" data-line-number="4">  <span class="fu">|</span> pred x         <span class="fu">=</span> x <span class="fu">:</span> filter pred xs</a>
 <a class="sourceLine" id="cb208-5" data-line-number="5">  <span class="fu">|</span> otherwise      <span class="fu">=</span> filter pred xs</a></code></pre></div>
 <p>(<strong>Note!</strong> naming the argument <code>_pred</code> is a way to tell the reader of the code that this argument is unused. It could have been just <code>_</code> as well.)</p>
+<!-- TODO: section that introduces different types of recursion:
+
+- accumulator recursion (aka tail recursion)
+- "direct recursion"
+- multiple recursion
+
+These can be then used in in explaining Set 3a Ex 14
+-->
 <h2 id="something-fun-list-comprehensions"><span class="header-section-number">3.9</span> Something fun: list comprehensions</h2>
 <p>Haskell has <em>list comprehensions</em>, a nice syntax for defining lists that combines the power of <code>map</code> and <code>filter</code>. You might be familiar with Python’s list comprehensions already. Haskell’s work pretty much the same way, but their syntax is a bit different.</p>
 <p>Mapping:</p>
