@@ -148,6 +148,9 @@ dotAndLine = todo
 --
 -- should average two images, pixel by pixel.
 --
+-- PS. Use rounding down integer division (i.e. the div function) for
+-- the average.
+--
 -- Examples:
 --   blendColor (Color 10 100 0) (Color 0 200 40)
 --     ==> Color 5 150 20
@@ -208,8 +211,8 @@ exampleCircle = fill red (circle 80 100 200)
 
 ------------------------------------------------------------------------------
 -- Ex 3: implement a rectangle. The value of `rectangle x0 y0 w h`
--- should be a rectangle with a corner at (x0, y0), a width of w, and
--- a height of h.
+-- should be a rectangle with the upper left corner at (x0, y0), a
+-- width of w, and a height of h.
 --
 -- Example:
 --  renderList (fill white (rectangle 1 2 2 3)) (0,5) (0,5)
