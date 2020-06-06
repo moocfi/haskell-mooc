@@ -123,6 +123,9 @@ isPrime = todo
 -- biggest prime number that is less than or equal to the given
 -- number. Use the function isPrime you just defined.
 --
+-- You don't need to care about arguments less than 2. Any behaviour
+-- for them is fine.
+--
 -- Examples:
 --   biggestPrimeAtMost 3 ==> 3
 --   biggestPrimeAtMost 10 ==> 7
