@@ -3110,7 +3110,7 @@ Because <code>Nothing</code> is a constructor.
 <pre><code>    • No instance for (Check a) arising from a use of ‘check’
       Possible fix:
         add (Check a) to the context of the instance declaration</code></pre>
-<p>If you think about it, this instance hierarchy allows us to circumventing the limitation that we can’t make a <code>Check [Int]</code> instance.</p>
+<p>If you think about it, this instance hierarchy allows us to circumvent the limitation that we can’t make a <code>Check [Int]</code> instance.</p>
 <p>Respectively, a class can depend on another class. This is useful for instance when you want to use functions from another class in your default implementations:</p>
 <div class="sourceCode" id="cb361"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb361-1" data-line-number="1"><span class="kw">class</span> <span class="dt">Size</span> a <span class="kw">where</span></a>
 <a class="sourceLine" id="cb361-2" data-line-number="2"><span class="ot">  size ::</span> a <span class="ot">-&gt;</span> <span class="dt">Int</span></a>
