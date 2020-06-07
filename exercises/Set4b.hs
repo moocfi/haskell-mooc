@@ -6,9 +6,9 @@ import Mooc.Todo
 
 ------------------------------------------------------------------------------
 -- Ex 1: countNothings with a fold. The function countNothings from
--- the course material can be easily implemented using foldr. Your
--- task is to define countHelper so that the following
--- definition of countNothings works.
+-- the course material can be implemented using foldr. Your task is to
+-- define countHelper so that the following definition of countNothings
+-- works.
 --
 -- Hint: You can start by trying to add a type signature for countHelper.
 --
@@ -75,6 +75,7 @@ lastHelper = todo
 -- Start by giving slStart and slHelper types.
 --
 -- Examples:
+--   sumAndLength []             ==>  (0.0,0)
 --   sumAndLength [1.0,2.0,4.0]  ==>  (7.0,3)
 
 
@@ -86,9 +87,11 @@ slHelper = todo
 
 ------------------------------------------------------------------------------
 -- Ex 6: implement concat with with a fold. Define concatHelper and
--- concatStart so that the given definition of myConcat works.
+-- concatStart so that the given definition of myConcat joins inner lists
+-- of a list.
 --
 -- Examples:
+--   myConcat [[]]                ==> []
 --   myConcat [[1,2,3],[4,5],[6]] ==> [1,2,3,4,5,6]
 
 myConcat :: [[a]] -> [a]

@@ -136,7 +136,7 @@ powers k max = todo
 --     ==> Avvt
 
 while :: (a->Bool) -> (a->a) -> a -> a
-while check update initial = todo
+while check update value = todo
 
 ------------------------------------------------------------------------------
 -- Ex 8: another version of a while loop. This time, the check
