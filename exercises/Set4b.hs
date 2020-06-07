@@ -104,8 +104,6 @@ concatHelper = todo
 -- Ex 7: get all occurrences of the largest number in a list with a
 -- fold. Implement largestHelper so that the given definition of largest works.
 --
--- This is tricky.
---
 -- Examples:
 --   largest [] ==> []
 --   largest [1,3,2] ==> [3]
