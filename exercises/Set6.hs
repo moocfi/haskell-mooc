@@ -119,8 +119,9 @@ instance Eq RationalNumber where
   p == q = todo
 
 ------------------------------------------------------------------------------
--- Ex 9: implement function simplify, which simplifies rational a number
--- so that:
+-- Ex 9: implement the function simplify, which simplifies rational a
+-- number by removing common factors of the numerator and denominator.
+-- In other words,
 --
 --     ca         a
 --    ----  ==>  ---
