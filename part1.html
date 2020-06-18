@@ -1112,7 +1112,7 @@ cabal v2-exec runhaskell Set1Test.hs</code></pre>
 <p>Often you’ll find you need helper variables in recursion to keep track of things. You can get them by defining a helper function with more arguments. Analogy: arguments of the helper function are variables you update in your loop.</p>
 <p>Here’s an example of how you would convert a loop (in Java or Python) into a recursive helper function in Haskell.</p>
 <p>Java:</p>
-<div class="sourceCode" id="cb85"><pre class="sourceCode java"><code class="sourceCode java"><a class="sourceLine" id="cb85-1" data-line-number="1"><span class="kw">public</span> <span class="dt">int</span> <span class="fu">repeatString</span>(<span class="dt">int</span> n, <span class="bu">String</span> str) {</a>
+<div class="sourceCode" id="cb85"><pre class="sourceCode java"><code class="sourceCode java"><a class="sourceLine" id="cb85-1" data-line-number="1"><span class="kw">public</span> <span class="dt">String</span> <span class="fu">repeatString</span>(<span class="dt">int</span> n, <span class="bu">String</span> str) {</a>
 <a class="sourceLine" id="cb85-2" data-line-number="2">    <span class="bu">String</span> result = <span class="st">&quot;&quot;</span>;</a>
 <a class="sourceLine" id="cb85-3" data-line-number="3">    <span class="kw">while</span> (n&gt;<span class="dv">0</span>) {</a>
 <a class="sourceLine" id="cb85-4" data-line-number="4">        result = result+str;</a>
