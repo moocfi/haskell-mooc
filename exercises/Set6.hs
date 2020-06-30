@@ -140,7 +140,7 @@ simplify p = todo
 
 ------------------------------------------------------------------------------
 -- Ex 10: implement the typeclass Num for RationalNumber. The results
--- of addition an multiplication must be simplified.
+-- of addition and multiplication must be simplified.
 --
 -- Reminders:
 --   * negate x is 0-x
