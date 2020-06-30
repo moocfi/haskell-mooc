@@ -1567,15 +1567,14 @@ Because <code>Nothing</code> is a constructor
 <div class="sourceCode" id="cb147"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb147-1" data-line-number="1">whatFollows <span class="ch">&#39;a&#39;</span> <span class="dv">2</span> <span class="st">&quot;abracadabra&quot;</span></a>
 <a class="sourceLine" id="cb147-2" data-line-number="2">  <span class="fu">==&gt;</span> [<span class="st">&quot;br&quot;</span>,<span class="st">&quot;ca&quot;</span>,<span class="st">&quot;da&quot;</span>,<span class="st">&quot;br&quot;</span>,<span class="st">&quot;&quot;</span>]</a></code></pre></div>
 <h2 id="partial-application"><span class="header-section-number">3.2</span> Partial application</h2>
-<p>When using higher-order functions you can find yourself defining lots of small helper functions, like <code>addThree</code> or <code>process</code> in the previous examples. This is a bit of a chore in the long run, but luckily Haskell’s functions behave a bit weirdly…</p>
+<p>When using higher-order functions you can find yourself defining lots of small helper functions, like <code>addThree</code> or <code>shorten</code> in the previous examples. This is a bit of a chore in the long run, but luckily Haskell’s functions behave a bit weirdly…</p>
 <p>Let’s start in GHCi:</p>
 <div class="sourceCode" id="cb148"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb148-1" data-line-number="1"><span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="kw">let</span> add a b <span class="fu">=</span> a<span class="fu">+</span>b</a>
 <a class="sourceLine" id="cb148-2" data-line-number="2"><span class="dt">Prelude</span><span class="fu">&gt;</span> add <span class="dv">1</span> <span class="dv">5</span></a>
 <a class="sourceLine" id="cb148-3" data-line-number="3"><span class="dv">6</span></a>
 <a class="sourceLine" id="cb148-4" data-line-number="4"><span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="kw">let</span> addThree <span class="fu">=</span> add <span class="dv">3</span></a>
-<a class="sourceLine" id="cb148-5" data-line-number="5"><span class="dv">6</span></a>
-<a class="sourceLine" id="cb148-6" data-line-number="6"><span class="dt">Prelude</span><span class="fu">&gt;</span> addThree <span class="dv">2</span></a>
-<a class="sourceLine" id="cb148-7" data-line-number="7"><span class="dv">5</span></a></code></pre></div>
+<a class="sourceLine" id="cb148-5" data-line-number="5"><span class="dt">Prelude</span><span class="fu">&gt;</span> addThree <span class="dv">2</span></a>
+<a class="sourceLine" id="cb148-6" data-line-number="6"><span class="dv">5</span></a></code></pre></div>
 <p>So, we’ve defined <code>add</code>, a function of two arguments, and only given it one argument. The result is not a type error but a new function. The new function just stores (or remembers) the given argument, waits for another argument, and then gives both to <code>add</code>.</p>
 <pre><code>Prelude&gt; map addThree [1,2,3]
 [4,5,6]
@@ -2044,7 +2043,7 @@ A type error
 <p>To get values out of tuples, you can use the functions <code>fst</code> and <code>snd</code>:</p>
 <div class="sourceCode" id="cb220"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb220-1" data-line-number="1">fst<span class="ot"> ::</span> (a, b) <span class="ot">-&gt;</span> a</a>
 <a class="sourceLine" id="cb220-2" data-line-number="2">snd<span class="ot"> ::</span> (a, b) <span class="ot">-&gt;</span> b</a></code></pre></div>
-<p>You can also pattern match on tuples. This is often the most convenient way, and works for tuples of size &gt;2. <code>fst</code> and <code>snd</code> work only on pairs.</p>
+<p>You can also pattern match on tuples. This is often the most convenient way, and also works for tuples of larger sizes. The <code>fst</code> and <code>snd</code> functions work only on pairs.</p>
 <p>Tuples are very useful in combination with lists. Here are some examples using the <code>zip</code>, <code>unzip</code> and <code>partition</code> functions from the <code>Data.List</code> module.</p>
 <div class="sourceCode" id="cb221"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb221-1" data-line-number="1">zip<span class="ot"> ::</span> [a] <span class="ot">-&gt;</span> [b] <span class="ot">-&gt;</span> [(a, b)]    <span class="co">-- two lists to list of pairs</span></a>
 <a class="sourceLine" id="cb221-2" data-line-number="2">unzip<span class="ot"> ::</span> [(a, b)] <span class="ot">-&gt;</span> ([a], [b])  <span class="co">-- list of pairs to pair of lists</span></a>
@@ -2418,7 +2417,7 @@ stack haddock --open &lt;package&gt;</code></pre>
 <p>This has the added benefit of getting exactly the right version of the documentation.</p>
 <p>In summary, here are the main ways of reading Haskell library documentation: - If you know the name of the package you browse the docs via <a href="https://hackage.haskell.org/" class="uri">https://hackage.haskell.org/</a>. - If you know the name of the function you can find it using <a href="https://hoogle.haskell.org/" class="uri">https://hoogle.haskell.org/</a>. - If you’re using <code>stack</code> you can use <code>stack haddock --open</code> or <code>stack haddock --open &lt;package&gt;</code> to open docs in your browser.</p>
 <h2 id="quiz-3"><span class="header-section-number">4.9</span> Quiz</h2>
-<p>What is the type of <code>swap . id . swap</code>?</p>
+<p>What is the type of <code>swap . swap</code>?</p>
 <ol class="quiz">
 <li class="correct">
 <code>(a, b) -&gt; (a, b)</code>
@@ -3181,17 +3180,17 @@ Because <code>Nothing</code> is a constructor.
 <p>Given the following definition of the class <code>BitOperations</code></p>
 <div class="sourceCode" id="cb365"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb365-1" data-line-number="1"><span class="kw">class</span> <span class="dt">BitOperations</span> a <span class="kw">where</span></a>
 <a class="sourceLine" id="cb365-2" data-line-number="2"><span class="ot">  bitNot ::</span> a <span class="ot">-&gt;</span> a</a>
-<a class="sourceLine" id="cb365-3" data-line-number="3">  bitNot x <span class="fu">=</span> bitXor x x</a>
+<a class="sourceLine" id="cb365-3" data-line-number="3">  bitNot x <span class="fu">=</span> bitNand bitTrue x</a>
 <a class="sourceLine" id="cb365-4" data-line-number="4"><span class="ot">  bitAnd ::</span> a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a</a>
 <a class="sourceLine" id="cb365-5" data-line-number="5">  bitAnd x y <span class="fu">=</span> bitNot (bitOr (bitNot x) (bitNot y))</a>
 <a class="sourceLine" id="cb365-6" data-line-number="6"><span class="ot">  bitOr ::</span> a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a</a>
 <a class="sourceLine" id="cb365-7" data-line-number="7">  bitOr x y <span class="fu">=</span> bitNot (bitAnd (bitNot x) (bitNot y))</a>
-<a class="sourceLine" id="cb365-8" data-line-number="8"><span class="ot">  bitXor ::</span> a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a</a>
-<a class="sourceLine" id="cb365-9" data-line-number="9">  bitXor x y <span class="fu">=</span> bitAnd (bitOr x y) (bitOr (bitNot x) (bitNot y))</a></code></pre></div>
+<a class="sourceLine" id="cb365-8" data-line-number="8"><span class="ot">  bitNand ::</span> a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a</a>
+<a class="sourceLine" id="cb365-9" data-line-number="9">  bitNand x y <span class="fu">=</span> bitNot (bitAnd x y)</a></code></pre></div>
 <p>which set of operations is <em>not</em> a minimal complete definition of <code>BitOperations</code>?</p>
 <ol class="quiz">
 <li>
-<code>bitXor, bitAnd</code>
+<code>bitNand, bitAnd</code>
 </li>
 <li class="correct">
 <code>bitAnd, bitOr</code>
@@ -3200,7 +3199,7 @@ Because <code>Nothing</code> is a constructor.
 <code>bitAnd, bitNot</code>
 </li>
 <li>
-<code>bitNot, bitAnd, bitOr</code>
+<code>bitNot, bitOr</code>
 </li>
 </ol>
 <p>The declaration <code>instance Num a =&gt; Eq (Pair a)</code> tells me that</p>
