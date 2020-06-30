@@ -116,8 +116,6 @@ average = todo
 
 ------------------------------------------------------------------------------
 -- Ex 5: reverse a NonEmpty list.
---
--- Hint! You'll probably need to handle two cases.
 
 reverseNonEmpty :: NonEmpty a -> NonEmpty a
 reverseNonEmpty = todo
