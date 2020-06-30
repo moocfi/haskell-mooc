@@ -134,8 +134,8 @@ merge xs ys = todo
 --   mymaximum (>) 0 [1,3,2] ==> 3
 --   mymaximum (>) 4 [1,3,2] ==> 4    -- initial value was biggest
 --   mymaximum (<) 4 [1,3,2] ==> 1    -- note changed biggerThan
---   mymaximum (\_ _ -> True) 4 [1,3,2]
---     ==> 2  -- new value is always the biggest, so returns the last
+--   mymaximum (\xs ys -> length xs > length ys) [] [[1,2],[3]]
+--     ==> [1,2]
 
 mymaximum :: (a -> a -> Bool) -> a -> [a] -> a
 mymaximum bigger initial xs = todo
