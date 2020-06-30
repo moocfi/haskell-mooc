@@ -1344,7 +1344,7 @@ cabal v2-exec runhaskell Set1Test.hs</code></pre>
 </tbody>
 </table>
 <p>You can think of <code>Maybe a</code> as being a bit like <code>[a]</code> except there can only be 0 or 1 elements, not more. Alternatively, you can think of <code>Maybe a</code> introducing a null value to the type <code>a</code>. If you’re familiar with Java, <code>Maybe Integer</code> is the Haskell equivalent of Java’s <code>Optional&lt;Integer&gt;</code>.</p>
-<p>You use a <code>Maybe</code> value by pattern matching on it. Some more examples:</p>
+<p>You use a <code>Maybe</code> value by pattern matching on it. Usually you define patterns for the <code>Nothing</code> and <code>Just something</code> cases. Some examples:</p>
 <div class="sourceCode" id="cb116"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb116-1" data-line-number="1"><span class="ot">intOrZero ::</span> <span class="dt">Maybe</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span></a>
 <a class="sourceLine" id="cb116-2" data-line-number="2">intOrZero <span class="dt">Nothing</span> <span class="fu">=</span> <span class="dv">0</span></a>
 <a class="sourceLine" id="cb116-3" data-line-number="3">intOrZero (<span class="dt">Just</span> i) <span class="fu">=</span> i</a>
@@ -1392,7 +1392,7 @@ Just :: a -&gt; Maybe a</code></pre>
 <a class="sourceLine" id="cb119-3" data-line-number="3">readInt <span class="st">&quot;1&quot;</span> <span class="fu">=</span> <span class="dt">Right</span> <span class="dv">1</span></a>
 <a class="sourceLine" id="cb119-4" data-line-number="4">readInt s <span class="fu">=</span> <span class="dt">Left</span> (<span class="st">&quot;Unsupported string: &quot;</span> <span class="fu">++</span> s)</a></code></pre></div>
 <p>Sidenote: the constructors of <code>Either</code> are called <code>Left</code> and <code>Right</code> because they refer to the left and right type arguments of <code>Either</code>. Note how in <code>Either a b</code>, <code>a</code> is the left argument and <code>b</code> is the right argument. Thus <code>Left</code> contains a value of type <code>a</code> and likewise <code>Right</code> of type <code>b</code>. The convention of using <code>Right</code> for success is probably simply because right also means correct. No offense is intended to left-handed people.</p>
-<p>Here’s another example: pattern matching an Either.</p>
+<p>Here’s another example: pattern matching an Either. Just like with <code>Maybe</code>, there are two patterns for an <code>Either</code>, one for each constructor.</p>
 <div class="sourceCode" id="cb120"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb120-1" data-line-number="1"><span class="ot">iWantAString ::</span> <span class="dt">Either</span> <span class="dt">Int</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">String</span></a>
 <a class="sourceLine" id="cb120-2" data-line-number="2">iWantAString (<span class="dt">Right</span> str)   <span class="fu">=</span> str</a>
 <a class="sourceLine" id="cb120-3" data-line-number="3">iWantAString (<span class="dt">Left</span> number) <span class="fu">=</span> show number</a></code></pre></div>
