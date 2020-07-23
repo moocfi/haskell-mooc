@@ -229,16 +229,13 @@ multiCompose fs = todo
 -- f to the resulting list. Give also the type annotation for multiApp.
 --
 -- Examples:
---   multiApp id [] [] ==> []
 --   multiApp id [] 7  ==> []
 --   multiApp id [id, reverse, tail] "This is a test"
 --       ==> ["This is a test","tset a si sihT","his is a test"]
---   multiApp unwords
---            [head, head . tail, head . tail . tail]
---            ["Lorem", "ipsum", "dolor"]
---       ==> "Lorem ipsum dolor"
---   multiApp (map (*2)) [(1+), (^3), (+2)] 1 ==> [4,2,6]
+--   multiApp id  [(1+), (^3), (+2)] 1  ==>  [2,1,3]
+--   multiApp sum [(1+), (^3), (+2)] 1  ==>  6
 --   multiApp reverse [tail, take 2, reverse] "foo" ==> ["oof","fo","oo"]
+--   multiApp concat [take 3, reverse] "race" ==> "racecar"
 
 multiApp = todo
 
