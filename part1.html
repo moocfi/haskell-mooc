@@ -1030,12 +1030,13 @@ Because <code>`...`</code> is used for delimiting strings.
 </li>
 </ol>
 <h2 id="working-on-the-exercises"><span class="header-section-number">1.13</span> Working on the exercises</h2>
-<p>The course materials, including exercises, are available in a Git repository on GitHub at <a href="https://github.com/moocfi/haskell-mooc" class="uri">https://github.com/moocfi/haskell-mooc</a>.</p>
-<p>If you’re not familiar with Git, <a href="https://help.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository">this might help</a>.</p>
-<p>Once you’ve cloned the <code>haskell-mooc</code> repository, go into the <code>exercises</code> directory. To download dependencies needed for running the exercise tests (like the correct version of GHC and various libraries), run this command in your terminal. This might take a while.</p>
-<div class="sourceCode" id="cb80"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb80-1" data-line-number="1"><span class="ex">stack</span> build</a></code></pre></div>
-<p>You’ll find the first set of exercises in the file <code>Set1.hs</code>. This is a Haskell source file that you should edit according to the instructions in the file itself. You can check your answers by running this command in your terminal:</p>
-<div class="sourceCode" id="cb81"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb81-1" data-line-number="1"><span class="ex">stack</span> runhaskell Set1Test.hs</a></code></pre></div>
+<p>The course materials, including exercises, are available in a Git repository on GitHub at <a href="https://github.com/moocfi/haskell-mooc" class="uri">https://github.com/moocfi/haskell-mooc</a>. If you’re not familiar with Git, see <a href="https://help.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository">GitHub’s instructions on cloning a repository</a>.</p>
+<p>Once you’ve cloned the <code>haskell-mooc</code> repository, go into the <code>exercises</code> directory. To download and build dependencies needed for running the exercise tests (such as the correct version of GHC and various libraries), run following command in your terminal:</p>
+<div class="sourceCode" id="cb80"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb80-1" data-line-number="1">$ <span class="ex">stack</span> build</a></code></pre></div>
+<p>Do note that the dependencies are multiple gigabytes and it will take a while for the command to finish.</p>
+<p>There are primarily two types of files in the <code>exercises</code> directory: exercise sets named <code>SetNX.hs</code> and accompanying test program for the exercises named <code>SetNXTest.hs</code>. Both are Haskell source files, but only the exercise file should to be edited when solving the exercises. Instructions to all individual exercises are embedded in the exercise file as comments.</p>
+<p>Use the tests file to check your answers. For example when you have solved some of the exercises in <code>Set1.hs</code>, run the following command:</p>
+<div class="sourceCode" id="cb81"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb81-1" data-line-number="1">$ <span class="ex">stack</span> runhaskell Set1Test.hs</a></code></pre></div>
 <p>The output of the tests looks something like this:</p>
 <pre><code>===== EXERCISE 1
 +++++ Pass
@@ -1083,7 +1084,8 @@ quadruple 1
 ===== TOTAL
 1101111111111111111
 18 / 19</code></pre>
-<p>As you can see, I’ve made a mistake in exercise 3. I can verify the mistake myself by loading my answers in GHCi:</p>
+<p>In the example above, I’ve made a mistake in exercise 3.</p>
+<p>To make debugging faster and more straightforward, I can load my exercise file in GHCi, which allows me to evaluate any top-level function manually. For instance I can verify the above mistake by:</p>
 <pre><code>$ stack ghci Set1.hs
 GHCi, version 8.6.5: http://www.haskell.org/ghc/  :? for help
 [1 of 2] Compiling Mooc.Todo        ( Mooc/Todo.hs, interpreted )
@@ -1094,8 +1096,8 @@ Ok, two modules loaded.
 <p>Once you’re done with an exercise set, you can turn it in on the <a href="https://haskell.mooc.fi/submit.php">Submit page</a> on the course pages. After that you can see the results of your submission on the <a href="https://haskell.mooc.fi/results.php">Results page</a> and your total score on the <a href="https://haskell.mooc.fi/status.php">My status page</a>.</p>
 <p><strong>Note!</strong> you may turn in an exercise set as many times as you want.</p>
 <p><strong>Note!</strong> if you don’t want to use Stack or can’t get it working, you should also be able to run the tests with <a href="https://www.haskell.org/cabal/download.html">Cabal</a> like this:</p>
-<pre class="shell"><code>cabal v2-build
-cabal v2-exec runhaskell Set1Test.hs</code></pre>
+<div class="sourceCode" id="cb84"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb84-1" data-line-number="1">$ <span class="ex">cabal</span> v2-build</a>
+<a class="sourceLine" id="cb84-2" data-line-number="2">$ <span class="ex">cabal</span> v2-exec runhaskell Set1Test.hs</a></code></pre></div>
 <h2 id="exercises"><span class="header-section-number">1.14</span> Exercises</h2>
 <ul>
 <li><a href="https://github.com/moocfi/haskell-mooc/blob/master/exercises/Set1.hs">Set1</a></li>
