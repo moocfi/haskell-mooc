@@ -1175,7 +1175,7 @@ Ok, two modules loaded.
 <a class="sourceLine" id="cb92-6" data-line-number="6">fibonacci&#39; a b <span class="dv">1</span> <span class="fu">=</span> b</a>
 <a class="sourceLine" id="cb92-7" data-line-number="7">fibonacci&#39; a b n <span class="fu">=</span> fibonacci&#39; b (a<span class="fu">+</span>b) (n<span class="fu">-</span><span class="dv">1</span>)</a></code></pre></div>
 <p>Take a while to study these and note how the Haskell recursion has the same format as the loop.</p>
-<p>Sidenote: Haskell programs often use the apostrophe to name helper functions and alternative versions of functions. Thus the name <code>fibonnaci'</code> for the helper function above. Names like <code>foo'</code> are usually read <em>foo prime</em> (like in mathematics).</p>
+<p>Sidenote: Haskell programs often use the apostrophe to name helper functions and alternative versions of functions. Thus the name <code>fibonacci'</code> for the helper function above. Names like <code>foo'</code> are usually read <em>foo prime</em> (like in mathematics).</p>
 <p>I said earlier that this version of fibonacci is more efficient. Can you see why? The answer is that there are less recursive calls. The expression <code>fibonacci' _ _ n</code> calls <code>fibonacci' _ _ (n-1)</code> once, and this means that we can compute <code>fibonacci' _ _ n</code> in <code>n</code> steps.</p>
 <p>This type of recursion where a function just directly calls itself with different arguments is called <em>tail recursion</em>. As you’ve seen above, tail recursion corresponds to loops. This is why tail recursion is often fast: the compiler can generate a loop in machine code when it sees tail recursion.</p>
 <h2 id="guards"><span class="header-section-number">2.2</span> Guards</h2>
@@ -1365,7 +1365,7 @@ Ok, two modules loaded.
 <pre><code>Prelude&gt; :t Just
 Just :: a -&gt; Maybe a</code></pre>
 <h2 id="the-either-type"><span class="header-section-number">2.8</span> The <code>Either</code> type</h2>
-<p>Sometimes it would be nice if you could add an error message or something to <code>Nothing</code>. That’s why we the have <code>Either</code> type. The <code>Either</code> type takes two type arguments. The type <code>Either a b</code> has two constructors: <code>Left</code> and <code>Right</code>. Both take an argument, <code>Left</code> an argument of type <code>a</code> and <code>Right</code> and argument of type <code>b</code>.</p>
+<p>Sometimes it would be nice if you could add an error message or something to <code>Nothing</code>. That’s why we the have the <code>Either</code> type. The <code>Either</code> type takes two type arguments. The type <code>Either a b</code> has two constructors: <code>Left</code> and <code>Right</code>. Both take an argument, <code>Left</code> an argument of type <code>a</code> and <code>Right</code> and argument of type <code>b</code>.</p>
 <table>
 <thead>
 <tr class="header">
@@ -3279,6 +3279,7 @@ If I define an instance for <code>Num</code>, I also get an instance for <code>F
 <a class="sourceLine" id="cb371-6" data-line-number="6"></a>
 <a class="sourceLine" id="cb371-7" data-line-number="7">addVat (<span class="dt">Money</span> <span class="dv">299</span>)</a>
 <a class="sourceLine" id="cb371-8" data-line-number="8">  <span class="fu">==&gt;</span> <span class="dt">Money</span> <span class="dv">371</span></a></code></pre></div>
+<p><strong>Note!</strong> If you’re familiar with Object-Oriented Programming, this is a bit like encapsulation.</p>
 <h2 id="modeling-with-cases"><span class="header-section-number">7.2</span> Modeling with cases</h2>
 <p>Haskell’s algebraic datatypes are really powerful at modeling things based on <em>cases</em>. It’s often useful to think of types as defining the set of possible cases, and functions <em>handling</em> those cases (often via pattern matching). Let’s look at two examples.</p>
 <p>Since it’s so easy to define custom types in Haskell, it’s quite convenient to use more descriptive types instead of booleans or strings. Consider a list of persons. In some other language if you wanted to sort the persons into ascending order by name you might use a call like <code>sortPersons(persons, &quot;name&quot;, true)</code>. In Haskell you can do this instead:</p>
