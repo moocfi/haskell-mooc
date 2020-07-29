@@ -3321,7 +3321,7 @@ If I define an instance for <code>Num</code>, I also get an instance for <code>F
 <a class="sourceLine" id="cb377-2" data-line-number="2">nonEmpty [<span class="dv">1</span>]         <span class="fu">==&gt;</span>  <span class="dt">Just</span> (<span class="dv">1</span> <span class="fu">:|</span> [])</a>
 <a class="sourceLine" id="cb377-3" data-line-number="3">nonEmpty []          <span class="fu">==&gt;</span>  <span class="dt">Nothing</span></a>
 <a class="sourceLine" id="cb377-4" data-line-number="4">toList (<span class="dv">1</span> <span class="fu">:|</span> [<span class="dv">2</span>,<span class="dv">3</span>])  <span class="fu">==&gt;</span>  [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>]</a></code></pre></div>
-<p>Here are <code>head</code> and <code>last</code> implement for <code>NonEmpty</code>:</p>
+<p>Here are <code>head</code> and <code>last</code> implemented for <code>NonEmpty</code>:</p>
 <div class="sourceCode" id="cb378"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb378-1" data-line-number="1">neHead (x <span class="fu">:|</span> _) <span class="fu">=</span> x</a>
 <a class="sourceLine" id="cb378-2" data-line-number="2">neLast (x <span class="fu">:|</span> []) <span class="fu">=</span> x</a>
 <a class="sourceLine" id="cb378-3" data-line-number="3">neLast (_ <span class="fu">:|</span> xs) <span class="fu">=</span> last xs</a></code></pre></div>
