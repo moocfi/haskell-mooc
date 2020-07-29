@@ -60,7 +60,7 @@ ol.quiz li:hover { background: lightgrey; }
 ol.quiz li:active { background: red; }
 ol.quiz li.correct:active { background: green; }
 
-pre.sourceCode, pre, table
+pre.sourceCode, pre, table, img
 { max-width: 80%;
   border-left: 2px solid grey;
   padding: 0.5em 0.5em 0.5em 0.5em;
