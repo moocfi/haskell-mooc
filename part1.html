@@ -3208,7 +3208,7 @@ Because <code>Nothing</code> is a constructor.
 <a class="sourceLine" id="cb357-2" data-line-number="2">  <span class="fu">...</span></a>
 <a class="sourceLine" id="cb357-3" data-line-number="3"><span class="kw">class</span> <span class="dt">Num</span> a <span class="ot">=&gt;</span> <span class="dt">Fractional</span> a <span class="kw">where</span></a>
 <a class="sourceLine" id="cb357-4" data-line-number="4">  <span class="fu">...</span></a></code></pre></div>
-<p>Another way to look at subclasses is that if you have a <code>class Sub a =&gt; Main a</code>, you must provide an <code>instance Sub MyType</code> in order to be able to declare <code>instance Main MyType</code>.</p>
+<p>Another way to look at subclasses is that if you have a <code>class Main a =&gt; Sub a</code>, you must provide an <code>instance Main MyType</code> in order to be able to declare <code>instance Sub MyType</code>.</p>
 <h2 id="quiz-5"><span class="header-section-number">6.6</span> Quiz</h2>
 <p>What are the functions in the <code>Eq</code> class?</p>
 <ol class="quiz">
