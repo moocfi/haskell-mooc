@@ -15,11 +15,11 @@ main = score tests
 
 tests = [(1,"countNothings",[ex1_countNothings])
         ,(2,"myMaximum",[ex2_myMaximum])
-        ,(3,"myHead",[ex3_myHead_empty, ex3_myHead_full])
-        ,(4,"myLast",[ex4_myLast_empty, ex4_myLast_full])
-        ,(5,"sumAndLength",[ex5_sumAndLength])
-        ,(6,"myConcat",[ex6_myConcat])
-        ,(7,"largest",[ex7_largest])]
+        ,(3,"sumAndLength",[ex3_sumAndLength])
+        ,(4,"myConcat",[ex4_myConcat])
+        ,(5,"largest",[ex5_largest])
+        ,(6,"myHead",[ex6_myHead_empty, ex6_myHead_full])
+        ,(7,"myLast",[ex7_myLast_empty, ex7_myLast_full])]
 
 ex1_countNothings = property $ do
   justs <- fmap (map Just) $ listOf (choose (0::Int,10))
@@ -37,35 +37,36 @@ ex2_myMaximum = property $ do
     counterexample ("xs = "++show xs) $
     $(testing' [|foldr maxHelper x xs|]) (?==maximum (x:xs))
 
-ex3_myHead_empty =
-  $(testing' [|foldr headHelper Nothing []|]) (?==(Nothing::Maybe Bool))
-
-ex3_myHead_full =
-  forAll_ $ \(NonEmpty xs::NonEmptyList Int) ->
-  counterexample ("xs = "++show xs) $
-  $(testing' [|foldr headHelper Nothing xs|]) (?==Just (head xs))
-
-ex4_myLast_empty =
-  $(testing' [|foldr lastHelper Nothing []|]) (?==(Nothing::Maybe Bool))
-
-ex4_myLast_full =
-  forAll_ $ \(NonEmpty xs::NonEmptyList Int) ->
-  counterexample ("xs = "++show xs) $
-  $(testing' [|foldr lastHelper Nothing xs|]) (?==Just (last xs))
-
 niceDouble = fmap ((/2).fromIntegral) (arbitrary :: Gen Int)
 
-ex5_sumAndLength =
+ex3_sumAndLength =
   forAllBlind (listOf niceDouble) $ \(ds::[Double]) ->
   counterexample ("ds = "++show ds) $
   $(testing' [|foldr slHelper slStart ds|]) (?==(sum ds, length ds))
 
-ex6_myConcat =
+ex4_myConcat =
   forAll_ $ \(xs :: [[Int]]) ->
   counterexample ("xs = "++show xs) $
   $(testing' [|foldr concatHelper concatStart xs|]) (?==concat xs)
 
-ex7_largest =
+ex5_largest =
   forAll_ $ \(NonEmpty (xs :: [Int])) ->
   counterexample ("xs = "++show xs) $
   $(testing' [|foldr largestHelper [] xs|]) (?==filter (==maximum xs) xs)
+
+
+ex6_myHead_empty =
+  $(testing' [|foldr headHelper Nothing []|]) (?==(Nothing::Maybe Bool))
+
+ex6_myHead_full =
+  forAll_ $ \(NonEmpty xs::NonEmptyList Int) ->
+  counterexample ("xs = "++show xs) $
+  $(testing' [|foldr headHelper Nothing xs|]) (?==Just (head xs))
+
+ex7_myLast_empty =
+  $(testing' [|foldr lastHelper Nothing []|]) (?==(Nothing::Maybe Bool))
+
+ex7_myLast_full =
+  forAll_ $ \(NonEmpty xs::NonEmptyList Int) ->
+  counterexample ("xs = "++show xs) $
+  $(testing' [|foldr lastHelper Nothing xs|]) (?==Just (last xs))

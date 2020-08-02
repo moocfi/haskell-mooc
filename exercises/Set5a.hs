@@ -258,3 +258,65 @@ fromNat n = todo
 toNat :: Int -> Maybe Nat
 toNat z = todo
 
+
+------------------------------------------------------------------------------
+-- Ex 12: While pleasingly simple in its definition, the Nat datatype is not
+-- very efficient computationally. Instead of the unary Peano natural numbers,
+-- computers use binary numbers.
+--
+-- Binary numbers are like decimal numbers, except that binary numbers have
+-- only two digits (called bits), 0 and 1. The table below gives some
+-- examples:
+--
+--   decimal | binary
+--   ----------------
+--         0 |      0
+--         1 |      1
+--         2 |     10
+--         7 |    111
+--        44 | 101100
+--
+-- For allowing arbitrarily long binary numbers, our representation, the
+-- datatype Bin, includes a special End constructor for denoting the end of
+-- the binary number. In order to make computation with Bin easier, the bits
+-- are represented in increasing order by significance (i.e. "backwards").
+-- Consider the Bin numbers O (I (I End)), representing 110 in binary or
+-- 6 in decimal, and I (I (O End)) that represents 011 in binary or 3 in
+-- decimal. The most significant (last) bit, the bit I, of O (I (I End)) is
+-- greater than the bit O, which is the most significant bit of I (I (O End)).
+-- Therefore, O (I (I End)) is greater than I (I (O End)).
+--
+-- Your task is to write functions prettyPrint, fromBin, and toBin that
+-- convert Bin to human-readable string, Bin to Int, and Int to Bin
+-- respectively.
+--
+-- Examples:
+--   prettyPrint End                     ==> ""
+--   prettyPrint (O End)                 ==> "0"
+--   prettyPrint (I End)                 ==> "1"
+--   prettyPrint (O (O (I (O (I End))))) ==> "10100"
+--   map fromBinary [O End, I End, O (I End), I (I End), O (O (I End)),
+--                  I (O (I End))]
+--     ==> [0, 1, 2, 3, 4, 5]
+--   fromBinary (I (I (O (O (I (O (I (O End)))))))) ==> 83
+--   fromBinary (I (I (O (O (I (O (I End)))))))     ==> 83
+--   map toBinary [0..5] ==>
+--     [O End,I End,O (I End),I (I End),O (O (I End)),I (O (I End))]
+--   toBinary 57 ==> I (O (O (I (I (I End)))))
+--
+data Bin = End | O Bin | I Bin
+
+-- This function increments a binary number by one.
+inc :: Bin -> Bin
+inc End   = I End
+inc (O b) = I b
+inc (I b) = O (inc b)
+
+prettyPrint :: Bin -> String
+prettyPrint = todo
+
+fromBin :: Bin -> Int
+fromBin = todo
+
+toBin :: Int -> Bin
+toBin = todo

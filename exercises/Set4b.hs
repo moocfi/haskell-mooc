@@ -38,37 +38,7 @@ myMaximum (x:xs) = foldr maxHelper x xs
 maxHelper = todo
 
 ------------------------------------------------------------------------------
--- Ex 3: get the first element of a list with a fold. Define
--- headHelper so that the given definition of myHead works.
---
--- Start by giving headHelper a type.
---
--- Examples:
---   myHead []  ==>  Nothing
---   myHead [1,2,3]  ==>  Just 1
-
-myHead :: [a] -> Maybe a
-myHead xs = foldr headHelper Nothing xs
-
-headHelper = todo
-
-------------------------------------------------------------------------------
--- Ex 4: get the last element of a list with a fold. Define lasthelper
--- so that the given definition of myLast works.
---
--- Start by giving lastHelper a type.
---
--- Examples:
---   myLast [] ==> Nothing
---   myLast [1,2,3] ==> Just 3
-
-myLast :: [a] -> Maybe a
-myLast xs = foldr lastHelper Nothing xs
-
-lastHelper = todo
-
-------------------------------------------------------------------------------
--- Ex 5: compute the sum and length of a list with a fold. Define
+-- Ex 3: compute the sum and length of a list with a fold. Define
 -- slHelper and slStart so that the given definition of sumAndLength
 -- works. This could be used to compute the average of a list.
 --
@@ -86,7 +56,7 @@ slStart = todo
 slHelper = todo
 
 ------------------------------------------------------------------------------
--- Ex 6: implement concat with with a fold. Define concatHelper and
+-- Ex 4: implement concat with with a fold. Define concatHelper and
 -- concatStart so that the given definition of myConcat joins inner lists
 -- of a list.
 --
@@ -101,7 +71,7 @@ concatStart = todo
 concatHelper = todo
 
 ------------------------------------------------------------------------------
--- Ex 7: get all occurrences of the largest number in a list with a
+-- Ex 5: get all occurrences of the largest number in a list with a
 -- fold. Implement largestHelper so that the given definition of largest works.
 --
 -- Examples:
@@ -113,4 +83,35 @@ largest :: [Int] -> [Int]
 largest xs = foldr largestHelper [] xs
 
 largestHelper = todo
+
+
+------------------------------------------------------------------------------
+-- Ex 6: get the first element of a list with a fold. Define
+-- headHelper so that the given definition of myHead works.
+--
+-- Start by giving headHelper a type.
+--
+-- Examples:
+--   myHead []  ==>  Nothing
+--   myHead [1,2,3]  ==>  Just 1
+
+myHead :: [a] -> Maybe a
+myHead xs = foldr headHelper Nothing xs
+
+headHelper = todo
+
+------------------------------------------------------------------------------
+-- Ex 7: get the last element of a list with a fold. Define lasthelper
+-- so that the given definition of myLast works.
+--
+-- Start by giving lastHelper a type.
+--
+-- Examples:
+--   myLast [] ==> Nothing
+--   myLast [1,2,3] ==> Just 3
+
+myLast :: [a] -> Maybe a
+myLast xs = foldr lastHelper Nothing xs
+
+lastHelper = todo
 

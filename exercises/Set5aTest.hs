@@ -23,6 +23,10 @@ tests = [(1,"Vehicle",[ex1])
         ,(9,"OneOrTwo",[ex9])
         ,(10,"KeyVals",[ex10_type, ex10_string_bool, ex10_int_int])
         ,(11,"Nat",[ex11_to, ex11_from, ex11_just, ex11_nothing])
+        ,(12,"Bin",[ex12_from_zero, ex12_to_zero, ex12_to_from_zero
+                   , ex12_from_to_zero, ex12_from_one, ex12_to_one
+                   , ex12_to_from_one, ex12_from_to_one, ex12_to_from
+                   , ex12_from_to])
         ]
 
 -- -- -- -- -- -- -- --
@@ -185,3 +189,29 @@ ex11_just = forAll_ $ \(n :: Nat) ->
   (toNat (fromNat n) ?== Just n)
 ex11_nothing = forAll_ $ \(Negative (z :: Int)) ->
   $(testing [|toNat z|]) (?== Nothing)
+
+instance Arbitrary Bin where
+  arbitrary = do
+    bs <- arbitrary :: Gen [Bool]
+    return $ foldr (\x b -> if x then I b else O b) (I End) (take 8 bs)
+
+ex12_from_zero    =
+  counterexample ("fromBin (O End)") (fromBin (O End) ?== 0)
+ex12_to_zero      =
+  counterexample ("toBin 0") (toBin 0 ?== O End)
+ex12_to_from_zero =
+  counterexample ("toBin (fromBin (O End))") (toBin (fromBin (O End)) ?== O End)
+ex12_from_to_zero =
+  counterexample ("fromBin (toBin 0)") (fromBin (toBin 0) ?== 0)
+ex12_from_one    =
+  counterexample ("fromBin (I End)") (fromBin (I End) ?== 1)
+ex12_to_one      =
+  counterexample ("toBin 0") (toBin 1 ?== I End)
+ex12_to_from_one =
+  counterexample ("toBin (fromBin (I End))") (toBin (fromBin (I End)) ?== I End)
+ex12_from_to_one =
+  counterexample ("fromBin (toBin 1)") (fromBin (toBin 1) ?== 1)
+ex12_to_from      = forAll_ $ \(b :: Bin) ->
+  counterexample ("toBin (fromBin (" ++ show b ++ "))") (toBin (fromBin b) ?== b)
+ex12_from_to      = forAll_ $ \(n :: Int) -> n < 0 .||.
+  counterexample ("fromBin (toBin (" ++ show n ++ "))") (fromBin (toBin n) ?== n)

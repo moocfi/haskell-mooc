@@ -86,6 +86,11 @@ ex6_milk =
   conjoin [$(testing [|price [Just (Milk milk1), Nothing, Just (Milk milk2)]|]) (?==(15*milk1+15*milk2))
           ,$(testing [|price [Nothing, Nothing, Nothing :: Maybe Milk]|]) (?==0)]
 
+instance Arbitrary Number where
+  arbitrary = do
+    b <- arbitrary
+    if b then arbitrary >>= return . Finite else return Infinite
+
 ex7_eq_check =
   $(withInstance "Eq" "Number" [|(==) :: Number -> Number -> Bool|]) $ \(==) ->
   forAll_ $ \i ->
@@ -93,6 +98,34 @@ ex7_eq_check =
   conjoin [$(testing [|Finite i == Finite j|]) (?==(i Prelude.== j))
           ,$(testing [|Finite i == Infinite|]) (?==False)
           ,$(testing [|Infinite == Infinite|]) (?==True)]
+
+ex7_trichotomy =
+  $(withInstance "Eq" "Number" [|(==) :: Number -> Number -> Bool|]) $ \(==) ->
+  forAll_ $ \(x :: Number) ->
+  forAll_ $ \(y :: Number) ->
+  (x /= y) ==> counterexample
+  (show x ++ " /= " ++ show y ++ ", but neither " ++
+   show x ++ " < " ++ show y ++ " or " ++
+   show x ++ " > " ++ show y ++ " was true")
+  (x < y || x > y)
+
+ex7_reflexivity =
+  $(withInstance "Eq" "Number" [|(==) :: Number -> Number -> Bool|]) $ \(==) ->
+  forAll_ $ \(x :: Number) ->
+  $(testing [| x <= x |]) (?==True)
+
+ex7_antisymmetry =
+  $(withInstance "Eq" "Number" [|(==) :: Number -> Number -> Bool|]) $ \(==) ->
+  forAll_ $ \(x :: Number) ->
+  forAll_ $ \(y :: Number) ->
+  (x <= y && y <= x) ==> $(testing [| x == y |]) (?==True)
+
+ex7_transitivity =
+  $(withInstance "Eq" "Number" [|(==) :: Number -> Number -> Bool|]) $ \(==) ->
+  forAll_ $ \(x :: Number) ->
+  forAll_ $ \(y :: Number) ->
+  forAll_ $ \(z :: Number) ->
+  (x <= y && y <= z) ==> $(testing [| x <= z |]) (?==True)
 
 ex7_finite =
   $(withInstance "Ord" "Number" [|max :: Number -> Number -> Number|]) $ \max ->
@@ -273,7 +306,9 @@ tests = [(1,"Eq Country",[ex1])
         ,(4,"Eq List",[ex4_eq, ex4_neq])
         ,(5,"Price",[ex5_egg, ex5_milk])
         ,(6,"Price List",[ex6_egg, ex6_milk])
-        ,(7,"Ord Number",[ex7_eq_check, ex7_finite, ex7_infinite])
+        ,(7,"Ord Number",[ ex7_eq_check, ex7_trichotomy, ex7_reflexivity
+                         , ex7_antisymmetry, ex7_transitivity, ex7_finite
+                         , ex7_infinite ])
         ,(8,"Eq RationalNumber",[ex8_refl, ex8_eq])
         ,(9,"simplify",[ex9_prime, ex9_eq])
         ,(10,"Num RationalNumber",[ex10_add_zero, ex10_add_commut, ex10_add_whole, ex10_add
