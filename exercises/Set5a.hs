@@ -305,6 +305,7 @@ toNat z = todo
 --   toBinary 57 ==> I (O (O (I (I (I End)))))
 --
 data Bin = End | O Bin | I Bin
+  deriving (Show, Eq)
 
 -- This function increments a binary number by one.
 inc :: Bin -> Bin
