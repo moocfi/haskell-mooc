@@ -269,7 +269,7 @@ toNat z = todo
 -- examples:
 --
 --   decimal | binary
---   ----------------
+--   --------+-------
 --         0 |      0
 --         1 |      1
 --         2 |     10
@@ -295,14 +295,17 @@ toNat z = todo
 --   prettyPrint (O End)                 ==> "0"
 --   prettyPrint (I End)                 ==> "1"
 --   prettyPrint (O (O (I (O (I End))))) ==> "10100"
---   map fromBinary [O End, I End, O (I End), I (I End), O (O (I End)),
+--   map fromBin [O End, I End, O (I End), I (I End), O (O (I End)),
 --                  I (O (I End))]
 --     ==> [0, 1, 2, 3, 4, 5]
---   fromBinary (I (I (O (O (I (O (I (O End)))))))) ==> 83
---   fromBinary (I (I (O (O (I (O (I End)))))))     ==> 83
---   map toBinary [0..5] ==>
+--   fromBin (I (I (O (O (I (O (I (O End)))))))) ==> 83
+--   fromBin (I (I (O (O (I (O (I End)))))))     ==> 83
+--   map toBin [0..5] ==>
 --     [O End,I End,O (I End),I (I End),O (O (I End)),I (O (I End))]
---   toBinary 57 ==> I (O (O (I (I (I End)))))
+--   toBin 57 ==> I (O (O (I (I (I End)))))
+--
+-- Challenge: Can you implement toBin by directly converting its input into a
+-- sequence of bits instead of repeatedly applying inc?
 --
 data Bin = End | O Bin | I Bin
   deriving (Show, Eq)

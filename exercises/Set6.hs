@@ -18,7 +18,7 @@ instance Eq Country where
 
 ------------------------------------------------------------------------------
 -- Ex 2: implement an Ord instance for Country so that
---   Finland < Norway < Switzerland
+--   Finland <= Norway <= Switzerland
 --
 -- Remember minimal complete definitions!
 
@@ -86,7 +86,7 @@ data Milk = Milk Int -- amount in litres
 -- Integer, or a special value Infinite.
 --
 -- Implement an Ord instance so that finite Numbers compare normally,
--- and Infinite is larger than any other value.
+-- and Infinite is greater than any other value.
 
 data Number = Finite Integer | Infinite
   deriving (Show,Eq)

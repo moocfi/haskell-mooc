@@ -194,7 +194,7 @@ set path val tree = todo
 -- Ex 10: given a value and a tree, return a path that goes from the
 -- root to the value. If the value doesn't exist in the tree, return Nothing.
 --
--- If the value occurs in the tree multiple times, prefer the leftmost value.
+-- If the value occurs in the tree multiple times, prefer the leftmost occurrence.
 --
 -- Examples:
 --   search 1 (Node 2 (Node 1 Empty Empty) (Node 3 Empty Empty))  ==>  Just [StepL]

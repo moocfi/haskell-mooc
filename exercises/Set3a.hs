@@ -230,6 +230,8 @@ multiCompose fs = todo
 -- a composition operation that applies each function g in gs to x and then
 -- f to the resulting list. Give also the type annotation for multiApp.
 --
+-- Challenge: Try implementing multiApp without lambdas or list comprehensions.
+--
 -- Examples:
 --   multiApp id [] 7  ==> []
 --   multiApp id [id, reverse, tail] "This is a test"
