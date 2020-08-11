@@ -73,8 +73,9 @@ add = todo
 --
 --  * Baking starts in the Start state
 --  * A successful cake (reperesented by the Finished value) is baked
---    by first adding eggs, then adding flour and sugar (in which ever
---    order), then mixing, and finally baking.
+--    by first adding eggs, then adding flour and sugar (flour and
+--    sugar can be added in which ever order), then mixing, and
+--    finally baking.
 --  * If the order of Events differs from this, the result is an Error cake.
 --    No Events can save an Error cake.
 --  * Once a cake is Finished, it stays Finished even if additional Events happen.
