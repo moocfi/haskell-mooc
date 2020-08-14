@@ -25,7 +25,8 @@ tests = [(1,"allEqual",[ex1])
         ,(8,"winner",[ex8_winner, ex8_tie])
         ,(9,"freqs",[ex9_bool, ex9_int])
         ,(10,"transfer",[ex10_success, ex10_missing, ex10_notEnough])
-        ,(11,"maxIndex",[ex11_bool, ex11_int])]
+        ,(11,"swap",[ex11_swap_small, ex11_swap_large])
+        ,(12,"maxIndex",[ex12_bool, ex12_int])]
 
 -- -- -- -- -- -- -- --
 
@@ -190,13 +191,34 @@ ex10_notEnough = property $
      return $ conjoin [$(testing [|transfer from to (fromBal+amount) inp|]) (?==inp)
                       ,$(testing [|transfer from to (negate amount) inp|]) (?==inp)]
 
-ex11_bool = property $
+ex11_swap_small = property $
+  do a <- choose ('a','z')
+     b <- choose ('a','z')
+     i <- choose (0,10::Int)
+     let inp = listArray (i,i+1) [a,b]
+         out = listArray (i,i+1) [b,a]
+     return $ $(testing [|swap i (i+1) inp|]) (?==out)
+
+
+ex11_swap_large = property $
+  do base <- choose (0,10::Int)
+     len <- choose (3,6::Int)
+     let max = base+len-1
+     vals <- shuffle (take len [0..])
+     ~(i:j:_) <- shuffle [base..max]
+     let vi = vals !! (i-base)
+     let vj = vals !! (j-base)
+     let inp = listArray (base,max) (vals::[Int])
+     let out = listArray (base,max) (map (\x -> if x==vi then vj else if x == vj then vi else x) vals)
+     return $ $(testing [|swap i j inp|]) (?==out)
+
+ex12_bool = property $
   do small <- choose (0,100::Int)
      diff <- choose (1,100)
      return $ conjoin [$(testing [|maxIndex (array (False,True) [(False,small),(True,small+diff)])|]) (?==True)
                       ,$(testing [|maxIndex (array (False,True) [(True,small),(False,small+diff)])|]) (?==False)]
 
-ex11_int = property $
+ex12_int = property $
   do low <- choose (0,100::Int)
      hi <- choose (low+1,low+10)
      mid <- choose (low,hi)

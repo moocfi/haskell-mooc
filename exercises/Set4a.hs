@@ -192,7 +192,17 @@ transfer :: String -> String -> Int -> Map.Map String Int -> Map.Map String Int
 transfer from to amount bank = todo
 
 ------------------------------------------------------------------------------
--- Ex 11: given an Array, find the index of the largest element. You
+-- Ex 11: given an Array and two indices, swap the elements in the indices.
+--
+-- Example:
+--   swap 2 3 (array (1,4) [(1,"one"),(2,"two"),(3,"three"),(4,"four")])
+--         ==> array (1,4) [(1,"one"),(2,"three"),(3,"two"),(4,"four")]
+
+swap :: Ix i => i -> i -> Array i a -> Array i a
+swap i j arr = todo
+
+------------------------------------------------------------------------------
+-- Ex 12: given an Array, find the index of the largest element. You
 -- can assume the Array isn't empty.
 --
 -- You may assume that the largest element is unique.
