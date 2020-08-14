@@ -2219,6 +2219,11 @@ unspecified
 <a class="sourceLine" id="cb238-2" data-line-number="2">foldr f y []     <span class="fu">=</span> y</a>
 <a class="sourceLine" id="cb238-3" data-line-number="3">foldr f y (x<span class="fu">:</span>xs) <span class="fu">=</span> f x (foldr f y xs)</a></code></pre></div>
 <p>What this definition says, is that for an empty list <code>[] :: [a]</code>, <code>foldr</code> returns the default value <code>y :: b</code>. For any other list <code>x : xs</code>, <code>foldr</code> applies <code>f</code> to <code>x</code> and the result of <code>foldr f y xs</code> (i.e. folding over the rest of the list). It’s a simple definition by recursion.</p>
+<p>In other words, <code>foldr</code> calls its argument function <code>f</code> repeatedly with two arguments.</p>
+<ul>
+<li>The first argument is the current element from the list.</li>
+<li>The second argument is what <code>f</code> returned for the rest of the list.</li>
+</ul>
 <p>Consider the list <code>[1,2,3]</code>:</p>
 <p><img src="img/list123.svg" /></p>
 <!--
