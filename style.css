@@ -79,7 +79,7 @@ div#text {
   }
 }
 p {
-  max-width: 60em;
+  max-width: 60rem;
 }
 ul {
   padding-left: 3em;
@@ -107,15 +107,15 @@ ol.quiz li.correct:active {
   background: green;
 }
 pre {
-  font-family: Consolas, Monaco, Lucida Console;
   border-radius: 5px;
-  max-width: 60em;
+  max-width: 60rem;
   padding: 25px;
   background: #fff5b6;
   margin-bottom: 25px;
   overflow: auto !important; /* need to override style by pandoc... */
 }
 code {
+  font-family: Consolas, Monaco, Lucida Console, Liberation Mono, Bitstream Vera Sans Mono, monospace;
   white-space: pre; /* make non-syntax-colored code blocks behave like colored ones */
 }
 table, img {
