@@ -269,8 +269,9 @@ multiApp = todo
 -- after this you can enter commands on separate lines and see the
 -- responses to them
 --
--- Unfortunately the surprise might not work if you've implemented
--- your interpreter correctly but weirdly :(
+-- The suprise will only work if you generate the return list directly
+-- using (:). If you build the list in an argument to a helper
+-- function, the surprise won't work.
 
 interpreter :: [String] -> [String]
 interpreter commands = todo
