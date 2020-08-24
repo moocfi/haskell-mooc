@@ -1,69 +1,123 @@
-body { margin: 0 0 0 0;
-       padding-left: 5%;
-       font-family: sans-serif;
-       background: #fffcec;
-       color: #222; }
-
-div#text { padding-right: 5%; }
-
-@media (min-width: 800px) {
-
-    div#everything { overflow: hidden;
-                     display: flex;
-                     max-height: 100vh;
-                     width: 100%; }
-
-    div#text-container { overflow-y: scroll;
-                         flex-grow: 1;
-                         display: flex; }
-
-    div#text { margin-left: auto;
-               margin-right: auto;
-               max-width: 90%; /* 100% - padding */ }
-
-    nav#TOC { overflow-y: scroll;
-              order: 2; }
-
-    nav#TOC ul { padding-left: 2em;
-                 padding-right: 1em; }
-
+body {
+  margin: 0 0 0 0;
+  padding-left: 5%;
+  font-family: sans-serif;
+  background: #fffad1;
+  color: #211c00;
+  /*background: url("chevron.png") repeat;*/
 }
-
-p { max-width: 60em; }
-
-h1 { font-weight: 400;
-     margin-top: 2.1rem;
-     margin-bottom: 1.4rem;
-     font-size: 2.2rem;
-     line-height: 1; }
-
-h2 { font-weight: 400;
-     font-size: 1.7rem;
-     margin-top: 2rem;
-     margin-bottom: 1.4rem;
-     line-height: 1; }
-
-h3 { font-weight: 400;
-     font-size: 1.3rem;
-     margin-top: 2rem;
-     margin-bottom: 1.4rem;
-     line-height: 1; }
-
-ul,ol { padding-left: 3em; }
-
-ol.quiz { border-left: 2px dotted grey;
-          margin-left: min(5vw, 6rem);
-          padding-top: 0.5em;
-          padding-bottom: 0.5em;
-          list-style-type: lower-alpha; }
-ol.quiz li:hover { background: lightgrey; }
-ol.quiz li:active { background: red; }
-ol.quiz li.correct:active { background: green; }
-
-pre.sourceCode, pre, table, img
-{ max-width: 80%;
-  border-left: 2px solid grey;
+a[href] {
+  color: black;
+  background: #ffd608;
+  text-decoration: none;
+}
+/*
+a[href]:hover {
+  background: #a18600;
+}
+*/
+body h2 {
+  font-size: 1.4em;
+  margin: 35px 0 0 0;
+}
+body h3 {
+  margin: 35px 0 0 0;
+}
+body p {
+  line-height: 1.4em;
+}
+div#text {
+  padding-right: 5%;
+}
+@media (min-width: 800px) {
+  div#everything {
+    overflow: hidden;
+    display: flex;
+    max-height: 100vh;
+    width: 100%;
+  }
+  div#text-container {
+    overflow-y: scroll;
+    flex-grow: 1;
+  }
+  div#text {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 90%;
+  }
+  nav#TOC {
+    overflow-y: scroll;
+    order: 2;
+    background: #211c00;
+  }
+  nav#TOC ul {
+    padding-left: 2em;
+    padding-right: 1em;
+  }
+  nav#TOC ul li {
+    list-style-type: none;
+    padding: 5px 0 0 0;
+  }
+  nav#TOC ul li a {
+    color: #ffd608;
+    background: none;
+    display: inline !important;
+  }
+  nav#TOC ul li a:hover {
+    color: #a18600;
+  }
+  nav#TOC ul li ul {
+    margin: 0 0 20px 0;
+    font-weight: 400 !important;
+  }
+  nav#TOC ul li ul:first-child {
+    font-weight: bold;
+  }
+}
+p {
+  max-width: 60em;
+}
+ul {
+  padding-left: 3em;
+}
+ul li {
+  padding: 5px 0 0 0;
+  color: black;
+}
+ol {
+  padding-left: 3em;
+}
+ol.quiz {
+  /*margin-left: min(5vw, 6rem);*/
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  list-style-type: lower-alpha;
+}
+ol.quiz li:hover {
+  background: #ffd608;
+}
+ol.quiz li:active {
+  background: red;
+}
+ol.quiz li.correct:active {
+  background: green;
+}
+pre {
+  font-family: Consolas, Monaco, Lucida Console;
+  border-radius: 5px;
+  max-width: 60em;
+  padding: 25px;
+  background: #fff5b6;
+  margin-bottom: 25px;
+  overflow: auto !important; /* need to override style by pandoc... */
+}
+code {
+  white-space: pre; /* make non-syntax-colored code blocks behave like colored ones */
+}
+table, img {
+  max-width: 80%;
   padding: 0.5em 0.5em 0.5em 0.5em;
-  margin-left: min(5vw, 6rem); }
-
-table { border-spacing: 1.0em 0em }
+}
+table {
+  border-spacing: 1em 0em;
+}
