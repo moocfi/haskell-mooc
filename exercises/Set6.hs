@@ -1,6 +1,5 @@
 -- Exercise set 6: defining classes and instances
 
-
 module Set6 where
 
 import Mooc.Todo

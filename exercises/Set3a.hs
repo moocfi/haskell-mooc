@@ -3,7 +3,6 @@
 --  * lists
 --  * functional programming
 
-
 module Set3a where
 
 import Mooc.Todo
@@ -13,7 +12,6 @@ import Mooc.Todo
 import Data.Char
 import Data.Either
 import Data.List
-
 
 ------------------------------------------------------------------------------
 -- Ex 1: implement the function maxBy that takes as argument a

@@ -1,6 +1,5 @@
 -- Exercise set 5b: playing with binary trees
 
-
 module Set5b where
 
 import Mooc.Todo

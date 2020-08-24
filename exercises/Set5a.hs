@@ -3,7 +3,6 @@
 -- * defining algebraic datatypes
 -- * recursive datatypes
 
-
 module Set5a where
 
 import Mooc.Todo
@@ -257,7 +256,6 @@ fromNat n = todo
 
 toNat :: Int -> Maybe Nat
 toNat z = todo
-
 
 ------------------------------------------------------------------------------
 -- Ex 12: While pleasingly simple in its definition, the Nat datatype is not

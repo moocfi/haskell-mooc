@@ -471,4 +471,3 @@ instance Transform BlurMany where
 
 blurredSnowman = apply (BlurMany 2) exampleSnowman
 
-

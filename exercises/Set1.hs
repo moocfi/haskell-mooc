@@ -13,7 +13,6 @@
 --   * pattern matching
 --   * recursion
 
-
 module Set1 where
 
 import Mooc.Todo

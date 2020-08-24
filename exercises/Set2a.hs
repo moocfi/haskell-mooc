@@ -10,7 +10,6 @@
 --  * length
 --  * null
 
-
 module Set2a where
 
 import Mooc.Todo
