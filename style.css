@@ -11,11 +11,12 @@ a[href] {
   background: #ffd608;
   text-decoration: none;
 }
-/*
 a[href]:hover {
-  background: #a18600;
+  background: #c2a200;
 }
-*/
+a[href]:focus {
+  background: #c2a200;
+}
 body h2 {
   font-size: 1.4em;
   margin: 35px 0 0 0;
@@ -64,6 +65,9 @@ div#text {
     display: inline !important;
   }
   nav#TOC ul li a:hover {
+    color: #a18600;
+  }
+  nav#TOC ul li a:focus {
     color: #a18600;
   }
   nav#TOC ul li ul {
