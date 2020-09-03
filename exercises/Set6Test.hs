@@ -100,7 +100,8 @@ ex7_eq_check =
           ,$(testing [|Infinite == Infinite|]) (?==True)]
 
 ex7_trichotomy =
-  $(withInstance "Eq" "Number" [|(==) :: Number -> Number -> Bool|]) $ \(==) ->
+  $(withInstance "Ord" "Number" [|(<) :: Number -> Number -> Bool|]) $ \(<) ->
+  $(withInstance "Ord" "Number" [|(>) :: Number -> Number -> Bool|]) $ \(>) ->
   forAll_ $ \(x :: Number) ->
   forAll_ $ \(y :: Number) ->
   (x /= y) ==> counterexample
@@ -110,18 +111,18 @@ ex7_trichotomy =
   (x < y || x > y)
 
 ex7_reflexivity =
-  $(withInstance "Eq" "Number" [|(==) :: Number -> Number -> Bool|]) $ \(==) ->
+  $(withInstance "Ord" "Number" [|(<=) :: Number -> Number -> Bool|]) $ \(<=) ->
   forAll_ $ \(x :: Number) ->
   $(testing [| x <= x |]) (?==True)
 
 ex7_antisymmetry =
-  $(withInstance "Eq" "Number" [|(==) :: Number -> Number -> Bool|]) $ \(==) ->
+  $(withInstance "Ord" "Number" [|(<=) :: Number -> Number -> Bool|]) $ \(<=) ->
   forAll_ $ \(x :: Number) ->
   forAll_ $ \(y :: Number) ->
   (x <= y && y <= x) ==> $(testing [| x == y |]) (?==True)
 
 ex7_transitivity =
-  $(withInstance "Eq" "Number" [|(==) :: Number -> Number -> Bool|]) $ \(==) ->
+  $(withInstance "Ord" "Number" [|(<=) :: Number -> Number -> Bool|]) $ \(<=) ->
   forAll_ $ \(x :: Number) ->
   forAll_ $ \(y :: Number) ->
   forAll_ $ \(z :: Number) ->
