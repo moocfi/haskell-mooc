@@ -105,6 +105,8 @@ countdown = todo
 --
 -- Ps. your function doesn't need to work for inputs 0 and 1, but
 -- remember this in the next exercise!
+--
+-- Hint: remember the mod function!
 
 smallestDivisor :: Integer -> Integer
 smallestDivisor = todo
