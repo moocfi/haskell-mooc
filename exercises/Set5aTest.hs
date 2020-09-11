@@ -206,7 +206,7 @@ ex12_from_to_zero =
 ex12_from_one    =
   counterexample ("fromBin (I End)") (fromBin (I End) ?== 1)
 ex12_to_one      =
-  counterexample ("toBin 0") (toBin 1 ?== I End)
+  counterexample ("toBin 1") (toBin 1 ?== I End)
 ex12_to_from_one =
   counterexample ("toBin (fromBin (I End))") (toBin (fromBin (I End)) ?== I End)
 ex12_from_to_one =
