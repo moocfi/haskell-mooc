@@ -179,10 +179,13 @@ showArgs (Prefix name args) = [|fstring ++ " " ++ intercalate " " $arglist|]
 showArgs (Operator name left right) = [| show' $(return left) ++ " " ++ opstring ++ " " ++ show' $(return right) |]
   where opstring = nameBase name
 
+timeLimit :: Int
+timeLimit = 5 * 1000 * 1000 -- 5 seconds in microseconds, less than the toplevel timeout of 10 seconds
+
 testing :: Q Exp -> Q Exp
 testing call = do
   parsed <- fmap parseCall call
-  [| \k -> counterexample $(showArgs parsed) (k $call) |]
+  [| \k -> counterexample $(showArgs parsed) (within timeLimit (k $call)) |]
 
 -- TH pprint prints all names as qualified, let's convert the names to unqualified locals
 unqualifyName (Name n _) = Name n NameS
@@ -202,7 +205,7 @@ testing' :: Q Exp -> Q Exp
 testing' call = do
   str <- fmap (pprint.unqualify) call
   --str <- fmap show call
-  [| \k -> counterexample str (k $call) |]
+  [| \k -> counterexample str (within timeLimit (k $call)) |]
 
 -- checking imports
 

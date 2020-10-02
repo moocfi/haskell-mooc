@@ -4,6 +4,7 @@ module Mooc.Test where
 
 import Control.Exception (evaluate,SomeException,fromException)
 import Control.Monad
+import Control.DeepSeq (deepseq)
 import Data.Foldable
 import Data.Functor
 import Data.List
@@ -19,7 +20,10 @@ import Mooc.Todo
 
 -- better assertions
 
-expectation expected actual = counterexample ("  Expected: " ++ show expected ++ "\n  Was: " ++ show actual)
+-- strict counterexample', in case showing some values causes errors or never terminates
+counterexample' string prop = string `deepseq` counterexample string prop
+
+expectation expected actual = counterexample' ("  Expected: " ++ show expected ++ "\n  Was: " ++ show actual)
 
 expected ==? actual = expectation expected actual (expected == actual)
 actual ?== expected = expected ==? actual
@@ -33,11 +37,11 @@ expected =~? actual = actual ?~= expected
 infix 4 =~?
 infix 4 ?~=
 
-hasElements expected actual = counterexample ("  Expected elements (in any order): " ++ show expected
+hasElements expected actual = counterexample' ("  Expected elements (in any order): " ++ show expected
                                                ++ "\n  Was: " ++ show actual)
                               (sort expected == sort actual)
 
-was f actual = counterexample ("  Was: "++show actual) (f actual)
+was f actual = counterexample' ("  Was: "++show actual) (f actual)
 
 -- helpers
 
@@ -57,7 +61,7 @@ timedMillis = 500
 timed val k = monadicIO $ do
   res <- run $ timeout (timedMillis*1000) $ evaluate val
   case res of
-    Nothing -> return $ counterexample ("  didn't return in "++show timedMillis++"ms") $ False
+    Nothing -> return $ counterexample' ("  didn't return in "++show timedMillis++"ms") $ False
     Just v -> return $ k v
 
 -- handling TODO excercises
@@ -82,8 +86,10 @@ instance Monoid Outcome where
 
 quietArgs = stdArgs {chatty=False}
 
+timeLimit = 10 * 1000 * 1000 -- 10 seconds in microseconds
+
 myCheck :: Testable prop => prop -> IO Outcome
-myCheck prop = quickCheckWithResult quietArgs prop >>= interpret
+myCheck prop = quickCheckWithResult quietArgs (within timeLimit prop) >>= interpret
   where interpret res
           | resultIsTodo res = return Todo
           | isSuccess res = return Pass
