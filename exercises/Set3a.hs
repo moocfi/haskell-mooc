@@ -148,8 +148,6 @@ while check update value = todo
 -- a Right, the function should call `check` on the contents of the
 -- Right and so on.
 --
--- Hint! You'll need a helper function to pattern match on the result of f.
---
 -- Examples (see definition of step below):
 --   whileRight (step 100) 1   ==> 128
 --   whileRight (step 1000) 3  ==> 1536
