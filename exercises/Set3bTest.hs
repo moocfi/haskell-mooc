@@ -15,7 +15,7 @@ main = score tests
 tests = [(1,"buildList",[imports, ex1_buildList])
         ,(2,"sums",[imports, ex2_sums])
         ,(3,"mylast",[imports, ex3_mylast_nonempty, ex3_mylast_empty])
-        ,(4,"indexDefault",[imports, ex4_indexDefault_ok, ex4_indexDefault_ok])
+        ,(4,"indexDefault",[imports, ex4_indexDefault_ok, ex4_indexDefault_fail])
         ,(5,"sorted",[imports, ex5_sorted_empty, ex5_sorted])
         ,(6,"sumsOf",[imports, ex6_sumsOf])
         ,(7,"merge",[imports, ex7_merge])
