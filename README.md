@@ -8,23 +8,16 @@ University of Helsinki
 
 This work is licensed under a [Creative Commons Attribution-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-sa/4.0/).
 
-## About the Beta test
+## About the course
 
-Welcome to the Beta test of this Haskell course! The course material
-is finished, but we'd like your feedback on how we can make everything
-better for the real launch of the course. Please give feedback via
+This is an online course on Functional Programming that uses the
+Haskell programming language. You can study at your own pace. All the
+material and exercises are openly available.
 
-- The course [channel on Telegram](https://t.me/haskell_mooc_fi)
-- The feedback forms at the end of each lecture
-- You can also email <joel.kaasinen+mooc-feedback@gmail.com>
-
-We'd like to hear how you find the course, and especially if you find
-problems with the exercises or omissions in the material. However all
-sorts of feedback is welcome. If you're unsure about something, ask!
-
-## Material
-
-The material is available as [part1.html](part1.html) in this repository.
+The course is inteded to be followed through the
+[Course page](https://haskell.mooc.fi), but in case the course page is down or
+you want an offline backup, [the course material](part1.html) is also
+availble in this repository.
 
 ## Exercises
 
