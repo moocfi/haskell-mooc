@@ -476,7 +476,7 @@ Leaving GHCi.</code></pre>
 <ul>
 <li>A function of one argument: <code>argumentType -&gt; returnType</code></li>
 <li>… of two arguments: <code>argument1Type -&gt; argument2Type -&gt; returnType</code></li>
-<li>… of three arguments: <code>aargument1Type -&gt; argument2Type -&gt; argument3Type -&gt; returnType</code></li>
+<li>… of three arguments: <code>argument1Type -&gt; argument2Type -&gt; argument3Type -&gt; returnType</code></li>
 </ul>
 <p>Looks a bit weird, right? We’ll get back to this as well.</p>
 <h3 id="note-about-misleading-types"><span class="header-section-number">1.6.3</span> Note about misleading types</h3>
@@ -486,7 +486,7 @@ Leaving GHCi.</code></pre>
 <p>For now, you should read the type <code>Num a =&gt; a</code> as “any number type”. In Haskell, number literals are <em>overloaded</em> which means that they can be interpreted as any number type (e.g. <code>Int</code> or <code>Double</code>). We’ll get back to what <code>Num a</code> actually means when we talk about <em>type classes</em> later.</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="fu">:</span>t <span class="st">&quot;asdf&quot;</span></a>
 <a class="sourceLine" id="cb18-2" data-line-number="2"><span class="st">&quot;asdf&quot;</span><span class="ot"> ::</span> [<span class="dt">Char</span>]</a></code></pre></div>
-<p>The type <code>String</code> is just an alias for the type <code>[Char]</code> which means “list of characters”. We’ll get back to lists on the next lecture! In any case, you can use <code>String</code> and <code>[Char]</code> interchangeably, but GHCi will mostly use <code>[Char]</code> when describing types to you.</p>
+<p>The type <code>String</code> is just an alias for the type <code>[Char]</code> which means “list of characters”. We’ll get back to lists in the next lecture! In any case, you can use <code>String</code> and <code>[Char]</code> interchangeably, but GHCi will mostly use <code>[Char]</code> when describing types to you.</p>
 <h2 id="the-structure-of-a-haskell-program"><span class="header-section-number">1.7</span> The structure of a Haskell program</h2>
 <p>Here’s a simple Haskell program that does some arithmetic and prints some values.</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="kw">module</span> <span class="dt">Gold</span> <span class="kw">where</span></a>
