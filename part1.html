@@ -2546,11 +2546,11 @@ unspecified
 <p>What <code>Foldable</code> represents is types that you can fold over. The true type of <code>foldr</code> is:</p>
 <div class="sourceCode" id="cb283"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb283-1" data-line-number="1">foldr<span class="ot"> ::</span> <span class="dt">Foldable</span> t <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> b <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> b <span class="ot">-&gt;</span> t a <span class="ot">-&gt;</span> b</a></code></pre></div>
 <p>We’ve succesfully used the fact that lists are <code>Foldable</code> since we’ve managed to use <code>length</code> and <code>foldr</code> on lists. However, <code>Maybe</code> is also <code>Foldable</code>! The <code>Foldable</code> instance for <code>Maybe</code> just pretends that values of <code>Maybe a</code> are like lists of length 0 or 1:</p>
-<div class="sourceCode" id="cb284"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb284-1" data-line-number="1">foldr <span class="dv">1</span> (<span class="fu">+</span>) <span class="dt">Nothing</span> <span class="fu">==&gt;</span> <span class="dv">1</span></a>
-<a class="sourceLine" id="cb284-2" data-line-number="2">foldr <span class="dv">1</span> (<span class="fu">+</span>) <span class="dt">Just</span> <span class="dv">3</span>  <span class="fu">==&gt;</span> <span class="dv">4</span></a>
+<div class="sourceCode" id="cb284"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb284-1" data-line-number="1">foldr (<span class="fu">+</span>) <span class="dv">1</span> <span class="dt">Nothing</span> <span class="fu">==&gt;</span> <span class="dv">1</span></a>
+<a class="sourceLine" id="cb284-2" data-line-number="2">foldr (<span class="fu">+</span>) <span class="dv">1</span> (<span class="dt">Just</span> <span class="dv">3</span>) <span class="fu">==&gt;</span> <span class="dv">4</span></a>
 <a class="sourceLine" id="cb284-3" data-line-number="3">length <span class="dt">Nothing</span>      <span class="fu">==&gt;</span> <span class="dv">0</span></a>
 <a class="sourceLine" id="cb284-4" data-line-number="4">length (<span class="dt">Just</span> <span class="ch">&#39;a&#39;</span>)   <span class="fu">==&gt;</span> <span class="dv">1</span></a></code></pre></div>
-<p>We’ll some more foldable types next.</p>
+<p>We’ll see some more foldable types next.</p>
 <h2 id="more-data-structures"><span class="header-section-number">4.6</span> More data structures</h2>
 <p>Now that we are familiar with the standard type classes, we can look at one of their applications: the <code>Map</code> and <code>Array</code> data structures.</p>
 <h3 id="data.map"><span class="header-section-number">4.6.1</span> <code>Data.Map</code></h3>
