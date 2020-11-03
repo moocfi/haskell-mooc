@@ -35,3 +35,9 @@ of the set you are working on.
 
 
 See [the material](part1.html#working-on-the-exercises) for more info.
+
+## Reporting errors
+
+If you notice an error in these materials, you can report it via
+- an issue or pull request in this repository (see [CONTRIBUTING.md](CONTRIBUTING.md))
+- the course [channel on Telegram](https://t.me/haskell_mooc_fi)
