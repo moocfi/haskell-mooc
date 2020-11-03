@@ -132,7 +132,8 @@ average xs = todo
 ------------------------------------------------------------------------------
 -- Ex 8: given a map from player name to score and two players, return
 -- the name of the player with more points. If the players are tied,
--- return the name of the first player.
+-- return the name of the first player (that is, the name of the
+-- player who comes first in the argument list, player1).
 --
 -- If a player doesn't exist in the map, you can assume they have 0 points.
 --
@@ -141,8 +142,8 @@ average xs = todo
 -- Examples:
 --   winner (Map.fromList [("Bob",3470),("Jane",2130),("Lisa",9448)]) "Jane" "Lisa"
 --     ==> "Lisa"
---   winner (Map.fromList [("Bob",5899),("Lisa",5899),("Mike",13607)]) "Bob" "Lisa"
---     ==> "Bob"
+--   winner (Map.fromList [("Mike",13607),("Bob",5899),("Lisa",5899)]) "Lisa" "Bob"
+--     ==> "Lisa"
 
 winner :: Map.Map String Int -> String -> String -> String
 winner scores player1 player2 = todo
