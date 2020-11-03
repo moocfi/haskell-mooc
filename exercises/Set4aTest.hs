@@ -121,11 +121,12 @@ ex7 = conjoin [forAll_ $ \(Small i) -> $(testing [|average [fromIntegral i :: Fl
                   let x = fromIntegral i :: Double
                       y = fromIntegral j :: Double
                   in $(testing [|average (replicate 10 x ++ replicate 10 y)|]) (?~=(x+y)/2)]
+
 ex8_winner = property $
   do names <- shuffle ["Mike","Bob","Lisa","Jane"]
      let (win:lose:third:_) = names
      loseScore <- choose (0,10000)
-     diff <- choose (0,10000)
+     diff <- choose (1,100)
      thirdScore <- choose (0,20000)
      let inp = Map.fromList [(win,loseScore+diff),(lose,loseScore),(third,thirdScore)]
      return $ conjoin [$(testing [|winner inp win lose|]) (?==win)
