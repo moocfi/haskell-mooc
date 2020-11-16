@@ -114,6 +114,9 @@ pre {
   margin-bottom: 25px;
   overflow: auto !important; /* need to override style by pandoc... */
 }
+code.sourceCode {
+  position: static !important; /* override weird pandoc style that breaks on safari */
+}
 code {
   font-family: Consolas, Monaco, Lucida Console, Liberation Mono, Bitstream Vera Sans Mono, monospace;
   white-space: pre; /* make non-syntax-colored code blocks behave like colored ones */
