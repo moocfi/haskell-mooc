@@ -19,7 +19,7 @@ tests = [(1,"maxBy",[ex1_maxBy])
         ,(3,"mapMaybe2",[ex3_mapMaybe2])
         ,(4,"palindromeHalfs",[ex4_palindromeHalfs])
         ,(5,"capitalize",[ex5_capitalize_1, ex5_capitalize_2])
-        ,(6,"powers",[ex6_powers])
+        ,(6,"powers",[ex6_powers_small, ex6_powers_large])
         ,(7,"while",[ex7_while_number, ex7_while_string])
         ,(8,"whileRight",[ex8_whileRight_Left, ex8_whileRight_step])
         ,(9,"joinToLength",[ex9_1])
@@ -94,9 +94,9 @@ ex5_capitalize_2 = property $ do
     conjoin [counterexample ("char at index "++show p) $ v !! p ?== toUpper (input !! p)
             ,not (elem q positions) ==> counterexample ("char at index "++show q) (v !! q ?== input !! q)]
 
-ex6_powers = property $ do
+m_powers maxlen = property $ do
   n <- choose (2,5)
-  len <- choose (1,10)
+  len <- choose (1,maxlen)
   end <- choose (n^(len-1),n^len-1)
   return $ $(testing [|powers n end|]) $ \p -> conjoin
     [counterexample "all smaller than end" $ all (<=end) p
@@ -108,6 +108,9 @@ ex6_powers = property $ do
         check n k
           | k `mod` n == 0    = check n (div k n)
           | otherwise         = False
+
+ex6_powers_small = m_powers 5
+ex6_powers_large = m_powers 27 -- 5^27 still fits in Int
 
 ex7_while_number = property $ do
   n <- choose (0,20 :: Integer)
