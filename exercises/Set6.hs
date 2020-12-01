@@ -60,12 +60,15 @@ instance Eq a => Eq (List a) where
 ------------------------------------------------------------------------------
 -- Ex 5: below you'll find two datatypes, Egg and Milk. Implement a
 -- type class Price, containing a function price. The price function
--- should return an Int representing the price of the item in a store.
+-- should return the price of an item.
 --
 -- The prices should be as follows:
 -- * chicken eggs cost 20
 -- * chocolate eggs cost 30
 -- * milk costs 15 per liter
+--
+-- Example:
+--   price ChickenEgg  ==>  20
 
 data Egg = ChickenEgg | ChocolateEgg
   deriving Show
