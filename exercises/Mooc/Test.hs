@@ -2,7 +2,7 @@
 
 module Mooc.Test where
 
-import Control.Exception (evaluate,SomeException,fromException)
+import Control.Exception (try,evaluate,SomeException,fromException)
 import Control.Monad
 import Control.DeepSeq (deepseq)
 import Data.Foldable
@@ -54,6 +54,10 @@ forAllShrink_ gen = forAllShrinkBlind gen shrink
 forAll_ :: Arbitrary a => (a -> Property) -> Property
 forAll_ = forAllShrink_ arbitrary
 
+-- nondeterministic conjoin
+conjoin' :: Testable prop => [prop] -> Property
+conjoin' ps = property $ elements ps
+
 -- timeouts for evaluation
 
 timedMillis = 500
@@ -63,6 +67,18 @@ timed val k = monadicIO $ do
   case res of
     Nothing -> return $ counterexample' ("  didn't return in "++show timedMillis++"ms") $ False
     Just v -> return $ k v
+
+-- exceptions
+
+eval :: a -> PropertyM IO (Either SomeException a)
+eval x = run $ try $ evaluate x
+
+isFail :: Either SomeException a -> Property
+isFail (Left e) = property True
+isFail (Right _) = counterexample "  should fail" False
+
+shouldFail :: a -> Property
+shouldFail x = monadicIO $ fmap isFail $ eval x
 
 -- handling TODO excercises
 
@@ -86,10 +102,10 @@ instance Monoid Outcome where
 
 quietArgs = stdArgs {chatty=False}
 
-timeLimit = 10 * 1000 * 1000 -- 10 seconds in microseconds
+globalTimeLimit = 10 * 1000 * 1000 -- 10 seconds in microseconds
 
 myCheck :: Testable prop => prop -> IO Outcome
-myCheck prop = quickCheckWithResult quietArgs (within timeLimit prop) >>= interpret
+myCheck prop = quickCheckWithResult quietArgs (within globalTimeLimit prop) >>= interpret
   where interpret res
           | resultIsTodo res = return Todo
           | isSuccess res = return Pass

@@ -1,6 +1,6 @@
 {-# LANGUAGE TemplateHaskell, DeriveLift, StandaloneDeriving #-}
 
-module Mooc.Th (testing, testing',
+module Mooc.Th (testing, testing', timeLimit,
                 isDefined, withDefined, hasType, importsOnly, show',
                 reifyType, DataType(..), FieldType(..), Constructor(..),
                 withInstance, withInstance1, classContains, defineInstance)
@@ -199,6 +199,7 @@ unqualify (UInfixE left op right) = UInfixE (unqualify left) (unqualify op) (unq
 unqualify (LitE l) = LitE l
 unqualify (TupE exps) = TupE (map unqualify exps)
 unqualify (ListE exps) = ListE (map unqualify exps)
+unqualify (ArithSeqE (FromR x)) = ArithSeqE (FromR (unqualify x))
 unqualify x = error $ "Unsupported: " ++ show x
 
 testing' :: Q Exp -> Q Exp
