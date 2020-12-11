@@ -46,7 +46,9 @@ red = Color 255 0 0
 yellow :: Color
 yellow = Color 255 240 0
 
--- A coordinate is two Ints, x and y.
+-- A coordinate is two Ints, x and y. In this project, the (0,0)
+-- coordinate is in the top left corner of the image. The x coordinate
+-- increases to the right, and the y coordinate increases down.
 
 data Coord = Coord Int Int
 
@@ -66,9 +68,9 @@ solid color = Picture (\coord -> color)
 
 -- Here's a simple picture:
 examplePicture1 = Picture f
-  where f (Coord x y) | abs (x+y) < 100 = pink
-                      | max x y < 200 = white
-                      | otherwise = black
+  where f (Coord x y) | abs (x+y) < 100 = pink    -- top corner is pink
+                      | max x y < 200 = white     -- surrounded by a white square
+                      | otherwise = black         -- rest of the picture is black
 
 
 -- In order to find out what our example picture looks like, here's a
