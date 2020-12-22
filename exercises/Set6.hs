@@ -194,12 +194,18 @@ instance Num RationalNumber where
 -- The suit instance should cycle suits in the order Club, Spade,
 -- Diamond, Heart, Club.
 --
--- Also add a function `stepMany` and give it a default implementation
--- using `step`. The function `stepMany` should take multiple
--- (determined by an Int argument) steps like this:
+-- Also add a function `stepMany` to the class and give it a default
+-- implementation using `step`. The function `stepMany` should take
+-- multiple (determined by an Int argument) steps like this:
 --
 --   stepMany 2 Club ==> Diamond
 --   stepMany 3 Diamond ==> Spade
+--
+-- The tests will test the Cycle class and your default implementation
+-- of stepMany by adding an instance like this:
+--
+--    instance Cycle Int where
+--      step = succ
 
 data Color = Red | Green | Blue
   deriving (Show, Eq)
