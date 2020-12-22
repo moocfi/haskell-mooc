@@ -2,16 +2,19 @@
 
 module Mooc.Test where
 
-import Control.Exception (try,evaluate,SomeException,fromException)
-import Control.Monad
 import Control.DeepSeq (deepseq)
+import Control.Exception (try,evaluate,SomeException,fromException,bracket,finally)
+import Control.Monad
 import Data.Foldable
 import Data.Functor
 import Data.List
 import Data.Maybe
 import Data.Monoid
 import Data.Semigroup
+import GHC.IO.Handle
+import System.Directory
 import System.Environment
+import System.IO
 import System.Timeout
 import Test.QuickCheck
 import Test.QuickCheck.Monadic
@@ -80,6 +83,59 @@ isFail (Right _) = counterexample "  should fail" False
 shouldFail :: a -> Property
 shouldFail x = monadicIO $ fmap isFail $ eval x
 
+-- testing IO
+
+stop_ p = stop p >> return ()
+
+withOverrideHandle :: Handle -> Handle -> IO a -> IO a
+withOverrideHandle new old op =
+  bracket (hDuplicate old) hClose $ \oldcopy ->
+  bracket (hDuplicateTo new old) (\_ -> hDuplicateTo oldcopy old) $ \_ ->
+  op
+
+withStdinout :: Handle -> Handle -> IO a -> IO a
+withStdinout newin newout =
+  withOverrideHandle newin stdin . withOverrideHandle newout stdout
+
+capture :: String -> IO a -> IO (String,a)
+capture input op = do
+  dir <- getTemporaryDirectory
+  (path,h) <- openTempFile dir "haskell-exercises.in"
+  hPutStrLn h input
+  hClose h
+
+  (opath,oh) <- openTempFile dir "haskell-exercises.out"
+  read <- openFile path ReadMode
+
+  val <- withStdinout read oh op `finally`
+    do hClose oh
+       hClose read
+
+  str <- readFile opath
+
+  return (str,val)
+
+runc string op = run (capture string op)
+
+runc' op = run (capture "" op)
+
+withNoInput :: ((String,a) -> Property) -> IO a -> Property
+withNoInput k op = monadicIO $ do
+  res <- runc' op
+  stop_ $ k res
+
+withInput :: String -> ((String,a) -> Property) -> IO a -> Property
+withInput inp k op =
+  counterexample (" With input:\n  "++show inp) $ -- TODO render input?
+  monadicIO $ do
+    res <- runc inp op
+    stop_ $ k res
+
+checkOutput k (text,_) = counterexample " Printed output:" $ k text -- TODO check list of lines instead?
+checkResult k (_,val) = counterexample " Produced value:" $ k val
+
+check kOut kRes x = checkOutput kOut x .&&. checkResult kRes x
+
 -- handling TODO excercises
 
 isTodo :: SomeException -> Bool
@@ -139,6 +195,9 @@ showFinal color outs = concatMap (showCheck color) outs ++ "\n" ++ show score ++
         total = length outs
 
 type Test = (Int,String,[Property])
+
+precondition :: Property -> [Test] -> [Test]
+precondition prop = map (\(i,n,ps) -> (i,n,prop:ps))
 
 toJSON :: [(Int,String,Outcome)] -> String
 toJSON ts = "[" ++ intercalate "," (map f ts) ++ "]"
