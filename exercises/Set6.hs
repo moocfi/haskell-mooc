@@ -79,7 +79,9 @@ data Milk = Milk Int -- amount in litres
 ------------------------------------------------------------------------------
 -- Ex 6: define the necessary instances in order to be able to compute these:
 --
--- price [Just (ChocolateEgg), Nothing, Just (ChickenEgg)] ==> 50
+-- price (Just ChickenEgg) ==> 20
+-- price [Milk 1, Milk 2]  ==> 45
+-- price [Just ChocolateEgg, Nothing, Just ChickenEgg]  ==> 50
 -- price [Nothing, Nothing, Just (Milk 1), Just (Milk 2)]  ==> 45
 
 
