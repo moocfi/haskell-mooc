@@ -46,9 +46,9 @@ ex2_takeFinal_1 = property $ do
 
 ex2_takeFinal_2 = property $ do
   n <- choose (0,20)
-  k <- choose (0,n)
+  k <- choose (0,20)
   let inp = reverse [0..n]
-  return $ $(testing [|takeFinal k inp|]) (?== reverse [0..k-1])
+  return $ $(testing [|takeFinal k inp|]) (?== reverse [0..min (k-1) n])
 
 ex3_updateAt = property $ do
   ws <- listOf1 word
