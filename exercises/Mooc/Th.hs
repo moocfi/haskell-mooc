@@ -165,6 +165,7 @@ data Call = Prefix Name [Exp] | Operator Name Exp Exp
 
 parseCall :: Exp -> Call
 parseCall (VarE name) = Prefix name []
+parseCall (UnboundVarE name) = Prefix name []
 parseCall (AppE f arg) = Prefix name (args ++ [arg])
   where Prefix name args = parseCall f
 parseCall (InfixE (Just l) (VarE op) (Just r)) = Operator op l r
@@ -192,6 +193,7 @@ unqualifyName (Name n _) = Name n NameS
 
 unqualify :: Exp -> Exp
 unqualify (VarE n) = VarE (unqualifyName n)
+unqualify (UnboundVarE n) = UnboundVarE (unqualifyName n)
 unqualify (ConE n) = ConE (unqualifyName n)
 unqualify (AppE f x) = AppE (unqualify f) (unqualify x)
 unqualify (InfixE mleft op mright) = InfixE (fmap unqualify mleft) (unqualify op) (fmap unqualify mright)
