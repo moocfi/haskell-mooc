@@ -1412,7 +1412,7 @@ Ok, two modules loaded.
 <pre><code>Prelude&gt; :t Just
 Just :: a -&gt; Maybe a</code></pre>
 <h2 id="the-either-type"><span class="header-section-number">2.8</span> The <code>Either</code> type</h2>
-<p>Sometimes it would be nice if you could add an error message or something to <code>Nothing</code>. That’s why we the have the <code>Either</code> type. The <code>Either</code> type takes two type arguments. The type <code>Either a b</code> has two constructors: <code>Left</code> and <code>Right</code>. Both take an argument, <code>Left</code> an argument of type <code>a</code> and <code>Right</code> and argument of type <code>b</code>.</p>
+<p>Sometimes it would be nice if you could add an error message or something to <code>Nothing</code>. That’s why we have the <code>Either</code> type. The <code>Either</code> type takes two type arguments. The type <code>Either a b</code> has two constructors: <code>Left</code> and <code>Right</code>. Both take an argument, <code>Left</code> an argument of type <code>a</code> and <code>Right</code> an argument of type <code>b</code>.</p>
 <table>
 <thead>
 <tr class="header">
@@ -1441,7 +1441,7 @@ Just :: a -&gt; Maybe a</code></pre>
 <a class="sourceLine" id="cb122-3" data-line-number="3">readInt <span class="st">&quot;1&quot;</span> <span class="fu">=</span> <span class="dt">Right</span> <span class="dv">1</span></a>
 <a class="sourceLine" id="cb122-4" data-line-number="4">readInt s <span class="fu">=</span> <span class="dt">Left</span> (<span class="st">&quot;Unsupported string: &quot;</span> <span class="fu">++</span> s)</a></code></pre></div>
 <p>Sidenote: the constructors of <code>Either</code> are called <code>Left</code> and <code>Right</code> because they refer to the left and right type arguments of <code>Either</code>. Note how in <code>Either a b</code>, <code>a</code> is the left argument and <code>b</code> is the right argument. Thus <code>Left</code> contains a value of type <code>a</code> and likewise <code>Right</code> of type <code>b</code>. The convention of using <code>Right</code> for success is probably simply because right also means correct. No offense is intended to left-handed people.</p>
-<p>Here’s another example: pattern matching an Either. Just like with <code>Maybe</code>, there are two patterns for an <code>Either</code>, one for each constructor.</p>
+<p>Here’s another example: pattern matching an <code>Either</code>. Just like with <code>Maybe</code>, there are two patterns for an <code>Either</code>, one for each constructor.</p>
 <div class="sourceCode" id="cb123"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb123-1" data-line-number="1"><span class="ot">iWantAString ::</span> <span class="dt">Either</span> <span class="dt">Int</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">String</span></a>
 <a class="sourceLine" id="cb123-2" data-line-number="2">iWantAString (<span class="dt">Right</span> str)   <span class="fu">=</span> str</a>
 <a class="sourceLine" id="cb123-3" data-line-number="3">iWantAString (<span class="dt">Left</span> number) <span class="fu">=</span> show number</a></code></pre></div>
