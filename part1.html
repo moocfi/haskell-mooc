@@ -1115,8 +1115,8 @@ Ok, two modules loaded.
 *Set1&gt; quadruple 1
 2</code></pre>
 <p>Once you’re done with an exercise set, you can turn it in on the <a href="https://haskell.mooc.fi/submit.php">Submit page</a> on the course pages. After that you can see the results of your submission on the <a href="https://haskell.mooc.fi/results.php">Results page</a> and your total score on the <a href="https://haskell.mooc.fi/status.php">My status page</a>.</p>
-<p><strong>Note!</strong> you may turn in an exercise set as many times as you want.</p>
-<p><strong>Note!</strong> if you don’t want to use Stack or can’t get it working, you should also be able to run the tests with <a href="https://www.haskell.org/cabal/download.html">Cabal</a> like this:</p>
+<p><strong>Note!</strong> You may turn in an exercise set as many times as you want.</p>
+<p><strong>Note!</strong> If you don’t want to use Stack or can’t get it working, you should also be able to run the tests with <a href="https://www.haskell.org/cabal/download.html">Cabal</a> like this:</p>
 <div class="sourceCode" id="cb83"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb83-1" data-line-number="1">$ <span class="ex">cabal</span> v2-build</a>
 <a class="sourceLine" id="cb83-2" data-line-number="2">$ <span class="ex">cabal</span> v2-exec runhaskell Set1Test.hs</a></code></pre></div>
 <h3 id="model-solutions"><span class="header-section-number">1.13.1</span> Model Solutions</h3>
@@ -1804,7 +1804,7 @@ Prelude&gt; map (add 3) [1,2,3]
 <a class="sourceLine" id="cb180-7" data-line-number="7"><span class="dt">Prelude</span><span class="fu">&gt;</span> (\x y <span class="ot">-&gt;</span> x<span class="fu">^</span><span class="dv">2</span><span class="fu">+</span>y<span class="fu">^</span><span class="dv">2</span>) <span class="dv">2</span> <span class="dv">3</span>           <span class="co">-- multiple arguments</span></a>
 <a class="sourceLine" id="cb180-8" data-line-number="8"><span class="dv">13</span></a></code></pre></div>
 <p>The Haskell syntax for lambdas is a bit surprising. The backslash character (<code>\</code>) stands for the greek letter lambda (λ). The Haskell expression <code>\x -&gt; x+1</code> is trying to mimic the mathematical notation <em>λx. x+1</em>. Other languages use syntax like <code>x =&gt; x+1</code> (JavaScript) or <code>lambda x: x+1</code> (Python).</p>
-<p><strong>Note!</strong> you never <em>need</em> to use a lambda expression. You can always instead define the function normally using <code>let</code> or <code>where</code>.</p>
+<p><strong>Note!</strong> You never <em>need</em> to use a lambda expression. You can always instead define the function normally using <code>let</code> or <code>where</code>.</p>
 <p>By the way, lambda expressions are quite powerful constructs which have a deep theory of their own, known as <a href="https://en.wikipedia.org/wiki/Lambda_calculus">Lambda calculus</a>. Some even consider purely functional programming languages such as Haskell to be typed extensions of Lambda calculus with extra syntax.</p>
 <h2 id="sidenote-the-.-and-operators"><span class="header-section-number">3.5</span> Sidenote: The <code>.</code> and <code>$</code> Operators</h2>
 <p>The two most common operators in Haskell codebases are probably <code>.</code> and <code>$</code>. They are useful when writing code that uses higher-order functions. The first of these, the <code>.</code> operator, is the <em>function composition</em> operator. Here’s its type</p>
@@ -2000,7 +2000,7 @@ Prelude&gt; map (add 3) [1,2,3]
 <a class="sourceLine" id="cb225-3" data-line-number="3">myMaximum (x<span class="fu">:</span>xs) <span class="fu">=</span> go x xs</a>
 <a class="sourceLine" id="cb225-4" data-line-number="4">  <span class="kw">where</span> go biggest [] <span class="fu">=</span> biggest</a>
 <a class="sourceLine" id="cb225-5" data-line-number="5">        go biggest (x<span class="fu">:</span>xs) <span class="fu">=</span> go (max biggest x) xs</a></code></pre></div>
-<p><strong>Note!</strong>, <code>go</code> is just a cute name for the helper function here. It’s not special syntax.</p>
+<p><strong>Note!</strong>, “<code>go</code>” is just a cute name for the helper function here. It’s not special syntax.</p>
 <p>It’s often convenient to use nested patterns while consuming a list. Here’s an example that counts how many <code>Nothing</code> values occur in a list of <code>Maybe</code>s:</p>
 <div class="sourceCode" id="cb226"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb226-1" data-line-number="1"><span class="ot">countNothings ::</span> [<span class="dt">Maybe</span> a] <span class="ot">-&gt;</span> <span class="dt">Int</span></a>
 <a class="sourceLine" id="cb226-2" data-line-number="2">countNothings [] <span class="fu">=</span> <span class="dv">0</span></a>
@@ -2031,7 +2031,7 @@ Prelude&gt; map (add 3) [1,2,3]
 <a class="sourceLine" id="cb231-3" data-line-number="3">filter pred (x<span class="fu">:</span>xs)</a>
 <a class="sourceLine" id="cb231-4" data-line-number="4">  <span class="fu">|</span> pred x         <span class="fu">=</span> x <span class="fu">:</span> filter pred xs</a>
 <a class="sourceLine" id="cb231-5" data-line-number="5">  <span class="fu">|</span> otherwise      <span class="fu">=</span> filter pred xs</a></code></pre></div>
-<p>(<strong>Note!</strong> naming the argument <code>_pred</code> is a way to tell the reader of the code that this argument is unused. It could have been just <code>_</code> as well.)</p>
+<p>(<strong>Note!</strong> Naming the argument <code>_pred</code> is a way to tell the reader of the code that this argument is unused. It could have been just <code>_</code> as well.)</p>
 <h3 id="tail-recursion-and-lists"><span class="header-section-number">3.8.5</span> Tail Recursion and Lists</h3>
 <p>When a recursive function evaluates to a new call to that same function with different arguments, it is called <em>tail-recursive</em>. (The recursive call is said to be in <em>tail position</em>.) This is the type of recursion that corresponds to an imperative loop. We’ve already seen many examples of tail-recursive functions, but we haven’t really contrasted the two ways for writing the same function. This is <code>sumNumbers</code> from earlier in this lecture:</p>
 <div class="sourceCode" id="cb232"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb232-1" data-line-number="1"><span class="ot">sumNumbers ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span></a>
