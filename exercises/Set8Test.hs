@@ -87,7 +87,7 @@ ex3 = forAll_ $ \(Positive x0,Positive y0) ->
                ,checkShape (x0+max h w) (y0+1) False rect]
 
 ex4_union = forAll_ $ \(Positive x0,Positive y0,Positive x1,Positive y1) ->
-  counterexample ("union (dot "++show x0++" "++show y0++") (dot "++show x1++" "++show y0++")") $
+  counterexample ("union (dot "++show x0++" "++show y0++") (dot "++show x1++" "++show y1++")") $
   let un = union (dot x0 y0) (dot x1 y1)
   in conjoin [checkShape x0 y0 True un
              ,checkShape x1 y1 True un
