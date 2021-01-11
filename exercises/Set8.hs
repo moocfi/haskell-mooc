@@ -110,7 +110,7 @@ getPixel :: Picture -> Int -> Int -> String
 getPixel (Picture f) x y = colorToHex (f (Coord x y))
 renderList :: Picture -> (Int,Int) -> (Int,Int) -> [[String]]
 renderList picture (minx,maxx) (miny,maxy) =
-  [[getPixel picture x y | x <- [minx..maxx]] | y <- (reverse [miny..maxy])]
+  [[getPixel picture x y | x <- [minx..maxx]] | y <- [miny..maxy]]
 
 -- renderListExample evaluates to
 -- [["000000","000000","000000"],
@@ -125,11 +125,11 @@ renderListExample = renderList justADot (9,11) (9,11)
 -- Example:
 --   renderList dotAndLine (2,4) (3,9) ==>
 --     [["000000","000000","000000"],
---      ["ff69b4","ff69b4","ff69b4"],
---      ["000000","000000","000000"],
---      ["000000","000000","000000"],
---      ["000000","000000","000000"],
 --      ["000000","ffffff","000000"],
+--      ["000000","000000","000000"],
+--      ["000000","000000","000000"],
+--      ["000000","000000","000000"],
+--      ["ff69b4","ff69b4","ff69b4"],
 --      ["000000","000000","000000"]]
 
 dotAndLine :: Picture
@@ -156,6 +156,10 @@ dotAndLine = todo
 -- Examples:
 --   blendColor (Color 10 100 0) (Color 0 200 40)
 --     ==> Color 5 150 20
+--   renderList (combine (\c1 c2 -> c1) (solid red) justADot) (9,11) (9,11)
+--     ==> [["ff0000","ff0000","ff0000"],
+--          ["ff0000","ff0000","ff0000"],
+--          ["ff0000","ff0000","ff0000"]]
 --   renderList (combine blendColor (solid red) justADot) (9,11) (9,11)
 --     ==> [["7f0000","7f0000","7f0000"],
 --          ["7f0000","ff7f7f","7f0000"],
@@ -219,12 +223,11 @@ exampleCircle = fill red (circle 80 100 200)
 -- Example:
 --  renderList (fill white (rectangle 1 2 2 3)) (0,5) (0,5)
 --   ==> [["000000","000000","000000","000000","000000","000000"],
---        ["000000","ffffff","ffffff","000000","000000","000000"],
---        ["000000","ffffff","ffffff","000000","000000","000000"],
---        ["000000","ffffff","ffffff","000000","000000","000000"],
 --        ["000000","000000","000000","000000","000000","000000"],
+--        ["000000","ffffff","ffffff","000000","000000","000000"],
+--        ["000000","ffffff","ffffff","000000","000000","000000"],
+--        ["000000","ffffff","ffffff","000000","000000","000000"],
 --        ["000000","000000","000000","000000","000000","000000"]]
-
 
 rectangle :: Int -> Int -> Int -> Int -> Shape
 rectangle x0 y0 w h = todo
@@ -267,10 +270,11 @@ exampleSnowman = fill white snowman
 -- Implement the function paintSolid that takes a color and a shape,
 -- and draws them on top of an existing picture.
 --
--- Example: renderList (paintSolid pink (dot 10 11) justADot) (9,11) (9,11)
---  [["000000","ff69b4","000000"],
---   ["000000","ffffff","000000"],
---   ["000000","000000","000000"]]
+-- Example: renderList (paintSolid pink (dot 10 11) justADot) (9,11) (9,12)
+--   ==> [["000000","000000","000000"],
+--        ["000000","ffffff","000000"],
+--        ["000000","ff69b4","000000"],
+--        ["000000","000000","000000"]]
 
 paintSolid :: Color -> Shape -> Picture -> Picture
 paintSolid color shape base = todo
@@ -311,11 +315,11 @@ stripes a b = Picture f
 --
 -- Example:
 -- renderList (paint (stripes red white) (rectangle 0 0 2 4) (solid black)) (0,4) (0,4)
---  ==> [["000000","000000","000000","000000","000000"],
+--  ==> [["ff0000","ff0000","000000","000000","000000"],
 --       ["ffffff","ffffff","000000","000000","000000"],
 --       ["ff0000","ff0000","000000","000000","000000"],
 --       ["ffffff","ffffff","000000","000000","000000"],
---       ["ff0000","ff0000","000000","000000","000000"]]
+--       ["000000","000000","000000","000000","000000"]]
 
 paint :: Picture -> Shape -> Picture -> Picture
 paint pat shape base = todo
