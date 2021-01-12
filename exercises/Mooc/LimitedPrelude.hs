@@ -1,1 +1,1 @@
-module Mooc.LimitedPrelude (Int,Integer,Bool(..),Ordering(..),Eq(..),Ord(..),Num(..),Maybe(..),otherwise,undefined)  where
+module Mooc.LimitedPrelude (Int,Integer,Bool(..),Ordering(..),Eq(..),Ord(..),Num(..),Integral(..),Maybe(..),otherwise,undefined)  where
