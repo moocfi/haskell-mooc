@@ -44,6 +44,11 @@ hasElements expected actual = counterexample' ("  Expected elements (in any orde
                                                ++ "\n  Was: " ++ show actual)
                               (sort expected == sort actual)
 
+hasElementsDuplicates expected actual =
+  counterexample' ("  Expected elements (in any order, duplicates allowed): " ++ show expected
+                    ++ "\n  Was: " ++ show actual)
+  (nub (sort expected) == nub (sort actual))
+
 was f actual = counterexample' ("  Was: "++show actual) (f actual)
 
 -- helpers

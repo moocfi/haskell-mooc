@@ -1,7 +1,7 @@
 {-# LANGUAGE TemplateHaskell, DeriveLift, StandaloneDeriving #-}
 
 module Mooc.Th (testing, testing', timeLimit,
-                isDefined, withDefined, hasType, importsOnly, show',
+                isDefined, withDefined, hasType, hasType', importsOnly, show',
                 reifyType, DataType(..), FieldType(..), Constructor(..),
                 withInstance, withInstance1, classContains, defineInstance)
 where
@@ -57,6 +57,15 @@ hasType s qtyp = do
   let actual = case mt of Nothing -> "nothing"
                           Just t -> showType t
   if correct
+    then [|\k -> counterexample s (k $(varOrCon $ mkName s))|]
+    else [|\k -> counterexample ("The type of '"++s++"'\n  Expected: "++expected++"\n  Was: "++actual) False|]
+
+hasType' :: String -> String -> Q Exp
+hasType' s expected = do
+  mt <- getType s
+  let actual = case mt of Nothing -> "nothing"
+                          Just t -> showType t
+  if (actual==expected)
     then [|\k -> counterexample s (k $(varOrCon $ mkName s))|]
     else [|\k -> counterexample ("The type of '"++s++"'\n  Expected: "++expected++"\n  Was: "++actual) False|]
 
@@ -132,7 +141,7 @@ classContains cln varn = do
     Just cl -> do
       info <- reify cl
       case info of
-        (ClassOpI _ _ parent) -> let pn = nameBase parent in [|counterexample ("Function "++varn++ "is in the wrong class!") (pn ?== cln)|]
+        (ClassOpI _ _ parent) -> let pn = nameBase parent in [|counterexample ("Function "++varn++" is in the wrong class!") (pn ?== cln)|]
         _ -> [|counterexample ("Function "++varn++" is not a method of class "++cln) (property False)|]
 
 lookupConstructor :: String -> Q (Maybe Type)
