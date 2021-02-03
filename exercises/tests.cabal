@@ -4,5 +4,5 @@ build-type: Simple
 cabal-version: >= 1.10
 
 library
-  build-depends: QuickCheck, hspec, base, containers, array, template-haskell, generic-random, JuicyPixels
+  build-depends: QuickCheck, hspec, base, containers, array, transformers, template-haskell, generic-random, JuicyPixels
   default-language: Haskell2010
