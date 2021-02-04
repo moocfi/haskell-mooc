@@ -70,17 +70,13 @@ ex5_milk = $(withInstance "Price" "Milk" [|price|]) $ \price ->
   $(testing [|price (Milk l)|]) (?==(15*l))
 
 ex6_egg =
-  $(withInstance "Price" "Egg" [|price :: Egg -> Int|]) $ \_ ->
-  $(withInstance1 "Price" "[]" [|price :: [Egg] -> Int|]) $ \_ ->
-  $(withInstance1 "Price" "Maybe" [|price|]) $ \price ->
+  $(withInstances1 "Price" ["Maybe", "[]"] [|price|]) $ \price ->
   conjoin [$(testing [|price [Just ChocolateEgg, Nothing, Just ChickenEgg]|]) (?==50)
           ,$(testing [|price [Nothing, Nothing, Nothing :: Maybe Egg]|]) (?==0)]
 
 
 ex6_milk =
-  $(withInstance "Price" "Milk" [|price :: Milk -> Int|]) $ \_ ->
-  $(withInstance1 "Price" "[]" [|price :: [Milk] -> Int|]) $ \_ ->
-  $(withInstance1 "Price" "Maybe" [|price|]) $ \price ->
+  $(withInstances1 "Price" ["Maybe", "[]"] [|price|]) $ \price ->
   forAllBlind (choose (0,10)) $ \milk1 ->
   forAllBlind (choose (0,10)) $ \milk2 ->
   conjoin [$(testing [|price [Just (Milk milk1), Nothing, Just (Milk milk2)]|]) (?==(15*milk1+15*milk2))
