@@ -410,5 +410,5 @@ m_finish_n n = $(testing [|finish n [(1,1)]|]) . was $ \qs ->
             in counterexample "  these queens can capture each other: " $ (qs \\ sz) ?== []
           ]
 
-ex9_finish_medium = forAllBlind (choose (5,10)) m_finish_n
-ex9_finish_large = forAllBlind (choose (10,14)) m_finish_n
+ex9_finish_medium = forAllBlind (choose (5,8)) m_finish_n
+ex9_finish_large = forAllBlind (choose (9,13)) m_finish_n
