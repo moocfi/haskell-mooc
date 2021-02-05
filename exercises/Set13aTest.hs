@@ -17,7 +17,7 @@ import Set13a
 main = score tests
 
 tests = [(1,"readNames",[ex1_ok, ex1_fail])
-        ,(2,"winner",[ex2_small, ex2_big, ex2_fail])
+        ,(2,"winnerMaybe",[ex2_small, ex2_big, ex2_fail])
         ,(3,"selectSum",[ex3_ok, ex3_fail])
         ,(4,"countAndLog",[ex4])
         ,(5,"balance",[ex5_balance_examples, ex5_balance_ok, ex5_balance_nok])

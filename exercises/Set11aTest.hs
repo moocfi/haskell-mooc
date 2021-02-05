@@ -16,14 +16,14 @@ main = score tests
 
 tests = precondition imports
   [(1,"hello",[ex1_hello])
-  ,(2,"greet",[ex2_greet])
-  ,(3,"greet2",[ex3_greet2])
+  ,(2,"greetIO",[ex2_greet])
+  ,(3,"greetIO2",[ex3_greet2])
   ,(4,"readWords",[ex4_readWords])
   ,(5,"readUntil",[ex5_readUntil])
   ,(6,"countdownPrint",[ex6])
   ,(7,"isums",[ex7_isums])
   ,(8,"whenM",[ex8_whenM_True, ex8_whenM_False])
-  ,(9,"while",[ex9_example, ex9_False])
+  ,(9,"whileIO",[ex9_example, ex9_False])
   ,(10,"debug",[ex10_debug])]
 
 -- -- -- -- --
