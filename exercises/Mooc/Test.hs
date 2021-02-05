@@ -118,7 +118,7 @@ capture input op = do
 
   str <- readFile opath
 
-  return (str,val)
+  return $ length str `seq` (str,val) -- try to avoid half-open handles
 
 runc string op = run (capture string op)
 
