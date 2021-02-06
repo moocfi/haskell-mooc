@@ -139,7 +139,7 @@ ex8_interact_loop =
   forAllBlind (choose (0::Int,100)) $ \state ->
   forAllBlind (choose (0::Int,5)) $ \steps ->
   forAllBlind word $ \w ->
-  forAllBlind word $ \end ->
+  forAllBlind (word `suchThat` (/=w)) $ \end ->
   let input = unlines $ replicate steps w ++ [end]
       output = unlines $ map show [state..state+steps]
   in counterexample ("let f (input,state) = (input=="++show w++",show state,state+1) in interact' f "++show state) $
