@@ -359,7 +359,7 @@ step :: Size -> Stack -> Stack
 step = todo
 
 --------------------------------------------------------------------------------
--- Ex 8: Let's solve our puzzle! The function finish takes a partial
+-- Ex 9: Let's solve our puzzle! The function finish takes a partial
 -- solution (stack) and repeatedly step until a complete solution is
 -- found.
 --
