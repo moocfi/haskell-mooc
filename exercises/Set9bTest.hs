@@ -18,7 +18,7 @@ tests = [ (1, "warmup",         [ ex1_nextRow, ex1_nextCol ])
         , (3, "relations",      [ ex3_sameCol_pos, ex3_sameCol_neg
                                 , ex3_sameDiag_pos, ex3_sameDiag_neg
                                 , ex3_sameAntidiag_pos, ex3_sameAntidiag_neg ])
-        , (4, "danger",         [ ex4_danger, ex4_danger_neg ])
+        , (4, "danger",         [ ex4_danger, ex4_danger_neg, ex4_danger_neg_2 ])
         , (5, "prettyPrint2",   [ ex5_size, ex5_content, ex5_comm
                                 , ex5_correctness ])
         , (6, "fixFirst",       [ ex6_fixFirst_safeZone, ex6_fixFirst_dangerZone ])
@@ -192,10 +192,12 @@ ex3_sameAntidiag_neg = property $ do
 
 ex4_danger = property $ do
   (i,j) <- coord
-  let n = size (i,j)
+  (i',j') <- coord
+  let n = max (size (i,j)) (size (i',j'))
   let xs = dangerZone n (i,j)
   x <- elements xs
-  return $ $(testing [| danger x [(i,j)] |]) (?== True)
+  return $ conjoin [$(testing [| danger x [(i,j)] |]) (?== True)
+                   ,$(testing [| danger x [(i,j),(i',j')] |]) (?== True)]
 
 ex4_danger_neg = property $ do
   (i,j) <- coord
@@ -203,6 +205,16 @@ ex4_danger_neg = property $ do
   let xs = safeZone n (i,j)
   x <- elements xs
   return $ $(testing [| danger x [(i,j)] |]) (?== False)
+
+ex4_danger_neg_2 = property $ do
+  let n = 8
+  (i,j) <- boundedCoord n
+  (i',j') <- boundedCoord n
+  let xs = intersect (safeZone n (i,j)) (safeZone n (i',j'))
+  return $
+    (not (null xs) ==>) $
+    forAllBlind (elements xs) $ \x ->
+    $(testing [| danger x [(i,j),(i',j')] |]) (?== False)
 
 --------------------------------------------------------------------------------
 
