@@ -289,21 +289,19 @@ ex6_fixFirst_dangerZone = property $ do
   let k = n `div` 2
   (qs, dz, sz) <- queens n k
   q@(i,j) <- elements dz
-  return $ $(testing [| fixFirst n (q:qs) |]) $ \x -> case x of
-    x@(Just (q':qs')) -> conjoin [
-      counterexample
-        ("  returned " ++ show x ++ ", but\n  " ++ show q' ++
-          " is in danger")
-        (q' `elem` sz)
-      , counterexample
-        ("  returned " ++ show x ++ ", but\n  " ++ show qs' ++
-          " was not " ++ show qs)
-        (qs' == qs) ]
-    x@(Just []) -> counterexample
-                   ("  returned " ++ show x ++ ", but the list was empty")
-                   False
+  return $ $(testing [| fixFirst n (q:qs) |]) . was $ \x -> case x of
+    x@(Just (q'@(qi,qj):qs')) -> conjoin [counterexample
+                                          ("  but " ++ show q' ++ " is on the wrong row")
+                                          (qi ?== i)
+                                         ,counterexample
+                                          ("  but " ++ show q' ++ " is in danger")
+                                          (q' `elem` sz)
+                                         ,counterexample
+                                          ("  but " ++ show qs' ++ " was not " ++ show qs)
+                                          (qs' == qs)]
+    x@(Just []) -> counterexample ("  but the list was empty") False
     Nothing -> counterexample
-      ("  returned Nothing, but there were safe squares on row " ++ show i ++
+      ("  but there were safe squares on row " ++ show i ++
       ": " ++ show (intersect row sz))
       (all (`elem` dz) row)
       where row = [(i,k) | k <- [j .. n]]
