@@ -231,10 +231,11 @@ prettyPrint2 = todo
 --
 -- Given the size of the chessboard and a stack, the function fixFirst
 -- should take the queen on the top of the stack, and if it is in in
--- danger, move it right (in the direction of increasing columns)
--- until it is not in danger.
+-- danger, move it right _along the same row_ (in the direction of
+-- increasing columns) until it is not in danger.
 --
--- If no safe spot is found for the queen, fixFirst should return Nothing.
+-- If no safe spot is found for the queen on that row, fixFirst should
+-- return Nothing.
 --
 -- Examples:
 --   fixFirst 5 [(1,1)] ==> Just [(1,1)]
