@@ -3418,7 +3418,7 @@ Because <code>Nothing</code> is a constructor.
 <a class="sourceLine" id="cb380-3" data-line-number="3"></a>
 <a class="sourceLine" id="cb380-4" data-line-number="4"><span class="kw">instance</span> <span class="dt">Check</span> <span class="dt">Int</span> <span class="kw">where</span></a>
 <a class="sourceLine" id="cb380-5" data-line-number="5">  check x <span class="fu">=</span> x <span class="fu">&gt;</span> <span class="dv">0</span></a></code></pre></div>
-<p>Now we can write a function that checks a list:</p>
+<p>Now we can write a function that checks a list. We use the standard library function <code>and :: [Bool] -&gt; Bool</code> that checks if a list is all <code>True</code>s.</p>
 <div class="sourceCode" id="cb381"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb381-1" data-line-number="1"><span class="ot">checkAll ::</span> <span class="dt">Check</span> a <span class="ot">=&gt;</span> [a] <span class="ot">-&gt;</span> <span class="dt">Bool</span></a>
 <a class="sourceLine" id="cb381-2" data-line-number="2">checkAll <span class="fu">=</span> and (map check xs)</a></code></pre></div>
 <p>In order to turn this into a <code>Check [a]</code> instance, we need to add a constraint to the instance declaration. Our <code>Check [a]</code> is based on the <code>Check a</code> instance.</p>
