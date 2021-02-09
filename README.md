@@ -1,5 +1,7 @@
 # Haskell MOOC
 
+<p align="center"><img alt="Course logo" src="img/haskell-mooc-logo.svg" width="400" align="center"></p>
+
 University of Helsinki
 
 [Course page](https://haskell.mooc.fi)
