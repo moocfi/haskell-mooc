@@ -230,7 +230,7 @@ prettyPrint2 = todo
 -- the chessboard, it's time to write the first piece of the actual solution.
 --
 -- Given the size of the chessboard and a stack, the function fixFirst
--- should take the queen on the top of the stack, and if it is in in
+-- should take the queen on the top of the stack, and if it is in
 -- danger, move it right _along the same row_ (in the direction of
 -- increasing columns) until it is not in danger.
 --
