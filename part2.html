@@ -289,7 +289,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tr>
 <tr class="even">
 <td style="text-align: left;"><code>Red</code>, <code>Green</code>, <code>Blue</code></td>
-<td style="text-align: left;"><code>Bool</code></td>
+<td style="text-align: left;"><code>Color</code></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;"><code>MakeVector 1.5 3.2</code></td>
@@ -1034,7 +1034,7 @@ check digit is 7, 33+7=40 is divisible by 10, valid</code></pre>
 <a class="sourceLine" id="cb69-13" data-line-number="13"><span class="fu">==&gt;</span> not <span class="dt">False</span></a>
 <a class="sourceLine" id="cb69-14" data-line-number="14"><span class="fu">==&gt;</span> <span class="dt">True</span></a></code></pre></div>
 <p>Note that with this alternate definition <code>even</code> would not have worked. Can you tell why?</p>
-<div class="sourceCode" id="cb70"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb70-1" data-line-number="1">even&#39; x <span class="fu">=</span>  not (even (x<span class="fu">-</span><span class="dv">1</span>))  <span class="fu">||</span>  x <span class="fu">==</span> <span class="dv">0</span></a></code></pre></div>
+<div class="sourceCode" id="cb70"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb70-1" data-line-number="1">even&#39; x <span class="fu">=</span>  not (even&#39; (x<span class="fu">-</span><span class="dv">1</span>))  <span class="fu">||</span>  x <span class="fu">==</span> <span class="dv">0</span></a></code></pre></div>
 <p>Now we can really understand what’s going on in the infinite list example from earlier. Let’s use these definitions:</p>
 <div class="sourceCode" id="cb71"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb71-1" data-line-number="1">head (x<span class="fu">:</span>_) <span class="fu">=</span> x</a>
 <a class="sourceLine" id="cb71-2" data-line-number="2">head [] <span class="fu">=</span> <span class="fu">-</span><span class="dv">1</span></a>
