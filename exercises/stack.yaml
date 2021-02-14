@@ -1,2 +1,5 @@
 resolver: lts-16.31
 install-ghc: true
+
+extra-deps:
+- mtl-2.2.2
