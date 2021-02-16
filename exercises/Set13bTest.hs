@@ -5,7 +5,8 @@ module Set13bTest where
 import Mooc.Test
 import Mooc.Th
 
-import Control.Monad.State
+import Control.Monad
+import Control.Monad.Trans.State
 import qualified Data.Bits
 import Data.Char
 import Data.Either

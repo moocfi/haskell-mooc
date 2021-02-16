@@ -5,7 +5,7 @@ module Set13aTest where
 import Mooc.Test
 import Mooc.Th
 
-import Control.Monad.State
+import Control.Monad.Trans.State
 import Data.Char
 import Data.List
 import qualified Data.Map as Map
