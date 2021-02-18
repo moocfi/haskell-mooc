@@ -118,7 +118,7 @@ mkCounter = todo
 -- * hGetLine :: Handle -> IO String
 --   Reads one line from the Handle. Will fail if the Handle is at the
 --   end of the file
--- * hIsEOF :: Handle -> IO String
+-- * hIsEOF :: Handle -> IO Bool
 --   Produces True if the Handle is at the end of the file.
 -- * hGetContents :: Handle -> IO String
 --   Reads content from Handle until the end of the file.
