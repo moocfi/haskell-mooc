@@ -1093,7 +1093,7 @@ check digit is 7, 33+7=40 is divisible by 10, valid</code></pre>
 <p>A good heuristic for writing functions that work well with infinite lists is: can the <code>head</code> of the result be evaluated cheaply? Here are two examples of functions that don’t work with infinite inputs. In the case of <code>mapTailRecursive</code>, the problem is that it needs to process the whole input before being in WHNF. In the case of <code>myDrop</code>, the problem is that it uses the function <code>length</code>, doesn’t work for infinite lists since it tries to iterate until the end of the list.</p>
 <div class="sourceCode" id="cb75"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb75-1" data-line-number="1">map<span class="ot"> ::</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> [b]</a>
 <a class="sourceLine" id="cb75-2" data-line-number="2">map _ []     <span class="fu">=</span> []</a>
-<a class="sourceLine" id="cb75-3" data-line-number="3">map f (x<span class="fu">:</span>xs) <span class="fu">=</span> f x <span class="fu">:</span> map x xs</a>
+<a class="sourceLine" id="cb75-3" data-line-number="3">map f (x<span class="fu">:</span>xs) <span class="fu">=</span> f x <span class="fu">:</span> map f xs</a>
 <a class="sourceLine" id="cb75-4" data-line-number="4"></a>
 <a class="sourceLine" id="cb75-5" data-line-number="5"><span class="ot">mapTailRecursive ::</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> [b]</a>
 <a class="sourceLine" id="cb75-6" data-line-number="6">mapTailRecursive f xs <span class="fu">=</span> go xs []</a>
