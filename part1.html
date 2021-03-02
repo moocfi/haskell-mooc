@@ -206,7 +206,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="https://www.haskell.org/tutorial/">A Gentle Introduction to Haskell</a> - an older and shorter tutorial, but still worth reading</li>
 <li><a href="http://learnyouahaskell.com/chapters">Learn You a Haskell for Great Good!</a> – a nice free introduction to Haskell</li>
 <li><a href="https://www.cs.yale.edu/homes/hudak/SOE/index.htm">The Haskell School of Expression</a> - slightly older but still relevant introduction to functional programming</li>
-<li><a href="http://haskellbook.com/">Haskell Programming from First Principles</a> - $59 e-book on Haskell, slow and long</li>
+<li><a href="https://haskellbook.com/">Haskell Programming from First Principles</a> - $59 e-book on Haskell, slow and long</li>
 <li>The IRC channel <code>#haskell</code> on <a href="https://freenode.net/">freenode</a> is a nice place for beginners</li>
 </ul></li>
 </ul>
@@ -263,7 +263,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>1996 Haskell 1.3 (Monads, do-syntax, type system improvements)</li>
 <li>1999 Haskell 98</li>
 <li>2000’s: GHC development, many extensions to the language</li>
-<li>2009 <a href="http://www.haskell.org/onlinereport/haskell2010/">The Haskell 2010 standard</a></li>
+<li>2009 <a href="https://www.haskell.org/onlinereport/haskell2010/">The Haskell 2010 standard</a></li>
 <li>2010’s: GHC development, Haskell Platform, Haskell Stack</li>
 </ul>
 <p>The word ‘haskel’ means wisdom in Hebrew, but the name of the Haskell programming language comes from the logician Haskell Curry. The name Haskell comes from the Old Norse words áss (god) and ketill (helmet).</p>
@@ -274,12 +274,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>The <a href="https://engineering.fb.com/security/fighting-spam-with-haskell/">Sigma spam-prevention tool at Facebook</a></li>
 <li>The implementations of the <a href="https://www.purescript.org/">PureScript</a> and <a href="https://elm-lang.org/">Elm</a> programming languages are written in Haskell</li>
 <li>The <a href="https://pandoc.org/">Pandoc</a> tool for converting between different document formats – it’s also used to produce this course material</li>
-<li>The <a href="http://postgrest.org/">PostgREST</a> server that exposes a HTTP REST API for a PostgreSQL database</li>
+<li>The <a href="https://postgrest.org/">PostgREST</a> server that exposes a HTTP REST API for a PostgreSQL database</li>
 <li>Functional consulting companies like <a href="https://galois.com/">Galois</a> and <a href="https://well-typed.com/">Well-Typed</a> have a long history of developing critical systems for clients in Haskell</li>
 </ul>
-<p>See <a href="http://wiki.haskell.org/Haskell_in_industry">The Haskell Wiki</a> and <a href="https://serokell.io/blog/top-software-written-in-haskell">this blog post</a> for more!</p>
+<p>See <a href="https://wiki.haskell.org/Haskell_in_industry">The Haskell Wiki</a> and <a href="https://serokell.io/blog/top-software-written-in-haskell">this blog post</a> for more!</p>
 <h2 id="running-haskell"><span class="header-section-number">1.4</span> Running Haskell</h2>
-<p>The easiest way to get Haskell is to install the <code>stack</code> tool, see <a href="http://haskellstack.org" class="uri">http://haskellstack.org</a>. The exercises on this course are intended to work with Stack, so you should use it for now.</p>
+<p>The easiest way to get Haskell is to install the <code>stack</code> tool, see <a href="https://haskellstack.org" class="uri">https://haskellstack.org</a>. The exercises on this course are intended to work with Stack, so you should use it for now.</p>
 <p>By the way, if you’re interested in what Stack is, and how it relates to other Haskell tools like Cabal and GHC, <a href="https://www.quora.com/What-is-the-difference-between-Cabal-and-Stack-in-Haskell-projects-Which-one-do-you-recommend-and-why">read more here</a> or <a href="https://docs.haskellstack.org/en/stable/faq/">here</a>. We’ll get back to Haskell packages and using them in detail in part 2 of the course.</p>
 <p>For now, after installing Stack, just run <code>stack ghci</code> to get an interactive Haskell environment.</p>
 <h2 id="lets-start"><span class="header-section-number">1.5</span> Let’s Start!</h2>
@@ -2035,11 +2035,11 @@ Prelude&gt; map (add 3) [1,2,3]
 <a class="sourceLine" id="cb232-6" data-line-number="6"><span class="fu">==&gt;</span> <span class="dv">2</span><span class="fu">*</span><span class="dv">1</span> <span class="fu">:</span> (<span class="dv">2</span><span class="fu">*</span><span class="dv">2</span> <span class="fu">:</span> (<span class="dv">2</span><span class="fu">*</span><span class="dv">3</span> <span class="fu">:</span> []))</a>
 <a class="sourceLine" id="cb232-7" data-line-number="7"><span class="fu">===</span> [<span class="dv">2</span><span class="fu">*</span><span class="dv">1</span>, <span class="dv">2</span><span class="fu">*</span><span class="dv">2</span>, <span class="dv">2</span><span class="fu">*</span><span class="dv">3</span>]</a>
 <a class="sourceLine" id="cb232-8" data-line-number="8"><span class="fu">==&gt;</span> [<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">6</span>]</a></code></pre></div>
-<p>Once you know pattern matching for lists, it’s straightforward to define <code>map</code> and <code>filter</code>. Actually, let’s just look at the GHC standard library implementations. <a href="http://hackage.haskell.org/package/base-4.13.0.0/docs/src/GHC.Base.html#map">Here’s map</a>:</p>
+<p>Once you know pattern matching for lists, it’s straightforward to define <code>map</code> and <code>filter</code>. Actually, let’s just look at the GHC standard library implementations. <a href="https://hackage.haskell.org/package/base-4.13.0.0/docs/src/GHC.Base.html#map">Here’s map</a>:</p>
 <div class="sourceCode" id="cb233"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb233-1" data-line-number="1">map<span class="ot"> ::</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> [b]</a>
 <a class="sourceLine" id="cb233-2" data-line-number="2">map _ []     <span class="fu">=</span> []</a>
 <a class="sourceLine" id="cb233-3" data-line-number="3">map f (x<span class="fu">:</span>xs) <span class="fu">=</span> f x <span class="fu">:</span> map f xs</a></code></pre></div>
-<p>and <a href="http://hackage.haskell.org/package/base-4.13.0.0/docs/src/GHC.List.html#filter">here’s filter</a>:</p>
+<p>and <a href="https://hackage.haskell.org/package/base-4.13.0.0/docs/src/GHC.List.html#filter">here’s filter</a>:</p>
 <div class="sourceCode" id="cb234"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb234-1" data-line-number="1">filter<span class="ot"> ::</span> (a <span class="ot">-&gt;</span> <span class="dt">Bool</span>) <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> [a]</a>
 <a class="sourceLine" id="cb234-2" data-line-number="2">filter _pred []    <span class="fu">=</span> []</a>
 <a class="sourceLine" id="cb234-3" data-line-number="3">filter pred (x<span class="fu">:</span>xs)</a>
@@ -2666,7 +2666,7 @@ unspecified
 <a class="sourceLine" id="cb303-4" data-line-number="4">  <span class="fu">==&gt;</span> <span class="dv">10</span></a></code></pre></div>
 <h2 id="reading-docs"><span class="header-section-number">4.7</span> Reading Docs</h2>
 <p>Haskell libraries tend to have pretty good docs. We’ve linked to docs via Hackage (<a href="https://hackage.haskell.org" class="uri">https://hackage.haskell.org</a>) previously, but it’s important to know how to find the docs by your self too. The tool for generating Haskell documentation is called <em>Haddock</em> so sometimes Haskell docs are referred to as <em>haddocks</em>.</p>
-<p>Hackage is the Haskell package repository (just like <a href="https://pypi.org/">PyPI</a> for Python, Maven Central for Java or <a href="https://npmjs.com">NPM</a> for Javascript). In addition to the actual packages, it hosts documentation for them. Most of the modules that we use on this course are in the package called <code>base</code>. You can browse the docs for the base package at <a href="http://hackage.haskell.org/package/base-4.13.0.0/" class="uri">http://hackage.haskell.org/package/base-4.13.0.0/</a>.</p>
+<p>Hackage is the Haskell package repository (just like <a href="https://pypi.org/">PyPI</a> for Python, Maven Central for Java or <a href="https://npmjs.com">NPM</a> for Javascript). In addition to the actual packages, it hosts documentation for them. Most of the modules that we use on this course are in the package called <code>base</code>. You can browse the docs for the base package at <a href="https://hackage.haskell.org/package/base-4.13.0.0/" class="uri">https://hackage.haskell.org/package/base-4.13.0.0/</a>.</p>
 <p>When you’re not quite sure where the function you’re looking for is, Hoogle (<a href="https://hoogle.haskell.org/" class="uri">https://hoogle.haskell.org/</a>) can help. Hoogle is a search engine for Haskell documentation. It is a great resource when you need to check what was the type of <code>foldr</code> or which packages contain a function named <code>reverse</code>.</p>
 <p>Finally, since this course is using the <code>stack</code> tool, you can also browse the documentation for the libraries stack has installed for you with the commands</p>
 <pre><code>stack haddock --open
