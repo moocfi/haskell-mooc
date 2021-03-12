@@ -112,8 +112,8 @@ chunks = todo
 -- Hint: remember Data.Char.toLower
 --
 -- Examples:
---   ignorecase "abC" == ignoreCase "ABc"  ==>  True
---   ignorecase "acC" == ignoreCase "ABc"  ==>  False
+--   ignorecase "abC" == ignorecase "ABc"  ==>  True
+--   ignorecase "acC" == ignorecase "ABc"  ==>  False
 
 data IgnoreCase = Todo
 
