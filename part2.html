@@ -766,7 +766,7 @@ It is a type error.
 </ul>
 <h2 id="laziness-purity"><span class="header-section-number">10.1</span> Laziness &amp; Purity</h2>
 <p>Purity and laziness were mentioned as key features of Haskell in the beginning of part 1. Let’s take a closer look at them.</p>
-<p>Haskell is a <em>pure</em> functional language. This means that the value <code>f x y</code> is always the same if the values <code>x</code> and <code>y</code> are the same. This property is also called <em>referential transparency</em>.</p>
+<p>Haskell is a <em>pure</em> functional language. This means that the value <code>f x y</code> is always the same for given <code>x</code> and <code>y</code>. In other words, the values of <code>x</code> and <code>y</code> uniquely determine the value of <code>f x y</code>. This property is also called <em>referential transparency</em>.</p>
 <p>Purity also means that there are no side effects: you can’t have the evaluation of <code>f x y</code> read a line from the user - the line would be different on different invocations of <code>f</code> and would affect the return value, breaking referential transparency! Obviously you need side effects to actually get something done. We’ll get back to how Haskell handles side effects later.</p>
 <p>Haskell is a <em>lazy</em> language. This means that a value is not evaluated if it is not needed. An example illustrates this best. Consider these two functions:</p>
 <div class="sourceCode" id="cb37"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb37-1" data-line-number="1">f x <span class="fu">=</span> f x   <span class="co">-- infinite recursion</span></a>
