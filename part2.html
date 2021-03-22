@@ -2167,7 +2167,7 @@ Query the user for a number and return it.
 <a class="sourceLine" id="cb181-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb181-3" data-line-number="3"><span class="ot">mapTree ::</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> <span class="dt">Tree</span> a <span class="ot">-&gt;</span> <span class="dt">Tree</span> b</a>
 <a class="sourceLine" id="cb181-4" data-line-number="4">mapTree f <span class="dt">Leaf</span> <span class="fu">=</span> <span class="dt">Leaf</span></a>
-<a class="sourceLine" id="cb181-5" data-line-number="5">mapTree f (<span class="dt">Node</span> val left right) <span class="fu">=</span> <span class="dt">Node</span> (f x) (mapTree f left) (mapTree f right)</a></code></pre></div>
+<a class="sourceLine" id="cb181-5" data-line-number="5">mapTree f (<span class="dt">Node</span> val left right) <span class="fu">=</span> <span class="dt">Node</span> (f val) (mapTree f left) (mapTree f right)</a></code></pre></div>
 <p>A binary tree might look like this:</p>
 <figure>
 <img src="img/mapTreeBefore.svg" alt="A binary tree" /><figcaption>A binary tree</figcaption>
