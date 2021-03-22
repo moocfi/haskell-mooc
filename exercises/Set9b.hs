@@ -53,10 +53,11 @@ nextCol :: Coord -> Coord
 nextCol (i,j) = todo
 
 --------------------------------------------------------------------------------
--- Ex 2: Implement the function prettyPrint that, given the size of the
--- chessboard and a list of distinct coordinates of queens, prints the
--- chessboard with the queens on it. Empty squares must be printed as '.'s and
--- queens as 'Q's. The special line break character '\n' must be appended to the
+-- Ex 2: Implement the function prettyPrint that, given the size of
+-- the chessboard and a list of distinct coordinates of queens (that
+-- is, a list of (row,col) pairs), prints the chessboard with the
+-- queens on it. Empty squares must be printed as '.'s and queens as
+-- 'Q's. The special line break character '\n' must be appended to the
 -- end of each row.
 --
 -- Examples:
