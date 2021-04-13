@@ -92,7 +92,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="#recursion"><span class="toc-section-number">9.4</span> Recursion</a></li>
 <li><a href="#type-classes"><span class="toc-section-number">9.5</span> Type Classes</a></li>
 <li><a href="#quiz"><span class="toc-section-number">9.6</span> Quiz</a></li>
-<li><a href="#exercises"><span class="toc-section-number">9.7</span> Exercises</a></li>
+<li><a href="#working-on-the-exercises"><span class="toc-section-number">9.7</span> Working on the Exercises</a></li>
+<li><a href="#exercises"><span class="toc-section-number">9.8</span> Exercises</a></li>
 </ul></li>
 <li><a href="#lecture-10-reductionism"><span class="toc-section-number">10</span> Lecture 10: Reductionism</a><ul>
 <li><a href="#laziness-purity"><span class="toc-section-number">10.1</span> Laziness &amp; Purity</a></li>
@@ -273,7 +274,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <a class="sourceLine" id="cb1-17" data-line-number="17"><span class="kw">data</span> <span class="dt">Either</span> a b <span class="fu">=</span> <span class="dt">Left</span> a <span class="fu">|</span> <span class="dt">Right</span> b</a>
 <a class="sourceLine" id="cb1-18" data-line-number="18"><span class="kw">data</span> <span class="dt">List</span> a <span class="fu">=</span> <span class="dt">Nil</span> <span class="fu">|</span> <span class="dt">Cons</span> a (<span class="dt">List</span> a)             <span class="co">-- This is equivalent to the built-in [a] type</span></a>
 <a class="sourceLine" id="cb1-19" data-line-number="19"><span class="kw">data</span> <span class="dt">Tree</span> a <span class="fu">=</span> <span class="dt">Leaf</span> a <span class="fu">|</span> <span class="dt">Node</span> a (<span class="dt">Tree</span> a) (<span class="dt">Tree</span> a)</a>
-<a class="sourceLine" id="cb1-20" data-line-number="20"><span class="kw">data</span> <span class="dt">MultiTree</span> a <span class="fu">=</span> <span class="dt">MultiTree</span> a [<span class="dt">RoseTree</span> a]     <span class="co">-- Note the list</span></a></code></pre></div>
+<a class="sourceLine" id="cb1-20" data-line-number="20"><span class="kw">data</span> <span class="dt">MultiTree</span> a <span class="fu">=</span> <span class="dt">MultiTree</span> a [<span class="dt">MultiTree</span> a]     <span class="co">-- Note the list</span></a></code></pre></div>
 <p>Values of these types include:</p>
 <table>
 <thead>
@@ -583,7 +584,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb24"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb24-1" data-line-number="1">negate<span class="ot"> ::</span> <span class="dt">Num</span> a <span class="ot">=&gt;</span> a <span class="ot">-&gt;</span> a</a>
 <a class="sourceLine" id="cb24-2" data-line-number="2"><span class="ot">(==) ::</span> <span class="dt">Eq</span> a <span class="ot">=&gt;</span> a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a</a>
 <a class="sourceLine" id="cb24-3" data-line-number="3">sort<span class="ot"> ::</span> <span class="dt">Ord</span> a <span class="ot">=&gt;</span> [a] <span class="ot">-&gt;</span> [a]</a></code></pre></div>
-<p>A type like <code>Num a =&gt; a -&gt; a</code> means: for any type <code>X</code> that’s a member of the <code>Num</code> class, this function has type <code>X -&gt; X</code>. In ther words, we can invoke <code>negate</code> on any number type, but not on other types:</p>
+<p>A type like <code>Num a =&gt; a -&gt; a</code> means: for any type <code>X</code> that’s a member of the <code>Num</code> class, this function has type <code>X -&gt; X</code>. In other words, we can invoke <code>negate</code> on any number type, but not on other types:</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb25-1" data-line-number="1"><span class="dt">Prelude</span><span class="fu">&gt;</span> negate <span class="dv">1</span></a>
 <a class="sourceLine" id="cb25-2" data-line-number="2"><span class="fu">-</span><span class="dv">1</span></a>
 <a class="sourceLine" id="cb25-3" data-line-number="3"><span class="dt">Prelude</span><span class="fu">&gt;</span> negate <span class="fl">1.0</span></a>
@@ -752,7 +753,19 @@ It is a type error.
 <code>a -&gt; a -&gt; Bool</code>
 </li>
 </ol>
-<h2 id="exercises"><span class="header-section-number">9.7</span> Exercises</h2>
+<h2 id="working-on-the-exercises"><span class="header-section-number">9.7</span> Working on the Exercises</h2>
+<p>Here’s a short recap of how to work on the exercises. The system is the same as for part 1 of the course.</p>
+<ol type="1">
+<li>Clone the GitHub repository <a href="https://github.com/moocfi/haskell-mooc" class="uri">https://github.com/moocfi/haskell-mooc</a></li>
+<li>Go to the <code>exercises/</code> directory</li>
+<li>Run <code>stack build</code> to download dependencies</li>
+<li>Edit the file <code>Set9a.hs</code></li>
+<li>Check your answers by running <code>stack runhaskell Set9aTest.hs</code></li>
+<li>Return your answers on the <a href="https://haskell.mooc.fi/submit.php">Submit page</a></li>
+<li>Repeat as necessary. You can work on the exercise sets in any order, and you can return the sets as many times as you want!</li>
+<li>You can see total score on the <a href="https://haskell.mooc.fi/status.php">My status page</a></li>
+</ol>
+<h2 id="exercises"><span class="header-section-number">9.8</span> Exercises</h2>
 <ul>
 <li><a href="https://github.com/moocfi/haskell-mooc/blob/master/exercises/Set9a.hs">Set9a</a> - small exercises that recap part 1 of the course</li>
 <li><a href="https://github.com/moocfi/haskell-mooc/blob/master/exercises/Set9b.hs">Set9b</a> - let’s solve the N Queens puzzle!</li>
