@@ -2366,16 +2366,16 @@ Query the user for a number and return it.
 <a class="sourceLine" id="cb201-4" data-line-number="4">  <span class="fu">????</span></a></code></pre></div>
 <ol class="quiz">
 <li>
-<code>fmap (Things x ys) = Things (f x) [f x]</code>
+<code>fmap f (Things x ys) = Things (f x) [f x]</code>
 </li>
 <li class="correct">
-<code>fmap (Things x ys) = Things (f x) (map f ys)</code>
+<code>fmap f (Things x ys) = Things (f x) (map f ys)</code>
 </li>
 <li>
-<code>fmap (Things x ys) = Things (f x) ys</code>
+<code>fmap f (Things x ys) = Things (f x) ys</code>
 </li>
 <li>
-<code>fmap (Things x ys) = f (Things x ys)</code>
+<code>fmap f (Things x ys) = f (Things x ys)</code>
 </li>
 </ol>
 <p>What’s the kind of <code>[a]</code>?</p>
@@ -2412,10 +2412,10 @@ Query the user for a number and return it.
 1
 </li>
 <li>
-2
+<code>Just -1</code>
 </li>
 <li>
-3
+<code>Just 1</code>
 </li>
 </ol>
 <p>Which code snippet completes the next <code>Foldable</code> instance?</p>
