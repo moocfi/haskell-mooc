@@ -118,6 +118,7 @@ inBoth = todo
 --   length (LNode 1 (LNode 2 (LNode 3 Empty))) ==> 3
 
 instance Foldable List where
+  foldr = todo
 
 ------------------------------------------------------------------------------
 -- Ex 9: Implement the instance Foldable TwoList.
@@ -127,6 +128,7 @@ instance Foldable List where
 --   length (TwoNode 0 1 (TwoNode 2 3 TwoEmpty)) ==> 4
 
 instance Foldable TwoList where
+  foldr = todo
 
 ------------------------------------------------------------------------------
 -- Ex 10: (Tricky!) Fun a is a type that wraps a function Int -> a.
