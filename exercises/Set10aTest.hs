@@ -128,8 +128,8 @@ ex7_type = $(do let s = "IgnoreCase"
                                             _ -> [|counterexample ("Definition "++s++" is not a newype declaration!") False|])
 
 ex7_works =
-  $(hasType "ignorecase" [t|String -> IgnoreCase|]) $ \ignorecase ->
-  $(withInstance "Eq" "IgnoreCase" [|(==)|]) $ \((==)::IgnoreCase->IgnoreCase->Bool) ->
+  $(hasType' "ignorecase" "String -> IgnoreCase") $ \ignorecase ->
+  $(withInstance "Eq" "IgnoreCase" [|(==)|]) $ \((==)) ->
   property $ do
   w1 <- word
   w2 <- shuffleCase w1
