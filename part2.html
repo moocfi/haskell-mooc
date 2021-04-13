@@ -1463,7 +1463,7 @@ pit-----&gt;|Room &quot;You fall...&quot; []|    treasure---&gt;|Room &quot;A gr
 <code>reverse . reverse === reverse</code>
 </li>
 <li>
-<code>reverse . id === reverse</code>
+<code>reverse . id === id</code>
 </li>
 </ol>
 <p>Which of these is an infinite list that starts with <code>[0,1,2,1,2,1,2...]</code>?</p>
@@ -1547,7 +1547,7 @@ Yes, because it calls <code>map</code>, which works with infinite lists.
 </li>
 </ol>
 <p>What about this one?</p>
-<div class="sourceCode" id="cb119"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb119-1" data-line-number="1">f xs <span class="fu">=</span> map (<span class="fu">+</span>sum xs) xs</a></code></pre></div>
+<div class="sourceCode" id="cb119"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb119-1" data-line-number="1">f xs <span class="fu">=</span> map (<span class="fu">+</span>(sum xs)) xs</a></code></pre></div>
 <ol class="quiz">
 <li>
 No, because it uses <code>map</code>, which evaluates the whole list.
