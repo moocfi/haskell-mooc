@@ -40,6 +40,8 @@ expected =~? actual = actual ?~= expected
 infix 4 =~?
 infix 4 ?~=
 
+approximateListEq expected actual = expectation expected actual (length expected == length actual && and (zipWith (\e a -> abs (e-a) < 0.01) expected actual))
+
 hasElements expected actual = counterexample' ("  Expected elements (in any order): " ++ show expected
                                                ++ "\n  Was: " ++ show actual)
                               (sort expected == sort actual)

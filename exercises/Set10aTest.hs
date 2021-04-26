@@ -20,11 +20,12 @@ main = score tests
 tests = [(1,"doublify",[ex1_finite, ex1_infinite])
         ,(2,"interleave",[ex2_finite, ex2_infinite_1, ex2_infinite_2])
         ,(3,"deal",[ex3_examples, ex3_finite, ex3_infinite_1, ex3_infinite_2])
-        ,(4,"alternate",[ex4_examples, ex4])
-        ,(5,"lenghtAtLeast",[ex5_finite, ex5_infinite])
-        ,(6,"chunks",[ex6_finite, ex6_infinite])
-        ,(7,"IgnoreCase",[ex7_type, ex7_works])
-        ,(8,"maze",[ex8_1, ex8_2])]
+        ,(4,"averages",[ex4_simple, ex4_finite, ex4_infinite])
+        ,(5,"alternate",[ex5_examples, ex5])
+        ,(6,"lenghtAtLeast",[ex6_finite, ex6_infinite])
+        ,(7,"chunks",[ex7_finite, ex7_infinite])
+        ,(8,"IgnoreCase",[ex8_type, ex8_works])
+        ,(9,"maze",[ex9_1, ex9_2])]
 
 -- -- -- --
 
@@ -88,30 +89,53 @@ ex3_infinite_1 = forAllShrink_ (listOf1 word) $ \names ->
 ex3_infinite_2 =
   $(testing' [|take 10 (deal (repeat "me") (repeat "card"))|]) (?==replicate 10 ("card","me"))
 
-ex4_examples = conjoin [$(testing' [|take 20 (alternate "abc" "def" ',')|]) (?=="abc,def,abc,def,abc,")
+
+
+ex4_simple = conjoin [$(testing [|averages [1.0,2.0,3.0]|]) (approximateListEq [1.0,(1+2)/2,(1+2+3)/3])
+                     ,$(testing [|averages [7,2,5,8]|]) (approximateListEq [7,(7+2)/2,(7+2+5)/3,(7+2+5+8)/4])
+                     ,let e = [] :: [Double] in $(testing [|averages e|]) (?==e)]
+
+ex4_finite = forAllBlind (elements [0,1,2,3]) $ \base ->
+  forAllBlind (elements [1,2,3,4,5,6]) $ \step ->
+  forAllBlind (choose (2,7)) $ \len ->
+  let input = [base + i*step | i <- [0..len]]
+      output = [(j*base + (j-1)*j*step/2)/j | j <- [1..len+1]]
+  in $(testing [|averages input|]) (approximateListEq output)
+
+ex4_infinite = forAllBlind (elements [0,1,2,3,4,5,6,7,8,9]) $ \a ->
+  forAllBlind (elements [0,1,2,3,4,5,6,7,8,9]) $ \b ->
+  forAllBlind (choose (0,1000)) $ \i ->
+  counterexample ("With a=" ++ show a ++ ", b=" ++ show b) $
+  $(testing' [|averages (cycle [a,b])|]) $ \res ->
+  counterexample ("  element at index " ++ show i) $
+  let na = fromIntegral (div i 2 + 1)
+      nb = fromIntegral (div (i+1) 2)
+  in res !! i ?~= (na*a + nb*b)/(na+nb)
+
+ex5_examples = conjoin [$(testing' [|take 20 (alternate "abc" "def" ',')|]) (?=="abc,def,abc,def,abc,")
                        ,$(testing' [|take 10 (alternate [1,2] [3,4,5] 0)|]) (?==[1,2,0,3,4,5,0,1,2,0])]
 
-ex4 = forAllBlind (choose (1,3)) $ \n ->
+ex5 = forAllBlind (choose (1,3)) $ \n ->
   forAllBlind (choose (1,6)) $ \m ->
   forAll_ $ \(NonNegative i) ->
   $(testing [|alternate (replicate n 1) (replicate m 1) 0|]) $ \was ->
     counterexample (" Index "++show i) $
     (was !! i ?== if mod i (2+n+m) `elem` [n,n+1+m] then 0 else 1)
 
-ex5_finite = forAll_ $ \(is::[Int]) ->
+ex6_finite = forAll_ $ \(is::[Int]) ->
   forAll_ $ \(NonNegative n) ->
   $(testing [|lengthAtLeast n is|]) (?==(length is >= n))
 
-ex5_infinite = forAll_ $ \(Positive (i::Int)) ->
+ex6_infinite = forAll_ $ \(Positive (i::Int)) ->
   forAll_ $ \(NonNegative n) ->
   counterexample ("With n = " ++ show n ++ ", i = " ++ show i) $
   $(testing' [|lengthAtLeast n (repeat i)|]) (?==True)
 
-ex6_finite = forAllBlind (choose (1,6)) $ \n ->
+ex7_finite = forAllBlind (choose (1,6)) $ \n ->
   forAllShrink_ (listOf word) $ \ws ->
   $(testing [|chunks n ws|]) (?==[[ws!!i | i <- [j..j+n-1]] | j <- [0..length ws - n]])
 
-ex6_infinite = forAllBlind (choose (1,10)) $ \n ->
+ex7_infinite = forAllBlind (choose (1,10)) $ \n ->
   forAllBlind (choose (1,25)) $ \k ->
   counterexample ("With k = "++show k++", n = "++show n) $
   $(testing' [|take k (chunks n [0..])|]) (?==[[j..j+n-1] | j <- [0..k-1]])
@@ -119,7 +143,7 @@ ex6_infinite = forAllBlind (choose (1,10)) $ \n ->
 shuffleCase w = (do s <- vectorOf (length w) (elements [toLower,toUpper])
                     return (zipWith ($) s w)) `suchThat` (/=w)
 
-ex7_type = $(do let s = "IgnoreCase"
+ex8_type = $(do let s = "IgnoreCase"
                 n <- lookupTypeName s
                 case n of
                   Nothing -> [|counterexample ("Type "++s++" not defined!") False|]
@@ -127,7 +151,7 @@ ex7_type = $(do let s = "IgnoreCase"
                                case info of TyConI (NewtypeD _ _ _ _ _ _) -> [|property True|]
                                             _ -> [|counterexample ("Definition "++s++" is not a newype declaration!") False|])
 
-ex7_works =
+ex8_works =
   $(hasType' "ignorecase" "String -> IgnoreCase") $ \ignorecase ->
   $(withInstance "Eq" "IgnoreCase" [|(==)|]) $ \((==)) ->
   property $ do
@@ -156,12 +180,12 @@ play room [] = [describe room]
 play room (d:ds) = case move room d of Nothing -> [describe room]
                                        Just r -> describe room : play r ds
 
-ex8_1 = forAllShrink_ (choose (0,20)) $ \i ->
+ex9_1 = forAllShrink_ (choose (0,20)) $ \i ->
   counterexample ("with i = " ++ show i) $
   conjoin [$(testing' [|play maze (replicate i "Left")|]) (?==take (i+1) (cycle ["Maze","Deeper in the maze","Elsewhere in the maze"]))
           ,$(testing' [|play maze (replicate i "Right")|]) (?==take (i+1) (cycle ["Maze","Elsewhere in the maze","Deeper in the maze"]))]
 
-ex8_2 = forAllShrinkBlind (listOf (elements ["Left","Right"])) subterms $ \dirs ->
+ex9_2 = forAllShrinkBlind (listOf (elements ["Left","Right"])) subterms $ \dirs ->
   let cnt = sum (map (\d -> case d of "Left" -> 1; "Right" -> -1) dirs)
       answer = ["Maze","Deeper in the maze","Elsewhere in the maze"] !! mod cnt 3
   in counterexample ("with dirs = " ++ show dirs) $
