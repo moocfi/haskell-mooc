@@ -98,9 +98,8 @@ ex6 = forAllBlind (listOf1 word) $ \lines ->
   run $ hPutStr h $ unlines lines
   run $ hSeek h AbsoluteSeek 0
   outs <- run $ hFetchLines h
-  res <- stop_ $ outs ?== lines
   run $ hClose h
-  return res
+  stop_ $ outs ?== lines
 
 ex7_hSelectLines =
   forAllBlind (listOf1 word) $ \lines ->
@@ -113,12 +112,11 @@ ex7_hSelectLines =
   run $ hPutStr h $ unlines lines
   run $ hSeek h AbsoluteSeek 0
   outs <- run $ hSelectLines h inds
-  res <- stop_ $ counterexample ("  was: "++show outs) $
+  run $ hClose h
+  stop_ $ counterexample ("  was: "++show outs) $
     conjoin [counterexample "Length of result" $ length outs ?== length inds
             ,conjoin [counterexample ("result!!"++show i) $ outs!!i ?== lines!!((inds!!i)-1)
                      | i <- [0..length inds-1]]]
-  run $ hClose h
-  return res
 
 counter :: (String,Integer) -> (Bool,String,Integer)
 counter ("inc",n)   = (True,"done",n+1)
