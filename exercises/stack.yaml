@@ -1,2 +1,2 @@
-resolver: lts-16.31
+resolver: lts-17.10
 install-ghc: true

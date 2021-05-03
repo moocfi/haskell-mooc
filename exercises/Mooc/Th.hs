@@ -9,8 +9,8 @@ where
 import Data.Char
 import Data.List
 import Data.Maybe
-import Language.Haskell.TH
-import Language.Haskell.TH.Syntax
+import Language.Haskell.TH hiding (reifyType)
+import Language.Haskell.TH.Syntax hiding (reifyType)
 
 -- testing presence of definitions
 
@@ -238,7 +238,7 @@ unqualify (AppE f x) = AppE (unqualify f) (unqualify x)
 unqualify (InfixE mleft op mright) = InfixE (fmap unqualify mleft) (unqualify op) (fmap unqualify mright)
 unqualify (UInfixE left op right) = UInfixE (unqualify left) (unqualify op) (unqualify right)
 unqualify (LitE l) = LitE l
-unqualify (TupE exps) = TupE (map unqualify exps)
+unqualify (TupE exps) = TupE (map (fmap unqualify) exps)
 unqualify (ListE exps) = ListE (map unqualify exps)
 unqualify (ArithSeqE (FromR x)) = ArithSeqE (FromR (unqualify x))
 unqualify x = error $ "Unsupported: " ++ show x
