@@ -83,6 +83,7 @@ p {
 }
 ul {
   padding-left: 3em;
+  max-width: 60rem;
 }
 ul li {
   padding: 5px 0 0 0;
