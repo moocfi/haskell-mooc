@@ -151,6 +151,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="#quiz-4"><span class="toc-section-number">13.16</span> Quiz</a></li>
 <li><a href="#exercises-4"><span class="toc-section-number">13.17</span> Exercises</a></li>
 </ul></li>
+<li><a href="#lecture-14-lets-use-some-libraries"><span class="toc-section-number">14</span> Lecture 14: Let’s Use Some Libraries!</a><ul>
+<li><a href="#text-and-bytestring"><span class="toc-section-number">14.1</span> <code>Text</code> and <code>ByteString</code></a></li>
+<li><a href="#monads-recap"><span class="toc-section-number">14.2</span> Monads: Recap</a></li>
+<li><a href="#writing-a-http-server-wai-and-warp"><span class="toc-section-number">14.3</span> Writing a HTTP Server: WAI and Warp</a></li>
+<li><a href="#working-with-a-database-sqlite-simple"><span class="toc-section-number">14.4</span> Working With a Database: sqlite-simple</a></li>
+<li><a href="#exercises-5"><span class="toc-section-number">14.5</span> Exercises</a></li>
+</ul></li>
 </ul>
 </nav>
 <div id="text-container">
@@ -3307,6 +3314,344 @@ None of the above
 <ul>
 <li><a href="https://github.com/moocfi/haskell-mooc/blob/master/exercises/Set13a.hs">Set13a</a></li>
 <li><a href="https://github.com/moocfi/haskell-mooc/blob/master/exercises/Set13b.hs">Set13b</a></li>
+<li><a href="https://forms.gle/soVtMeGBxSo6u5zp6">Remember to give feedback!</a></li>
+</ul>
+<h1 id="lecture-14-lets-use-some-libraries"><span class="header-section-number">14</span> Lecture 14: Let’s Use Some Libraries!</h1>
+<p>Now that you know monads, you pretty much know everything about Haskell to start writing real programs that use libraries to do useful things. This lecture will go over some examples of libraries that are commonly used in such real programs. Using these libraries is also a good way to practice using monads, reading docs, and understanding type errors.</p>
+<h2 id="text-and-bytestring"><span class="header-section-number">14.1</span> <code>Text</code> and <code>ByteString</code></h2>
+<p>So far, we’ve been using the Haskell <code>String</code> type to work with strings. However <code>String</code> is just <code>[Char]</code>, a linked list of characters. This is horribly inefficient, both in terms of memory, and in terms of time. Once we move beyond processing short strings and start processing whole files or network requests, a more time efficient string type becomes a must.</p>
+<p>There are two types that are used as replacements for <code>String</code>, with slightly different semantics:</p>
+<ul>
+<li><code>Data.Text</code> represents <em>a sequence of <a href="https://en.wikipedia.org/wiki/Unicode">Unicode characters</a></em>, just like <code>String</code>, only more efficient. Used when dealing with text.</li>
+<li><code>Data.ByteString</code> represents <em>a sequence of bytes</em>. Used when dealing with binary data.</li>
+</ul>
+<p>Additionally, both of these types come in <em>lazy</em> and <em>strict</em> variants. The <a href="https://hackage.haskell.org/package/text-1.2.2.2/docs/Data-Text.html">docs for <code>Data.Text</code></a> summarize the difference well:</p>
+<blockquote>
+<p>The strict <code>Text</code> type requires that an entire string fit into memory at once. The lazy <code>Text</code> type is capable of streaming strings that are larger than memory using a small memory footprint… Each module provides an almost identical API…</p>
+</blockquote>
+<p>All of these types (<code>Text</code> and <code>ByteString</code>, strict and lazy) offer <code>pack</code> and <code>unpack</code> functions for converting from and to plain <code>String</code>s. The types also come with specialized versions of familiar list functions like <code>reverse</code>, <code>take</code>, <code>map</code> and so on.</p>
+<h3 id="examples-with-text"><span class="header-section-number">14.1.1</span> Examples with <code>Text</code></h3>
+<p>Let’s go through a short GHCi session demonstrating the use of <code>Data.Text</code>. As <a href="https://hackage.haskell.org/package/text-1.2.2.2/docs/Data-Text.html">the documentation</a> says, the <code>Data.Text</code> module is designed to be imported <em>qualified</em>. We can convert a <code>String</code> into a <code>Text</code> with the function <code>T.pack</code>. Note how a value of type <code>Text</code> gets printed just like a <code>String</code>.</p>
+<div class="sourceCode" id="cb310"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb310-1" data-line-number="1"><span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.Text</span> <span class="kw">as</span> <span class="dt">T</span></a>
+<a class="sourceLine" id="cb310-2" data-line-number="2"><span class="dt">Prelude</span> <span class="dt">T</span><span class="fu">&gt;</span> <span class="fu">:</span>t T.pack</a>
+<a class="sourceLine" id="cb310-3" data-line-number="3">T.pack<span class="ot"> ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">T.Text</span></a>
+<a class="sourceLine" id="cb310-4" data-line-number="4"><span class="dt">Prelude</span> <span class="dt">T</span><span class="fu">&gt;</span> <span class="kw">let</span> phrase <span class="fu">=</span> T.pack <span class="st">&quot;brevity is the soul of wit&quot;</span></a>
+<a class="sourceLine" id="cb310-5" data-line-number="5"><span class="dt">Prelude</span> <span class="dt">T</span><span class="fu">&gt;</span> <span class="fu">:</span>t phrase</a>
+<a class="sourceLine" id="cb310-6" data-line-number="6"><span class="ot">phrase ::</span> <span class="dt">T.Text</span></a>
+<a class="sourceLine" id="cb310-7" data-line-number="7"><span class="dt">Prelude</span> <span class="dt">T</span><span class="fu">&gt;</span> phrase</a>
+<a class="sourceLine" id="cb310-8" data-line-number="8"><span class="st">&quot;brevity is the soul of wit&quot;</span></a></code></pre></div>
+<p>We can use the functions from <code>Data.Text</code> to operate on values of <code>Text</code>. Many of these are named like their counterparts for <code>String</code>s or lists from <code>Prelude</code>.</p>
+<div class="sourceCode" id="cb311"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb311-1" data-line-number="1"><span class="dt">Prelude</span> <span class="dt">T</span><span class="fu">&gt;</span> <span class="fu">:</span>t T.length</a>
+<a class="sourceLine" id="cb311-2" data-line-number="2">T.length<span class="ot"> ::</span> <span class="dt">T.Text</span> <span class="ot">-&gt;</span> <span class="dt">Int</span></a>
+<a class="sourceLine" id="cb311-3" data-line-number="3"><span class="dt">Prelude</span> <span class="dt">T</span><span class="fu">&gt;</span> T.length phrase</a>
+<a class="sourceLine" id="cb311-4" data-line-number="4"><span class="dv">26</span></a>
+<a class="sourceLine" id="cb311-5" data-line-number="5"><span class="dt">Prelude</span> <span class="dt">T</span><span class="fu">&gt;</span> T.head phrase</a>
+<a class="sourceLine" id="cb311-6" data-line-number="6"><span class="ch">&#39;b&#39;</span></a>
+<a class="sourceLine" id="cb311-7" data-line-number="7"><span class="dt">Prelude</span> <span class="dt">T</span><span class="fu">&gt;</span> T.take <span class="dv">4</span> phrase</a>
+<a class="sourceLine" id="cb311-8" data-line-number="8"><span class="st">&quot;brev&quot;</span></a>
+<a class="sourceLine" id="cb311-9" data-line-number="9"><span class="dt">Prelude</span> <span class="dt">T</span><span class="fu">&gt;</span> <span class="fu">:</span>t T.words</a>
+<a class="sourceLine" id="cb311-10" data-line-number="10">T.words<span class="ot"> ::</span> <span class="dt">T.Text</span> <span class="ot">-&gt;</span> [<span class="dt">T.Text</span>]</a>
+<a class="sourceLine" id="cb311-11" data-line-number="11"><span class="dt">Prelude</span> <span class="dt">T</span><span class="fu">&gt;</span> T.words phrase</a>
+<a class="sourceLine" id="cb311-12" data-line-number="12">[<span class="st">&quot;brevity&quot;</span>,<span class="st">&quot;is&quot;</span>,<span class="st">&quot;the&quot;</span>,<span class="st">&quot;soul&quot;</span>,<span class="st">&quot;of&quot;</span>,<span class="st">&quot;wit&quot;</span>]</a>
+<a class="sourceLine" id="cb311-13" data-line-number="13"><span class="dt">Prelude</span> <span class="dt">T</span><span class="fu">&gt;</span> <span class="fu">:</span>t T.map</a>
+<a class="sourceLine" id="cb311-14" data-line-number="14">T.map<span class="ot"> ::</span> (<span class="dt">Char</span> <span class="ot">-&gt;</span> <span class="dt">Char</span>) <span class="ot">-&gt;</span> <span class="dt">T.Text</span> <span class="ot">-&gt;</span> <span class="dt">T.Text</span></a>
+<a class="sourceLine" id="cb311-15" data-line-number="15"><span class="dt">Prelude</span> <span class="dt">T</span><span class="fu">&gt;</span> T.map (\c <span class="ot">-&gt;</span> <span class="kw">if</span> c<span class="fu">==</span><span class="ch">&#39;o&#39;</span> <span class="kw">then</span> <span class="ch">&#39;0&#39;</span> <span class="kw">else</span> c) phrase</a>
+<a class="sourceLine" id="cb311-16" data-line-number="16"><span class="st">&quot;brevity is the s0ul 0f wit&quot;</span></a></code></pre></div>
+<p>A useful detail is that <code>Text</code> has a <code>Monoid</code> instance that glues <code>Text</code> values together. You can also use the functions <code>T.append</code> and <code>T.concat</code>.</p>
+<div class="sourceCode" id="cb312"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb312-1" data-line-number="1"><span class="dt">Prelude</span> <span class="dt">T</span><span class="fu">&gt;</span> phrase <span class="fu">&lt;&gt;</span> phrase</a>
+<a class="sourceLine" id="cb312-2" data-line-number="2"><span class="st">&quot;brevity is the soul of witbrevity is the soul of wit&quot;</span></a>
+<a class="sourceLine" id="cb312-3" data-line-number="3"><span class="dt">Prelude</span> <span class="dt">T</span><span class="fu">&gt;</span> T.append phrase phrase</a>
+<a class="sourceLine" id="cb312-4" data-line-number="4"><span class="st">&quot;brevity is the soul of witbrevity is the soul of wit&quot;</span></a>
+<a class="sourceLine" id="cb312-5" data-line-number="5"><span class="dt">Prelude</span> <span class="dt">T</span><span class="fu">&gt;</span> T.concat [phrase,phrase,phrase]</a>
+<a class="sourceLine" id="cb312-6" data-line-number="6"><span class="st">&quot;brevity is the soul of witbrevity is the soul of witbrevity is the soul of wit&quot;</span></a></code></pre></div>
+<p>If you want to write a recursive function that pattern matches on a <code>Text</code> like you would on a <code>String</code>, you can use the function <code>T.uncons :: T.Text -&gt; Maybe (Char, T.Text)</code> to split a <code>Text</code> into a head and a tail. Here’s a simple example:</p>
+<div class="sourceCode" id="cb313"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb313-1" data-line-number="1"><span class="ot">countLetter ::</span> <span class="dt">Char</span> <span class="ot">-&gt;</span> <span class="dt">T.Text</span> <span class="ot">-&gt;</span> <span class="dt">Int</span></a>
+<a class="sourceLine" id="cb313-2" data-line-number="2">countLetter c t <span class="fu">=</span></a>
+<a class="sourceLine" id="cb313-3" data-line-number="3">  <span class="kw">case</span> T.uncons t <span class="kw">of</span></a>
+<a class="sourceLine" id="cb313-4" data-line-number="4">    <span class="dt">Nothing</span> <span class="ot">-&gt;</span> <span class="dv">0</span></a>
+<a class="sourceLine" id="cb313-5" data-line-number="5">    <span class="dt">Just</span> (x,rest) <span class="ot">-&gt;</span> (<span class="kw">if</span> x <span class="fu">==</span> c <span class="kw">then</span> <span class="dv">1</span> <span class="kw">else</span> <span class="dv">0</span>) <span class="fu">+</span> countLetter c rest</a></code></pre></div>
+<div class="sourceCode" id="cb314"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb314-1" data-line-number="1"><span class="dt">Prelude</span> <span class="dt">T</span><span class="fu">&gt;</span> countLetter <span class="ch">&#39;t&#39;</span> phrase</a>
+<a class="sourceLine" id="cb314-2" data-line-number="2"><span class="dv">3</span></a></code></pre></div>
+<h4 id="strictness-and-laziness"><span class="header-section-number">14.1.1.1</span> Strictness and Laziness</h4>
+<p>Note that <code>Data.Text</code> implements the strict <code>Text</code> type. You need to use <code>Data.Text.Lazy</code> for the lazy variant. As mentioned earlier, one difference between these two types is that the strict type does not work for infinite strings:</p>
+<div class="sourceCode" id="cb315"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb315-1" data-line-number="1"><span class="dt">Prelude</span> <span class="dt">T</span><span class="fu">&gt;</span> T.head (T.pack (repeat <span class="ch">&#39;x&#39;</span>))</a>
+<a class="sourceLine" id="cb315-2" data-line-number="2"><span class="co">-- never returns</span></a>
+<a class="sourceLine" id="cb315-3" data-line-number="3"><span class="dt">Prelude</span> <span class="dt">T</span><span class="fu">&gt;</span> <span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.Text.Lazy</span> <span class="kw">as</span> <span class="dt">LT</span></a>
+<a class="sourceLine" id="cb315-4" data-line-number="4"><span class="dt">Prelude</span> <span class="dt">T</span> <span class="dt">LT</span><span class="fu">&gt;</span> <span class="dt">LT</span><span class="fu">.</span>head (<span class="dt">LT</span><span class="fu">.</span>pack (repeat <span class="ch">&#39;x&#39;</span>))</a>
+<a class="sourceLine" id="cb315-5" data-line-number="5"><span class="ch">&#39;x&#39;</span></a></code></pre></div>
+<p>Another practical problem that sometimes crops is that you can end up with a mismatch between strict and lazy <code>Text</code>s when using libraries. You can usually fix this by using <code>toStrict</code> or <code>fromStrict</code> as needed.</p>
+<div class="sourceCode" id="cb316"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb316-1" data-line-number="1"><span class="dt">Prelude</span> <span class="dt">T</span> <span class="dt">LT</span><span class="fu">&gt;</span> <span class="kw">let</span> lazyPhrase <span class="fu">=</span> <span class="dt">LT</span><span class="fu">.</span>pack <span class="st">&quot;brevity is the soul of wit&quot;</span></a>
+<a class="sourceLine" id="cb316-2" data-line-number="2"><span class="dt">Prelude</span> <span class="dt">T</span> <span class="dt">LT</span><span class="fu">&gt;</span> <span class="fu">:</span>t lazyPhrase</a>
+<a class="sourceLine" id="cb316-3" data-line-number="3"><span class="ot">lazyPhrase ::</span> <span class="dt">LT</span><span class="fu">.</span><span class="dt">Text</span></a>
+<a class="sourceLine" id="cb316-4" data-line-number="4"><span class="dt">Prelude</span> <span class="dt">T</span> <span class="dt">LT</span><span class="fu">&gt;</span> <span class="fu">:</span>t phrase</a>
+<a class="sourceLine" id="cb316-5" data-line-number="5"><span class="ot">phrase ::</span> <span class="dt">T.Text</span></a>
+<a class="sourceLine" id="cb316-6" data-line-number="6"><span class="dt">Prelude</span> <span class="dt">T</span> <span class="dt">LT</span><span class="fu">&gt;</span> lazyPhrase <span class="fu">==</span> phrase</a>
+<a class="sourceLine" id="cb316-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb316-8" data-line-number="8"><span class="fu">&lt;</span>interactive<span class="fu">&gt;:</span> error<span class="fu">:</span></a>
+<a class="sourceLine" id="cb316-9" data-line-number="9">    • <span class="dt">Couldn&#39;t</span> match expected <span class="kw">type</span> ‘<span class="dt">LT.Text</span>’</a>
+<a class="sourceLine" id="cb316-10" data-line-number="10">                  with actual <span class="kw">type</span> ‘<span class="dt">T.Text</span>’</a>
+<a class="sourceLine" id="cb316-11" data-line-number="11">      <span class="dt">NB</span><span class="fu">:</span> ‘<span class="dt">T.Text</span>’ is defined <span class="kw">in</span> ‘<span class="dt">Data.Text.Internal</span>’</a>
+<a class="sourceLine" id="cb316-12" data-line-number="12">          ‘<span class="dt">LT.Text</span>’ is defined <span class="kw">in</span> ‘<span class="dt">Data.Text.Internal.Lazy</span>’</a>
+<a class="sourceLine" id="cb316-13" data-line-number="13">    • <span class="dt">In</span> the second argument <span class="kw">of</span> ‘(<span class="fu">==</span>)’, namely ‘phrase’</a>
+<a class="sourceLine" id="cb316-14" data-line-number="14">      <span class="dt">In</span> the expression<span class="fu">:</span> lazyPhrase <span class="fu">==</span> phrase</a>
+<a class="sourceLine" id="cb316-15" data-line-number="15">      <span class="dt">In</span> an equation for ‘it’<span class="fu">:</span> it <span class="fu">=</span> lazyPhrase <span class="fu">==</span> phrase</a>
+<a class="sourceLine" id="cb316-16" data-line-number="16"></a>
+<a class="sourceLine" id="cb316-17" data-line-number="17"><span class="dt">Prelude</span> <span class="dt">T</span> <span class="dt">LT</span><span class="fu">&gt;</span> <span class="fu">:</span>t <span class="dt">LT</span><span class="fu">.</span>toStrict</a>
+<a class="sourceLine" id="cb316-18" data-line-number="18"><span class="dt">LT</span><span class="fu">.</span><span class="ot">toStrict ::</span> <span class="dt">LT</span><span class="fu">.</span><span class="dt">Text</span> <span class="ot">-&gt;</span> <span class="dt">T.Text</span></a>
+<a class="sourceLine" id="cb316-19" data-line-number="19"><span class="dt">Prelude</span> <span class="dt">T</span> <span class="dt">LT</span><span class="fu">&gt;</span> <span class="fu">:</span>t <span class="dt">LT</span><span class="fu">.</span>fromStrict</a>
+<a class="sourceLine" id="cb316-20" data-line-number="20"><span class="dt">LT</span><span class="fu">.</span><span class="ot">fromStrict ::</span> <span class="dt">T.Text</span> <span class="ot">-&gt;</span> <span class="dt">LT</span><span class="fu">.</span><span class="dt">Text</span></a>
+<a class="sourceLine" id="cb316-21" data-line-number="21"><span class="dt">Prelude</span> <span class="dt">T</span> <span class="dt">LT</span><span class="fu">&gt;</span> <span class="dt">LT</span><span class="fu">.</span>toStrict lazyPhrase <span class="fu">==</span> phrase</a>
+<a class="sourceLine" id="cb316-22" data-line-number="22"><span class="dt">True</span></a></code></pre></div>
+<h3 id="examples-with-bytestring"><span class="header-section-number">14.1.2</span> Examples with <code>ByteString</code></h3>
+<p>We can walk through pretty much the same GHCi session using <code>ByteString</code> instead of <code>Text</code>. However, note how the <code>ByteString</code> is built up from <code>Word8</code> values and not <code>Char</code> values. A <code>Char</code> can represent an arbitrary unicode codepoint like for a character like <code>'Å'</code>, but a <code>Word8</code> represents a byte: a number from 0 to 255. Unfortunately and somewhat confusingly, <code>ByteString</code> values get printed like <code>String</code>s.</p>
+<div class="sourceCode" id="cb317"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb317-1" data-line-number="1"><span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="kw">import</span> <span class="dt">Data.Word</span></a>
+<a class="sourceLine" id="cb317-2" data-line-number="2"><span class="dt">Prelude</span> <span class="dt">Data.Word</span><span class="fu">&gt;</span> <span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.ByteString</span> <span class="kw">as</span> <span class="dt">B</span></a>
+<a class="sourceLine" id="cb317-3" data-line-number="3"><span class="dt">Prelude</span> <span class="dt">Data.Word</span> <span class="dt">B</span><span class="fu">&gt;</span> <span class="kw">let</span> binary <span class="fu">=</span> B.pack [<span class="dv">99</span>,<span class="dv">111</span>,<span class="dv">102</span>,<span class="dv">102</span>,<span class="dv">101</span>,<span class="dv">101</span>]</a>
+<a class="sourceLine" id="cb317-4" data-line-number="4"><span class="dt">Prelude</span> <span class="dt">Data.Word</span> <span class="dt">B</span><span class="fu">&gt;</span> <span class="fu">:</span>t binary</a>
+<a class="sourceLine" id="cb317-5" data-line-number="5"><span class="ot">binary ::</span> <span class="dt">B.ByteString</span></a>
+<a class="sourceLine" id="cb317-6" data-line-number="6"><span class="dt">Prelude</span> <span class="dt">Data.Word</span> <span class="dt">B</span><span class="fu">&gt;</span> <span class="fu">:</span>t B.pack</a>
+<a class="sourceLine" id="cb317-7" data-line-number="7">B.pack<span class="ot"> ::</span> [<span class="dt">Word8</span>] <span class="ot">-&gt;</span> <span class="dt">B.ByteString</span></a>
+<a class="sourceLine" id="cb317-8" data-line-number="8"><span class="dt">Prelude</span> <span class="dt">Data.Word</span> <span class="dt">B</span><span class="fu">&gt;</span> binary</a>
+<a class="sourceLine" id="cb317-9" data-line-number="9"><span class="st">&quot;coffee&quot;</span></a>
+<a class="sourceLine" id="cb317-10" data-line-number="10"><span class="dt">Prelude</span> <span class="dt">Data.Word</span> <span class="dt">B</span><span class="fu">&gt;</span> <span class="fu">:</span>t B.length</a>
+<a class="sourceLine" id="cb317-11" data-line-number="11">B.length<span class="ot"> ::</span> <span class="dt">B.ByteString</span> <span class="ot">-&gt;</span> <span class="dt">Int</span></a>
+<a class="sourceLine" id="cb317-12" data-line-number="12"><span class="dt">Prelude</span> <span class="dt">Data.Word</span> <span class="dt">B</span><span class="fu">&gt;</span> B.length binary</a>
+<a class="sourceLine" id="cb317-13" data-line-number="13"><span class="dv">6</span></a>
+<a class="sourceLine" id="cb317-14" data-line-number="14"><span class="dt">Prelude</span> <span class="dt">Data.Word</span> <span class="dt">B</span><span class="fu">&gt;</span> <span class="fu">:</span>t B.head</a>
+<a class="sourceLine" id="cb317-15" data-line-number="15">B.head<span class="ot"> ::</span> <span class="dt">B.ByteString</span> <span class="ot">-&gt;</span> <span class="dt">Word8</span></a>
+<a class="sourceLine" id="cb317-16" data-line-number="16"><span class="dt">Prelude</span> <span class="dt">Data.Word</span> <span class="dt">B</span><span class="fu">&gt;</span> B.head binary</a>
+<a class="sourceLine" id="cb317-17" data-line-number="17"><span class="dv">99</span></a>
+<a class="sourceLine" id="cb317-18" data-line-number="18"><span class="dt">Prelude</span> <span class="dt">Data.Word</span> <span class="dt">B</span><span class="fu">&gt;</span> B.take <span class="dv">4</span> binary</a>
+<a class="sourceLine" id="cb317-19" data-line-number="19"><span class="st">&quot;coff&quot;</span></a>
+<a class="sourceLine" id="cb317-20" data-line-number="20"><span class="dt">Prelude</span> <span class="dt">Data.Word</span> <span class="dt">B</span><span class="fu">&gt;</span> <span class="fu">:</span>t B.map</a>
+<a class="sourceLine" id="cb317-21" data-line-number="21">B.map<span class="ot"> ::</span> (<span class="dt">Word8</span> <span class="ot">-&gt;</span> <span class="dt">Word8</span>) <span class="ot">-&gt;</span> <span class="dt">B.ByteString</span> <span class="ot">-&gt;</span> <span class="dt">B.ByteString</span></a>
+<a class="sourceLine" id="cb317-22" data-line-number="22"><span class="dt">Prelude</span> <span class="dt">Data.Word</span> <span class="dt">B</span><span class="fu">&gt;</span> B.map (<span class="fu">+</span><span class="dv">1</span>) binary</a>
+<a class="sourceLine" id="cb317-23" data-line-number="23"><span class="st">&quot;dpggff&quot;</span></a></code></pre></div>
+<p>The same caveats apply to the differences between strict and lazy <code>ByteString</code> as for <code>Text</code>:</p>
+<div class="sourceCode" id="cb318"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb318-1" data-line-number="1"><span class="dt">Prelude</span> <span class="dt">B</span> <span class="dt">Data.Char</span><span class="fu">&gt;</span> B.head (B.pack (repeat <span class="dv">99</span>))</a>
+<a class="sourceLine" id="cb318-2" data-line-number="2"><span class="co">-- never returns</span></a>
+<a class="sourceLine" id="cb318-3" data-line-number="3"><span class="dt">Prelude</span> <span class="dt">Data.Word</span> <span class="dt">B</span><span class="fu">&gt;</span> <span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.ByteString.Lazy</span> <span class="kw">as</span> <span class="dt">LB</span></a>
+<a class="sourceLine" id="cb318-4" data-line-number="4"><span class="dt">Prelude</span> <span class="dt">Data.Word</span> <span class="dt">B</span> <span class="dt">LB</span><span class="fu">&gt;</span> LB.head (LB.pack (repeat <span class="dv">99</span>))</a>
+<a class="sourceLine" id="cb318-5" data-line-number="5"><span class="dv">99</span></a>
+<a class="sourceLine" id="cb318-6" data-line-number="6"><span class="dt">Prelude</span> <span class="dt">Data.Word</span> <span class="dt">B</span> <span class="dt">LB</span><span class="fu">&gt;</span> binary <span class="fu">==</span> LB.pack [<span class="dv">99</span>]</a>
+<a class="sourceLine" id="cb318-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb318-8" data-line-number="8"><span class="fu">&lt;</span>interactive<span class="fu">&gt;:</span> error<span class="fu">:</span></a>
+<a class="sourceLine" id="cb318-9" data-line-number="9">    • <span class="dt">Couldn&#39;t</span> match expected <span class="kw">type</span> ‘<span class="dt">B.ByteString</span>’</a>
+<a class="sourceLine" id="cb318-10" data-line-number="10">                  with actual <span class="kw">type</span> ‘<span class="dt">LB.ByteString</span>’</a>
+<a class="sourceLine" id="cb318-11" data-line-number="11">      <span class="dt">NB</span><span class="fu">:</span> ‘<span class="dt">LB.ByteString</span>’ is defined <span class="kw">in</span> ‘<span class="dt">Data.ByteString.Lazy.Internal</span>’</a>
+<a class="sourceLine" id="cb318-12" data-line-number="12">          ‘<span class="dt">B.ByteString</span>’ is defined <span class="kw">in</span> ‘<span class="dt">Data.ByteString.Internal</span>’</a>
+<a class="sourceLine" id="cb318-13" data-line-number="13">    • <span class="dt">In</span> the second argument <span class="kw">of</span> ‘(<span class="fu">==</span>)’, namely ‘LB.pack [<span class="dv">99</span>]’</a>
+<a class="sourceLine" id="cb318-14" data-line-number="14">      <span class="dt">In</span> the expression<span class="fu">:</span> binary <span class="fu">==</span> LB.pack [<span class="dv">99</span>]</a>
+<a class="sourceLine" id="cb318-15" data-line-number="15">      <span class="dt">In</span> an equation for ‘it’<span class="fu">:</span> it <span class="fu">=</span> binary <span class="fu">==</span> LB.pack [<span class="dv">99</span>]</a>
+<a class="sourceLine" id="cb318-16" data-line-number="16"></a>
+<a class="sourceLine" id="cb318-17" data-line-number="17"><span class="dt">Prelude</span> <span class="dt">Data.Word</span> <span class="dt">B</span> <span class="dt">LB</span><span class="fu">&gt;</span> <span class="fu">:</span>t LB.toStrict</a>
+<a class="sourceLine" id="cb318-18" data-line-number="18">LB.toStrict<span class="ot"> ::</span> <span class="dt">LB.ByteString</span> <span class="ot">-&gt;</span> <span class="dt">B.ByteString</span></a>
+<a class="sourceLine" id="cb318-19" data-line-number="19"><span class="dt">Prelude</span> <span class="dt">Data.Word</span> <span class="dt">B</span> <span class="dt">LB</span><span class="fu">&gt;</span> <span class="fu">:</span>t LB.fromStrict</a>
+<a class="sourceLine" id="cb318-20" data-line-number="20">LB.fromStrict<span class="ot"> ::</span> <span class="dt">B.ByteString</span> <span class="ot">-&gt;</span> <span class="dt">LB.ByteString</span></a>
+<a class="sourceLine" id="cb318-21" data-line-number="21"><span class="dt">Prelude</span> <span class="dt">Data.Word</span> <span class="dt">B</span> <span class="dt">LB</span><span class="fu">&gt;</span> binary <span class="fu">==</span> LB.toStrict (LB.pack [<span class="dv">99</span>])</a>
+<a class="sourceLine" id="cb318-22" data-line-number="22"><span class="dt">False</span></a></code></pre></div>
+<h3 id="sidenote-encodings"><span class="header-section-number">14.1.3</span> Sidenote: Encodings</h3>
+<p>You might be wondering why on earth do we have both Text and ByteString. The difference is subtle but real. When we operate on <code>Text</code> we operate character by character, regardless of what those characters are and how they are encoded. When we operate on <code>ByteString</code> we operate on bytes, regardless of what those bytes represent.</p>
+<p>Characters, numbers, and data structures are abstractions that help us humans to deal with complex programming tasks. The computer memory is essentially just an enormous sequence of bytes. The machine doesn’t care how we interpret those bytes. The essential difference between <code>Text</code> and <code>ByteString</code> is the way how the bytes are grouped and interpreted.</p>
+<p>To illustrate this difference, we’ll look at the <a href="https://en.wikipedia.org/wiki/UTF-8">UTF-8 text encoding</a>. A text encoding is a method for representing <em>characters</em> as <em>bytes</em>. UTF-8 can represent all the millions of characters defined by <a href="https://en.wikipedia.org/wiki/Unicode">Unicode</a>. Because bytes can only store values from 0 to 255, this means that a character can get encoded into multiple bytes. The bits and bytes of the UTF-8 string “Ha∫keλ!” can be interpreted in various ways:</p>
+<p><img src="img/string.svg" /></p>
+<p>(If you see different characters in the picture and in “Ha∫keλ!”, it means that your browser is either interpreting the encoding incorrectly or the font you’re usign doesn’t support all of the characters.)</p>
+<p>If we read the same stream of bits using a different encoding, we’ll see other characters. For example the string above would be interpreted as “Haâ«keÎ»!” using the <a href="https://en.wikipedia.org/wiki/Latin-1">Latin-1 text encoding</a>.</p>
+<p>By the way, when dealing with raw binary data, it’s often convenient to use the hexadecimal number system which uses a single symbol <code>0</code>, <code>1</code>, …, <code>9</code>, <code>A</code>, <code>B</code>, …, <code>F</code> to represent all of the sixteen possible combinations of four bits. We don’t need hexadecimal in this course but you can check out <a href="https://en.wikipedia.org/wiki/Hexadecimal">Wikipedia</a> if you’re interested in learning more about hexadecimal.</p>
+<p>We can explore the same example using code. The function <code>Data.Text.Encoding.encodeUtf8 :: Text -&gt; ByteString</code> encodes the characters in a Text into bytes in a ByteString using UTF-8.</p>
+<div class="sourceCode" id="cb319"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb319-1" data-line-number="1"><span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.Text</span> <span class="kw">as</span> <span class="dt">T</span></a>
+<a class="sourceLine" id="cb319-2" data-line-number="2"><span class="dt">Prelude</span> <span class="dt">T</span><span class="fu">&gt;</span> <span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.ByteString</span> <span class="kw">as</span> <span class="dt">B</span></a>
+<a class="sourceLine" id="cb319-3" data-line-number="3"><span class="dt">Prelude</span> <span class="dt">T</span> <span class="dt">B</span><span class="fu">&gt;</span> T.length (T.pack <span class="st">&quot;haskell&quot;</span>)</a>
+<a class="sourceLine" id="cb319-4" data-line-number="4"><span class="dv">7</span></a>
+<a class="sourceLine" id="cb319-5" data-line-number="5"><span class="dt">Prelude</span> <span class="dt">T</span> <span class="dt">B</span><span class="fu">&gt;</span> T.length (T.pack <span class="st">&quot;Ha∫keλ!&quot;</span>)</a>
+<a class="sourceLine" id="cb319-6" data-line-number="6"><span class="dv">7</span></a>
+<a class="sourceLine" id="cb319-7" data-line-number="7"><span class="dt">Prelude</span> <span class="dt">T</span> <span class="dt">B</span><span class="fu">&gt;</span> <span class="kw">import</span> <span class="dt">Data.Text.Encoding</span></a>
+<a class="sourceLine" id="cb319-8" data-line-number="8"><span class="dt">Prelude</span> <span class="dt">T</span> <span class="dt">B</span> <span class="dt">Data.Text.Encoding</span><span class="fu">&gt;</span> encodeUtf8 (T.pack <span class="st">&quot;haskell&quot;</span>)</a>
+<a class="sourceLine" id="cb319-9" data-line-number="9"><span class="st">&quot;haskell&quot;</span></a>
+<a class="sourceLine" id="cb319-10" data-line-number="10"><span class="dt">Prelude</span> <span class="dt">T</span> <span class="dt">B</span> <span class="dt">Data.Text.Encoding</span><span class="fu">&gt;</span> encodeUtf8 (T.pack <span class="st">&quot;Ha∫keλ!&quot;</span>)</a>
+<a class="sourceLine" id="cb319-11" data-line-number="11"><span class="st">&quot;Ha\226\136\171ke\206\187!&quot;</span></a>
+<a class="sourceLine" id="cb319-12" data-line-number="12"><span class="dt">Prelude</span> <span class="dt">T</span> <span class="dt">B</span> <span class="dt">Data.Text.Encoding</span><span class="fu">&gt;</span> B.length (encodeUtf8 (T.pack <span class="st">&quot;haskell&quot;</span>))</a>
+<a class="sourceLine" id="cb319-13" data-line-number="13"><span class="dv">7</span></a>
+<a class="sourceLine" id="cb319-14" data-line-number="14"><span class="dt">Prelude</span> <span class="dt">T</span> <span class="dt">B</span> <span class="dt">Data.Text.Encoding</span><span class="fu">&gt;</span> B.length (encodeUtf8 (T.pack <span class="st">&quot;Ha∫keλ!&quot;</span>))</a>
+<a class="sourceLine" id="cb319-15" data-line-number="15"><span class="dv">10</span></a></code></pre></div>
+<p>If we are processing <a href="https://en.wikipedia.org/wiki/ASCII">ASCII text</a>, that is, characters that can be represented using single bytes, we can use <code>Text</code> and <code>ByteString</code> interchangeably. There are namespaces <code>Data.ByteString.Char8</code> and <code>Data.ByteString.Lazy.Char8</code> that offer functions that operate on <code>ByteString</code>s using <code>Char</code> values instead of <code>Word8</code>. However, care must be taken to make sure all the characters really are plain ASCII characters, or surprising things will happen.</p>
+<div class="sourceCode" id="cb320"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb320-1" data-line-number="1"><span class="dt">Prelude</span> <span class="dt">T</span> <span class="dt">B</span><span class="fu">&gt;</span> <span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.ByteString.Char8</span> <span class="kw">as</span> <span class="dt">B8</span></a>
+<a class="sourceLine" id="cb320-2" data-line-number="2"><span class="dt">Prelude</span> <span class="dt">T</span> <span class="dt">B</span> <span class="dt">B8</span><span class="fu">&gt;</span> B8.pack <span class="st">&quot;abc&quot;</span></a>
+<a class="sourceLine" id="cb320-3" data-line-number="3"><span class="st">&quot;abc&quot;</span></a>
+<a class="sourceLine" id="cb320-4" data-line-number="4"><span class="dt">Prelude</span> <span class="dt">T</span> <span class="dt">B</span> <span class="dt">B8</span><span class="fu">&gt;</span> <span class="fu">:</span>t B8.pack</a>
+<a class="sourceLine" id="cb320-5" data-line-number="5">B8.pack<span class="ot"> ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">B.ByteString</span></a>
+<a class="sourceLine" id="cb320-6" data-line-number="6"><span class="dt">Prelude</span> <span class="dt">T</span> <span class="dt">B</span> <span class="dt">B8</span><span class="fu">&gt;</span> <span class="fu">:</span>t B.pack</a>
+<a class="sourceLine" id="cb320-7" data-line-number="7">B.pack<span class="ot"> ::</span> [<span class="dt">Word8</span>] <span class="ot">-&gt;</span> <span class="dt">B.ByteString</span></a>
+<a class="sourceLine" id="cb320-8" data-line-number="8"><span class="dt">Prelude</span> <span class="dt">T</span> <span class="dt">B</span> <span class="dt">B8</span><span class="fu">&gt;</span> B8.cons <span class="ch">&#39;a&#39;</span> (B8.pack <span class="st">&quot;bc&quot;</span>)</a>
+<a class="sourceLine" id="cb320-9" data-line-number="9"><span class="st">&quot;abc&quot;</span></a>
+<a class="sourceLine" id="cb320-10" data-line-number="10"><span class="dt">Prelude</span> <span class="dt">T</span> <span class="dt">B</span> <span class="dt">B8</span><span class="fu">&gt;</span> putStrLn (B8.unpack (B8.pack <span class="st">&quot;€λ훈&quot;</span>))  <span class="co">-- non-ASCII characters get truncated</span></a>
+<a class="sourceLine" id="cb320-11" data-line-number="11">¬»È</a>
+<a class="sourceLine" id="cb320-12" data-line-number="12"><span class="dt">Prelude</span> <span class="dt">T</span> <span class="dt">B</span> <span class="dt">B8</span><span class="fu">&gt;</span> putStrLn (T.unpack (T.pack <span class="st">&quot;€λ훈&quot;</span>))</a>
+<a class="sourceLine" id="cb320-13" data-line-number="13">€λ훈</a></code></pre></div>
+<h2 id="monads-recap"><span class="header-section-number">14.2</span> Monads: Recap</h2>
+<p>The next libraries we’ll look at work inside the IO monad. Here’s a short recap of what we learned about monads in the last lecture.</p>
+<ul>
+<li>When <code>M</code> is a monad, values of type <code>M X</code> are <em>operations</em> that can be <em>executed</em> to <em>produce</em> a value of type <code>X</code>.</li>
+<li>Monadic operations can be implemented using
+<ul>
+<li>the methods of the <code>Monad</code> type class (<code>return</code>, <code>&gt;&gt;=</code>, <code>&gt;&gt;</code>),</li>
+<li><code>do</code>-notation,</li>
+<li>and library functions like <code>mapM</code>.</li>
+</ul></li>
+<li>Unlike in other languages, <code>return</code> is not a keyword and does not cause an operation to stop executing. Instead, <code>return x</code> <em>is the operation that always produces x and does nothing else</em>.</li>
+<li>This is what <code>do</code>-notation looks like:</li>
+</ul>
+<div class="sourceCode" id="cb321"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb321-1" data-line-number="1">foo y <span class="fu">=</span> <span class="kw">do</span></a>
+<a class="sourceLine" id="cb321-2" data-line-number="2">  operation1         <span class="co">-- run an operation</span></a>
+<a class="sourceLine" id="cb321-3" data-line-number="3">  val <span class="ot">&lt;-</span> operation2  <span class="co">-- run an operation and keep the produced value</span></a>
+<a class="sourceLine" id="cb321-4" data-line-number="4">  operation3 val y   <span class="co">-- run an operation with parameters</span></a>
+<a class="sourceLine" id="cb321-5" data-line-number="5">  mapM_ (\x <span class="ot">-&gt;</span> operation4 val x) things  <span class="co">-- use a generic monad operation and a lambda</span></a>
+<a class="sourceLine" id="cb321-6" data-line-number="6">  operation5 val     <span class="co">-- the final line of the do decides which value the whole block produces</span></a></code></pre></div>
+<!-- TODO more? -->
+<h2 id="writing-a-http-server-wai-and-warp"><span class="header-section-number">14.3</span> Writing a HTTP Server: WAI and Warp</h2>
+<p>Sometimes it feels like everything in the world happens over <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">HTTP</a> and <a href="https://en.wikipedia.org/wiki/Web_API">Web Apis</a>. Your web browser, your smartphone apps, <a href="https://developer.nordeaopenbanking.com/">your bank</a>, <a href="https://tools.ietf.org/html/rfc2324">your coffee pot</a>, <a href="https://support.ring.com/hc/en-us/articles/205385394-The-Protocols-and-Ports-Used-by-Ring-Devices">and even your doorbell</a>, all talk to servers using the HTTP protocol.</p>
+<p>Let’s look at how we can set up a simple HTTP server in Haskell. The standard low level components for this are called <a href="https://hackage.haskell.org/package/wai-3.2.2.1/docs/Network-Wai.html">WAI</a> and <a href="http://hackage.haskell.org/package/warp-3.3.13">Warp</a>. WAI, the Web Application Interface gives us a way to define how HTTP requests are handled. Warp is a simple HTTP server that runs the logic we have defined using WAI. That probably sounds a bit abstract right now, but a simple example will help.</p>
+<p>The file <a href="https://github.com/moocfi/haskell-mooc/blob/master/exercises/Examples/HelloServer.hs"><code>exercises/Examples/HelloServer.hs</code></a> implements a HTTP server that always responds with “Hello World!”. You can try it out by going to the <code>exercises/Examples</code> directory and running it with <code>stack runhaskell HelloServer.hs</code>. After that you can visit <a href="http://localhost:3421" class="uri">http://localhost:3421</a> in your browser to see the response from the server.</p>
+<div class="sourceCode" id="cb322"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb322-1" data-line-number="1"><span class="kw">module</span> <span class="dt">Examples.HelloServer</span> <span class="kw">where</span></a>
+<a class="sourceLine" id="cb322-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb322-3" data-line-number="3"><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.ByteString.Lazy.Char8</span> <span class="kw">as</span> <span class="dt">LB</span></a>
+<a class="sourceLine" id="cb322-4" data-line-number="4"><span class="kw">import</span> <span class="dt">Network.HTTP.Types.Status</span> (status200)</a>
+<a class="sourceLine" id="cb322-5" data-line-number="5"><span class="kw">import</span> <span class="dt">Network.Wai</span> (<span class="dt">Application</span>, responseLBS)</a>
+<a class="sourceLine" id="cb322-6" data-line-number="6"><span class="kw">import</span> <span class="dt">Network.Wai.Handler.Warp</span> (run)</a>
+<a class="sourceLine" id="cb322-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb322-8" data-line-number="8"><span class="ot">port ::</span> <span class="dt">Int</span></a>
+<a class="sourceLine" id="cb322-9" data-line-number="9">port <span class="fu">=</span> <span class="dv">3421</span></a>
+<a class="sourceLine" id="cb322-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb322-11" data-line-number="11"><span class="ot">main ::</span> <span class="dt">IO</span> ()</a>
+<a class="sourceLine" id="cb322-12" data-line-number="12">main <span class="fu">=</span> run port application</a>
+<a class="sourceLine" id="cb322-13" data-line-number="13"></a>
+<a class="sourceLine" id="cb322-14" data-line-number="14"><span class="co">-- type Application = Request -&gt; (Response -&gt; IO ResponseReceived) -&gt; IO ResponseReceived</span></a>
+<a class="sourceLine" id="cb322-15" data-line-number="15"><span class="ot">server ::</span> <span class="dt">Application</span></a>
+<a class="sourceLine" id="cb322-16" data-line-number="16">server request respond <span class="fu">=</span></a>
+<a class="sourceLine" id="cb322-17" data-line-number="17">  respond (responseLBS status200 [] (LB.pack <span class="st">&quot;Hello World!&quot;</span>))</a></code></pre></div>
+<p>Let’s look at the types in this example. There’s a lot going on here. First off, <code>Application</code> is a <em>type alias</em> for a thing that implements the logic of a web server. The <a href="http://hackage.haskell.org/package/warp-3.3.13/docs/Network-Wai-Handler-Warp.html#v:run"><code>run</code> function from Warp</a> can run <code>Application</code>s:</p>
+<div class="sourceCode" id="cb323"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb323-1" data-line-number="1"><span class="ot">run ::</span> <span class="dt">Port</span> <span class="ot">-&gt;</span> <span class="dt">Application</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> ()</a>
+<a class="sourceLine" id="cb323-2" data-line-number="2"><span class="kw">type</span> <span class="dt">Application</span> <span class="fu">=</span> <span class="dt">Request</span> <span class="ot">-&gt;</span> (<span class="dt">Response</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> <span class="dt">ResponseReceived</span>) <span class="ot">-&gt;</span> <span class="dt">IO</span> <span class="dt">ResponseReceived</span></a></code></pre></div>
+<p>We’ll talk about what <code>Request</code> and <code>Response</code> are soon, but from this type we can see that an <code>Application</code> is an IO operation that takes as arguments a request of type <code>Request</code>, and an IO operation <code>respond :: Response -&gt; IO ResponseReceived</code>. Arguments like <code>respond</code> are called <em>callbacks</em> in many contexts. They allow us to call back to the library who called the application. The <code>Application</code> operation has to produce the same special <code>ResponseReceived</code> type that <code>respond</code>. You can think of this type as a token proving that <code>respond</code> was called by the <code>Application</code>.</p>
+<p>That might sound intimidating: but looking at the code things are relatively simple: our <code>server</code> is an <code>Application</code> and takes two parameters: <code>request</code> and <code>respond</code>.</p>
+<p>WAI uses lots of types like <code>Port</code>, <code>Request</code>, <code>Response</code>, <code>Status</code> to represent HTTP concepts. It’s useful to look these up in the documentation when you bump into them. For example <a href="http://hackage.haskell.org/package/warp-3.3.13/docs/Network-Wai-Handler-Warp.html#t:Port"><code>Port</code> is just an alias for <code>Int</code></a>. As another example, we can see the <a href="https://hackage.haskell.org/package/wai-3.2.2.1/docs/Network-Wai.html#v:responseLBS"><code>responseLBS</code> function</a> has the type</p>
+<div class="sourceCode" id="cb324"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb324-1" data-line-number="1"><span class="ot">responseLBS ::</span> <span class="dt">Status</span> <span class="ot">-&gt;</span> <span class="dt">ResponseHeaders</span> <span class="ot">-&gt;</span> <span class="dt">ByteString</span> <span class="ot">-&gt;</span> <span class="dt">Response</span></a></code></pre></div>
+<p>where <a href="https://hackage.haskell.org/package/http-types-0.12.3/docs/Network-HTTP-Types-Status.html#t:Status"><code>Status</code> is defined in <code>Network.HTTP.Types.Status</code></a>, <a href="https://hackage.haskell.org/package/http-types-0.12.3/docs/Network-HTTP-Types-Header.html#t:ResponseHeaders"><code>ResponseHeaders</code> is a type alias for <code>[Header]</code> from <code>Network.HTTP.Types.Header</code></a>, <code>ByteString</code> is a lazy <code>ByteString</code>, and the result type <a href="https://hackage.haskell.org/package/wai-3.2.2.1/docs/Network-Wai.html#t:Response"><code>Response</code> is defined by <code>Network.WAI</code></a>.</p>
+<p>Finally, note that we take a shortcut and use the function <code>Data.ByteString.Lazy.Char8.pack</code> to convert a <code>String</code> into a <code>ByteString</code>. This only works for ASCII text.</p>
+<p>A web server that always responds with the same text isn’t that interesting. Let’s look at how we can give different responses to different requests next. There are many parts in a HTTP request, but for this lecture we’re going to focus on the <em>path</em>. In a URL like <code>http://example.com/abcd/ef/file</code>, the <code>/abcd/ef/file</code> part is the path. WAI has the function</p>
+<div class="sourceCode" id="cb325"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb325-1" data-line-number="1"><span class="ot">pathInfo ::</span> <span class="dt">Request</span> <span class="ot">-&gt;</span> [<span class="dt">Text</span>]</a></code></pre></div>
+<p>This gives us the path of the requested URL, split at the <code>/</code> characters.</p>
+<p>The file <a href="https://github.com/moocfi/haskell-mooc/blob/master/exercises/Examples/PathServer.hs"><code>exercises/Examples/PathServer.hs</code></a> implements a web server that has three different pages:</p>
+<ul>
+<li><a href="http://localhost:3421/source" class="uri">http://localhost:3421/source</a> is the source of the application itself, read from the file system</li>
+<li><a href="http://localhost:3421/secret/file" class="uri">http://localhost:3421/secret/file</a> is a secret string</li>
+<li><a href="http://localhost:3421/anything/else" class="uri">http://localhost:3421/anything/else</a> - for all other paths, a “Not found: anything/else” text is shown</li>
+</ul>
+<p>As before, you can run the server by going into the <code>exercises/Examples</code> directory, and running <code>stack runhaskell PathServer.hs</code>.</p>
+<!-- TODO walk through the code of the PathServer? -->
+<h2 id="working-with-a-database-sqlite-simple"><span class="header-section-number">14.4</span> Working With a Database: sqlite-simple</h2>
+<p>After implementing a HTTP server we can participate in the global graph of applications talking to each other that’s called the internet. But what use is talking if we can’t remember? A real application needs to be able to <em>persist data</em> even when it is restarted. A common way to accomplish this is to use a database.</p>
+<p>There are many different kinds of databases, but arguably the most widely used simple database is <a href="https://www.sqlite.org/index.html">SQLite</a>. SQLite is a library that lets you store data in a file and process it using <a href="">SQL, the Structured Query Language</a>. With SQLite there is no need to run a separate database server a la <a href="https://www.postgresql.org/">PostgreSQL</a> or <a href="https://www.mysql.com/">MySQL</a>.</p>
+<p>In case you’re not familiar with SQL, don’t worry, you won’t need to write any queries of your own in the exercises. If you’d like to learn a bit of SQL now, there are lots of tutorials on the web. See <a href="https://www.w3schools.com/sql/">W3Schools</a>, <a href="https://sqlzoo.net/">SQL Zoo</a> or <a href="https://www.codecademy.com/learn/learn-sql">Codecademy</a>.</p>
+<p>There are many libraries for Haskell for using SQLite, but we’ll look at one called <a href="https://hackage.haskell.org/package/sqlite-simple-0.4.18.0">sqlite-simple</a> here. Let’s explore the library in GHCi for a bit.</p>
+<p>All the functions live inside <code>Database.SQLite.Simple</code>. You can open a database by giving a filename to <code>open</code>, which is an IO operation that produces a <code>Connection</code>.</p>
+<div class="sourceCode" id="cb326"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb326-1" data-line-number="1"><span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="kw">import</span> <span class="dt">Database.SQLite.Simple</span></a>
+<a class="sourceLine" id="cb326-2" data-line-number="2"><span class="dt">Prelude</span> <span class="dt">Database.SQLite.Simple</span><span class="fu">&gt;</span> <span class="fu">:</span>t open</a>
+<a class="sourceLine" id="cb326-3" data-line-number="3"><span class="ot">open ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> <span class="dt">Connection</span></a>
+<a class="sourceLine" id="cb326-4" data-line-number="4"><span class="dt">Prelude</span> <span class="dt">Database.SQLite.Simple</span><span class="fu">&gt;</span> db <span class="ot">&lt;-</span> open <span class="st">&quot;example.sqlite&quot;</span></a></code></pre></div>
+<p>To run an SQL query you can use IO operation <code>query_</code>, which takes a <code>Connection</code> and a <code>Query</code>, and produces a list of results. The <code>Query</code> type is just a simple <code>newtype</code> around <code>Text</code>. The result type of <code>query_</code>is polymorphic: you can read any type that satisfies the <code>FromRow</code> type class from the database. If this feels confusing, compare it to the type of <code>read</code>: <code>Read a =&gt; String -&gt; a</code>. The <code>FromRow</code> class is like <code>Read</code> for this database: it represents types that can be read out of the database. Anyway, let’s read the number <code>1</code> from the database:</p>
+<div class="sourceCode" id="cb327"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb327-1" data-line-number="1"><span class="dt">Prelude</span> <span class="dt">Database.SQLite.Simple</span><span class="fu">&gt;</span> <span class="fu">:</span>t query_</a>
+<a class="sourceLine" id="cb327-2" data-line-number="2"><span class="ot">query_ ::</span> <span class="dt">FromRow</span> r <span class="ot">=&gt;</span> <span class="dt">Connection</span> <span class="ot">-&gt;</span> <span class="dt">Query</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> [r]</a>
+<a class="sourceLine" id="cb327-3" data-line-number="3"><span class="dt">Prelude</span> <span class="dt">Database.SQLite.Simple</span><span class="fu">&gt;</span> <span class="fu">:</span>info <span class="dt">Query</span></a>
+<a class="sourceLine" id="cb327-4" data-line-number="4"><span class="kw">newtype</span> <span class="dt">Query</span> <span class="fu">=</span> <span class="dt">Query</span> {<span class="ot">fromQuery ::</span> <span class="dt">Data.Text.Internal.Text</span>}</a>
+<a class="sourceLine" id="cb327-5" data-line-number="5">    <span class="co">-- Defined in ‘Database.SQLite.Simple.Types’</span></a>
+<a class="sourceLine" id="cb327-6" data-line-number="6">    <span class="co">-- ... rest of output omitted</span></a>
+<a class="sourceLine" id="cb327-7" data-line-number="7"><span class="dt">Prelude</span> <span class="dt">Database.SQLite.Simple</span><span class="fu">&gt;</span> <span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.Text</span> <span class="kw">as</span> <span class="dt">T</span></a>
+<a class="sourceLine" id="cb327-8" data-line-number="8"><span class="dt">Prelude</span> <span class="dt">Database.SQLite.Simple</span> <span class="dt">T</span><span class="fu">&gt;</span> <span class="kw">let</span> q <span class="fu">=</span> <span class="dt">Query</span> (T.pack <span class="st">&quot;SELECT 1;&quot;</span>)</a>
+<a class="sourceLine" id="cb327-9" data-line-number="9"><span class="dt">Prelude</span> <span class="dt">Database.SQLite.Simple</span> <span class="dt">T</span><span class="fu">&gt;</span> res <span class="ot">&lt;-</span> query_ db<span class="ot"> q ::</span> <span class="dt">IO</span> [[<span class="dt">Int</span>]]</a>
+<a class="sourceLine" id="cb327-10" data-line-number="10"><span class="dt">Prelude</span> <span class="dt">Database.SQLite.Simple</span> <span class="dt">T</span><span class="fu">&gt;</span> res</a>
+<a class="sourceLine" id="cb327-11" data-line-number="11">[[<span class="dv">1</span>]]</a></code></pre></div>
+<p>By the way, all of these initial examples use simple <code>SELECT x, y, z;</code> queries that just return constant data. We’ll worry about actual tables in the database later.</p>
+<p>Without the type signature, we get an error from GHCi, which can’t decide which type we want to read out from the database:</p>
+<div class="sourceCode" id="cb328"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb328-1" data-line-number="1"><span class="dt">Prelude</span> <span class="dt">Database.SQLite.Simple</span> <span class="dt">T</span><span class="fu">&gt;</span> res <span class="ot">&lt;-</span> query_ db q</a>
+<a class="sourceLine" id="cb328-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb328-3" data-line-number="3"><span class="fu">&lt;</span>interactive<span class="fu">&gt;:</span><span class="dv">17</span><span class="fu">:</span><span class="dv">8</span><span class="fu">:</span> error<span class="fu">:</span></a>
+<a class="sourceLine" id="cb328-4" data-line-number="4">    • <span class="dt">Ambiguous</span> <span class="kw">type</span> variable ‘r0’ arising from a use <span class="kw">of</span> ‘query_’</a>
+<a class="sourceLine" id="cb328-5" data-line-number="5">      prevents the constraint ‘(<span class="dt">FromRow</span> r0)’ from being solved<span class="fu">.</span></a>
+<a class="sourceLine" id="cb328-6" data-line-number="6">      <span class="dt">Probable</span> fix<span class="fu">:</span> use a <span class="kw">type</span> annotation to specify what ‘r0’ should be<span class="fu">.</span></a>
+<a class="sourceLine" id="cb328-7" data-line-number="7">      <span class="co">-- rest of error omitted</span></a></code></pre></div>
+<p>Before we go on, let’s have a closer look at <code>FromRow</code>. If you’ve bumped into SQL before, you know that an SQL query returns a number of <em>rows</em>, and each row consists of a number of <em>values</em> (also called <em>columns</em>). To be able to interpret the result of an SQL query into Haskell data, we need a way to interpret these values and rows. Thus sqlite-simple defines two classes, <code>FromField</code> and <code>FromRow</code>, and a bunch of instances like the following. (You can find these instances from <a href="https://hackage.haskell.org/package/sqlite-simple-0.4.18.0/docs/Database-SQLite-Simple.html#t:FromRow">the docs</a> or by asking GHCi with <code>:info FromRow</code> etc.)</p>
+<div class="sourceCode" id="cb329"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb329-1" data-line-number="1"><span class="kw">instance</span> <span class="dt">FromField</span> <span class="dt">Int</span></a>
+<a class="sourceLine" id="cb329-2" data-line-number="2"><span class="kw">instance</span> <span class="dt">FromField</span> <span class="dt">Bool</span></a>
+<a class="sourceLine" id="cb329-3" data-line-number="3"><span class="kw">instance</span> <span class="dt">FromField</span> <span class="dt">String</span></a>
+<a class="sourceLine" id="cb329-4" data-line-number="4"><span class="kw">instance</span> <span class="dt">FromField</span> <span class="dt">Text</span></a>
+<a class="sourceLine" id="cb329-5" data-line-number="5"><span class="kw">instance</span> <span class="dt">FromField</span> a <span class="ot">=&gt;</span> <span class="dt">FromRow</span> [a]</a>
+<a class="sourceLine" id="cb329-6" data-line-number="6"><span class="kw">instance</span> (<span class="dt">FromField</span> a, <span class="dt">FromField</span> b) <span class="ot">=&gt;</span> <span class="dt">FromRow</span> (a,b)</a>
+<a class="sourceLine" id="cb329-7" data-line-number="7"><span class="kw">instance</span> (<span class="dt">FromField</span> a, <span class="dt">FromField</span> b, <span class="dt">FromField</span> c) <span class="ot">=&gt;</span> <span class="dt">FromRow</span> (a,b,c)</a></code></pre></div>
+<p>In essence, basic Haskell datatypes fulfill the <code>FromField</code> class, and various Haskell collections fulfill the <code>FromRow</code> class. Our earlier example was using the <code>FromRow [a]</code> and <code>FromField Int</code> instances to get a <code>[[Int]]</code> out of <code>query_</code>. Here’s a simple query that uses some other datatypes:</p>
+<div class="sourceCode" id="cb330"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb330-1" data-line-number="1"><span class="dt">Prelude</span> <span class="dt">Database.SQLite.Simple</span> <span class="dt">T</span><span class="fu">&gt;</span> <span class="kw">let</span> q <span class="fu">=</span> <span class="dt">Query</span> (T.pack <span class="st">&quot;SELECT 1, true, &#39;string&#39;;&quot;</span>)</a>
+<a class="sourceLine" id="cb330-2" data-line-number="2"><span class="dt">Prelude</span> <span class="dt">Database.SQLite.Simple</span> <span class="dt">T</span><span class="fu">&gt;</span> query_ db<span class="ot"> q ::</span> <span class="dt">IO</span> [(<span class="dt">Int</span>,<span class="dt">Bool</span>,<span class="dt">String</span>)]</a>
+<a class="sourceLine" id="cb330-3" data-line-number="3">[(<span class="dv">1</span>,<span class="dt">True</span>,<span class="st">&quot;string&quot;</span>)]</a></code></pre></div>
+<p>What happens if the SQL and Haskell types don’t match? Well, you get a runtime error, just like if you try to invoke <code>read &quot;True&quot; :: Int</code>.</p>
+<div class="sourceCode" id="cb331"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb331-1" data-line-number="1"><span class="dt">Prelude</span> <span class="dt">Database.SQLite.Simple</span> <span class="dt">T</span><span class="fu">&gt;</span> query_ db<span class="ot"> q ::</span> <span class="dt">IO</span> [(<span class="dt">Int</span>,<span class="dt">Int</span>,<span class="dt">Int</span>)]</a>
+<a class="sourceLine" id="cb331-2" data-line-number="2"><span class="fu">***</span> <span class="dt">Exception</span><span class="fu">:</span> <span class="dt">ConversionFailed</span> {errSQLType <span class="fu">=</span> <span class="st">&quot;TEXT&quot;</span>, errHaskellType <span class="fu">=</span> <span class="st">&quot;Int&quot;</span>, errMessage <span class="fu">=</span> <span class="st">&quot;need an int&quot;</span>}</a></code></pre></div>
+<p>To mirror the <code>FromRow</code> and <code>FromField</code> classes, sqlite-simple also defines the <code>ToRow</code> and <code>ToField</code> classes for writing into the database. Here’s the type of the <code>query</code> function, which allows us to use <em>parameterized queries</em>.</p>
+<div class="sourceCode" id="cb332"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb332-1" data-line-number="1"><span class="ot">query ::</span> (<span class="dt">ToRow</span> q, <span class="dt">FromRow</span> r) <span class="ot">=&gt;</span> <span class="dt">Connection</span> <span class="ot">-&gt;</span> <span class="dt">Query</span> <span class="ot">-&gt;</span> q <span class="ot">-&gt;</span> <span class="dt">IO</span> [r]</a></code></pre></div>
+<p>And here are some instances for <code>ToRow</code> and <code>ToField</code>:</p>
+<div class="sourceCode" id="cb333"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb333-1" data-line-number="1"><span class="kw">instance</span> <span class="dt">ToField</span> <span class="dt">Int</span></a>
+<a class="sourceLine" id="cb333-2" data-line-number="2"><span class="kw">instance</span> <span class="dt">ToField</span> <span class="dt">Bool</span></a>
+<a class="sourceLine" id="cb333-3" data-line-number="3"><span class="kw">instance</span> <span class="dt">ToField</span> <span class="dt">String</span></a>
+<a class="sourceLine" id="cb333-4" data-line-number="4"><span class="kw">instance</span> <span class="dt">ToField</span> <span class="dt">Text</span></a>
+<a class="sourceLine" id="cb333-5" data-line-number="5"><span class="kw">instance</span> <span class="dt">ToField</span> <span class="dt">Int</span></a>
+<a class="sourceLine" id="cb333-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb333-7" data-line-number="7"><span class="kw">instance</span> <span class="dt">ToField</span> a <span class="ot">=&gt;</span> <span class="dt">ToRow</span> [a]</a>
+<a class="sourceLine" id="cb333-8" data-line-number="8"><span class="kw">instance</span> (<span class="dt">ToField</span> a, <span class="dt">ToField</span> b) <span class="ot">=&gt;</span> <span class="dt">ToRow</span> (a, b)</a>
+<a class="sourceLine" id="cb333-9" data-line-number="9"><span class="kw">instance</span> (<span class="dt">ToField</span> a, <span class="dt">ToField</span> b, <span class="dt">ToField</span> c) <span class="ot">=&gt;</span> <span class="dt">ToRow</span> (a, b, c)</a></code></pre></div>
+<!-- instance ToField a => ToField (Maybe a)  -- TODO talk about sql null -->
+<p>Parameterized queries use a <code>?</code> character to denote slots where parameters can be passed in. Here’s a simple example:</p>
+<div class="sourceCode" id="cb334"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb334-1" data-line-number="1"><span class="dt">Prelude</span> <span class="dt">Database.SQLite.Simple</span> <span class="dt">T</span><span class="fu">&gt;</span> <span class="kw">let</span> input <span class="fu">=</span> (<span class="dv">1</span>,<span class="st">&quot;hello&quot;</span>)<span class="ot"> ::</span> (<span class="dt">Int</span>,<span class="dt">String</span>)</a>
+<a class="sourceLine" id="cb334-2" data-line-number="2"><span class="dt">Prelude</span> <span class="dt">Database.SQLite.Simple</span> <span class="dt">T</span><span class="fu">&gt;</span> <span class="kw">let</span> parameterized <span class="fu">=</span> <span class="dt">Query</span> (T.pack <span class="st">&quot;SELECT ?+1, true, ?;&quot;</span>)</a>
+<a class="sourceLine" id="cb334-3" data-line-number="3"><span class="dt">Prelude</span> <span class="dt">Database.SQLite.Simple</span> <span class="dt">T</span><span class="fu">&gt;</span> query db parameterized<span class="ot"> input ::</span> <span class="dt">IO</span> [(<span class="dt">Int</span>,<span class="dt">Bool</span>,<span class="dt">String</span>)]</a>
+<a class="sourceLine" id="cb334-4" data-line-number="4">[(<span class="dv">2</span>,<span class="dt">True</span>,<span class="st">&quot;hello&quot;</span>)]</a></code></pre></div>
+<p>That’s pretty much all you need to know about sqlite-simple: <code>open</code>, <code>query_</code>, <code>query</code>, <code>FromRow</code>, <code>ToRow</code>. Oh right, one more thing. There are the functions <code>execute</code> and <code>execute_</code> if you don’t need the result of the query. They’re useful for inserting things into the database, for example.</p>
+<div class="sourceCode" id="cb335"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb335-1" data-line-number="1"><span class="ot">execute_ ::</span> <span class="dt">Connection</span> <span class="ot">-&gt;</span> <span class="dt">Query</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> ()</a>
+<a class="sourceLine" id="cb335-2" data-line-number="2"><span class="ot">execute ::</span> <span class="dt">ToRow</span> q <span class="ot">=&gt;</span> <span class="dt">Connection</span> <span class="ot">-&gt;</span> <span class="dt">Query</span> <span class="ot">-&gt;</span> q <span class="ot">-&gt;</span> <span class="dt">IO</span> ()</a></code></pre></div>
+<p>You’ll find an example program that uses sqlite-simple to maintain a phone book under <a href="https://github.com/moocfi/haskell-mooc/blob/master/exercises/Examples/Phonebook.hs"><code>exercises/Examples/Phonebook.hs</code></a>. The program keeps the phonebook in a file called <code>phonebook.db</code> and works like this (run from the <code>exercises/Examples</code> directory in the course repository):</p>
+<pre><code>$ stack runhaskell Phonebook.hs
+(a)dd or (q)uery?
+a
+Name?
+bob
+Phone?
+1234
+$ stack runhaskell Phonebook.hs
+(a)dd or (q)uery?
+a
+Name?
+bob
+Phone?
+5678
+$ stack runhaskell Phonebook.hs
+(a)dd or (q)uery?
+a
+Name?
+samantha
+Phone?
+1357
+$ stack runhaskell Phonebook.hs
+(a)dd or (q)uery?
+q
+Name?
+bob
+2 numbers:
+[&quot;1234&quot;]
+[&quot;5678&quot;]</code></pre>
+<p>PS. If you’re devastated by the lack of compile-time type checking for SQL queries, you can have a look at some of the more advanced SQL libraries for Haskell like <a href="https://haskell-beam.github.io/beam/">Beam</a> or <a href="https://hackage.haskell.org/package/opaleye">Opaleye</a>. This course is using sqlite-simple for simplicity and to avoid dwelling on the details of SQL too much.</p>
+<!-- ## TODO Quiz: this set isn't that well suited for quiz questions -->
+<h2 id="exercises-5"><span class="header-section-number">14.5</span> Exercises</h2>
+<ul>
+<li><a href="https://github.com/moocfi/haskell-mooc/blob/master/exercises/Set14a.hs">Set14a</a>: Text &amp; ByteString</li>
+<li><a href="https://github.com/moocfi/haskell-mooc/blob/master/exercises/Set14b.hs">Set14b</a>: HTTP &amp; SQLite</li>
 <li><a href="https://forms.gle/soVtMeGBxSo6u5zp6">Remember to give feedback!</a></li>
 </ul>
 </div>
