@@ -59,7 +59,7 @@ ex2 = forAllBlind (listOf word) $ \up0 ->
 
 noRepeats s = group s == map (:[]) s
 
-ex3 = forAllShrink_ (listOf (choose (1,8))) $ \is ->
+ex3 = forAllBlind (listOf (choose (1,8))) $ \is ->
   forAllBlind (vectorOf (length is) letter `suchThat` noRepeats) $ \cs ->
   let inp = concat $ zipWith replicate is cs
       out = maximum (0:is)
