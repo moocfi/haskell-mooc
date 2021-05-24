@@ -197,7 +197,9 @@ ex4_danger = property $ do
   let xs = dangerZone n (i,j)
   x <- elements xs
   return $ conjoin [$(testing [| danger x [(i,j)] |]) (?== True)
-                   ,$(testing [| danger x [(i,j),(i',j')] |]) (?== True)]
+                   ,$(testing [| danger x [(i,j),(i',j')] |]) (?== True)
+                   ,$(testing [| danger x [(i',j'),(i,j)] |]) (?== True)
+                   ,$(testing [| danger x [(i',j),(i',j'),(i,j)] |]) (?== True)]
 
 ex4_danger_neg = property $ do
   (i,j) <- coord
