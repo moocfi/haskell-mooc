@@ -166,7 +166,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="#validating-lists-traverse"><span class="toc-section-number">15.5</span> Validating Lists: <code>traverse</code></a></li>
 <li><a href="#sidenote-traversable"><span class="toc-section-number">15.6</span> Sidenote: <code>Traversable</code></a></li>
 <li><a href="#dealing-with-failure-alternative"><span class="toc-section-number">15.7</span> Dealing with Failure: <code>Alternative</code></a></li>
-<li><a href="#sidenote-monads-and-applicatives"><span class="toc-section-number">15.8</span> Sidenote: Monads and Applicatives</a></li>
+<li><a href="#sidenote-applicatives-in-context"><span class="toc-section-number">15.8</span> Sidenote: Applicatives in Context</a></li>
 <li><a href="#quiz-5"><span class="toc-section-number">15.9</span> Quiz</a></li>
 <li><a href="#exercises-6"><span class="toc-section-number">15.10</span> Exercises</a></li>
 </ul></li>
@@ -3875,7 +3875,6 @@ liftA2 sumMoney (parseMoney &quot;123&quot; &quot;e&quot;) (parseMoney &quot;xxx
 <a class="sourceLine" id="cb365-9" data-line-number="9">  liftA2 f (<span class="dt">Ok</span> x)      (<span class="dt">Errors</span> e2) <span class="fu">=</span> <span class="dt">Errors</span> e2</a>
 <a class="sourceLine" id="cb365-10" data-line-number="10">  liftA2 f (<span class="dt">Errors</span> e1) (<span class="dt">Errors</span> e2) <span class="fu">=</span> <span class="dt">Errors</span> (e1<span class="fu">++</span>e2)</a></code></pre></div>
 <p>The definition of <code>liftA2</code> for <code>Validation</code> shows that the errors are collected together left-to-right. This can be seen in the example above where the expression <code>liftA2 congratulate checkedName checkedAge</code> outputs the error (<code>&quot;Name too long&quot;</code>) from <code>checkedName</code> first, and the error (<code>&quot;Too old&quot;</code>) from <code>checkedAge</code> last.</p>
-<p>PS. The same sort of idea has been implemented in the <a href="https://hackage.haskell.org/package/validation">validation</a> and <a href="https://hackage.haskell.org/package/either">either</a> libraries.</p>
 <!-- TODO other applicatives: IO, ? -->
 <h2 id="validating-lists-traverse"><span class="header-section-number">15.5</span> Validating Lists: <code>traverse</code></h2>
 <p>So far we’ve dealt with fixed-size things and Applicatives: we’ve applied a function of two or three arguments to some things. What if we have an arbitrary amount of inputs? What if we need to validate a list?</p>
@@ -4065,7 +4064,17 @@ TODO another example
 
 TODO explain `some` and `many`
 -->
-<h2 id="sidenote-monads-and-applicatives"><span class="header-section-number">15.8</span> Sidenote: Monads and Applicatives</h2>
+<h2 id="sidenote-applicatives-in-context"><span class="header-section-number">15.8</span> Sidenote: Applicatives in Context</h2>
+<h3 id="why-applicatives"><span class="header-section-number">15.8.1</span> Why Applicatives?</h3>
+<p>There are multiple reasons for learning Applicatives, even if they do not provide any additional power over Monads. First off, as discussed in Lecture 13, the GHC standard library nowadays makes Applicative instances for all Monads compulsory. Thus a working Haskell programmer is bound to see lots of Applicative instances.</p>
+<p>Secondly, you’ll bump into Applicative operators a lot even in Monadic code. Expressions like <code>f &lt;$&gt; x &lt;*&gt; y &lt;*&gt; z</code> can be useful in many Monadic contexts. Also, since the <code>Traversable</code> type class is built in terms of <code>Applicative</code>, you’ll often use applicative operations with it.</p>
+<p>Thirdly, Applicatives are an excellent exercise in understanding functional design patterns. They marry the Functor pattern with the Monoid pattern, and Alternative brings in yet another Monoid-like dimension. Being able to efficiently work with Applicatives will make working with further abstractions like <em>monad transformers</em> or <em>lenses</em> easier.</p>
+<p>Lastly, there are a couple of types that are Applicatives but not Monads. <code>Validation</code> is one example, and a very practical one at that. Without understanding of Applicative, we’d have no way to recognize and generalize operations over types like this. Another such type is <a href="https://hackage.haskell.org/package/base-4.15.0.0/docs/Control-Applicative.html#t:ZipList"><code>ZipList</code></a>.</p>
+<h3 id="applicatives-in-the-wild"><span class="header-section-number">15.8.2</span> Applicatives in the Wild</h3>
+<p>Even though we only looked at some very simple and concrete Applicatives in this lecture, there are plenty of Haskell libraries that use Applicatives for big things. Here are some examples.</p>
+<p>The same sort of idea as our <code>Validation</code> Applicative has been implemented in the <a href="https://hackage.haskell.org/package/validation">validation</a> and <a href="https://hackage.haskell.org/package/either">either</a> libraries.</p>
+<p>There are multiple parser libraries that use Applicatives. For example, <a href="https://hackage.haskell.org/package/regex-applicative">regex-applicative</a>, <a href="https://hackage.haskell.org/package/optparse-applicative">optparse-applicative</a>, <a href="https://cs-syd.eu/posts/2020-06-28-yamlparse-applicative">yamlparse-applicative</a>, <a href="https://hackage.haskell.org/package/json-stream">json-stream</a>, and so on.</p>
+<h3 id="monads-and-applicatives"><span class="header-section-number">15.8.3</span> Monads and Applicatives</h3>
 <p>So what’s the relationship between an Monad and an Applicative? If an Applicative is also a Monad, the following laws hold:</p>
 <div class="sourceCode" id="cb387"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb387-1" data-line-number="1">pure             <span class="fu">===</span> return</a>
 <a class="sourceLine" id="cb387-2" data-line-number="2"></a>
