@@ -158,6 +158,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="#working-with-a-database-sqlite-simple"><span class="toc-section-number">14.4</span> Working With a Database: sqlite-simple</a></li>
 <li><a href="#exercises-5"><span class="toc-section-number">14.5</span> Exercises</a></li>
 </ul></li>
+<li><a href="#lecture-15-youre-valid-even-without-monads"><span class="toc-section-number">15</span> Lecture 15: You’re Valid Even Without Monads</a><ul>
+<li><a href="#introduction-to-applicatives"><span class="toc-section-number">15.1</span> Introduction to Applicatives</a></li>
+<li><a href="#the-list-applicative"><span class="toc-section-number">15.2</span> The List Applicative</a></li>
+<li><a href="#new-operators"><span class="toc-section-number">15.3</span> New Operators</a></li>
+<li><a href="#the-validation-applicative"><span class="toc-section-number">15.4</span> The Validation Applicative</a></li>
+<li><a href="#validating-lists-traverse"><span class="toc-section-number">15.5</span> Validating Lists: <code>traverse</code></a></li>
+<li><a href="#sidenote-traversable"><span class="toc-section-number">15.6</span> Sidenote: <code>Traversable</code></a></li>
+<li><a href="#dealing-with-failure-alternative"><span class="toc-section-number">15.7</span> Dealing with Failure: <code>Alternative</code></a></li>
+<li><a href="#sidenote-monads-and-applicatives"><span class="toc-section-number">15.8</span> Sidenote: Monads and Applicatives</a></li>
+<li><a href="#quiz-5"><span class="toc-section-number">15.9</span> Quiz</a></li>
+<li><a href="#exercises-6"><span class="toc-section-number">15.10</span> Exercises</a></li>
+</ul></li>
 </ul>
 </nav>
 <div id="text-container">
@@ -1922,7 +1934,7 @@ Prelude&gt; final
 <a class="sourceLine" id="cb162-12" data-line-number="12">System.Directory.listDirectory<span class="ot"> ::</span> FilePath <span class="ot">-&gt;</span> <span class="dt">IO</span> [FilePath]</a>
 <a class="sourceLine" id="cb162-13" data-line-number="13"><span class="co">-- is the given file a directory?</span></a>
 <a class="sourceLine" id="cb162-14" data-line-number="14">System.Directory.doesDirectoryExist<span class="ot"> ::</span> FilePath <span class="ot">-&gt;</span> <span class="dt">IO</span> <span class="dt">Bool</span></a></code></pre></div>
-<p>And here’s the program itself. You can also find it in the course repository as <a href="https://github.com/moocfi/haskell-mooc/blob/master/exercises/Example/ReadTypes.hs"><code>exercises/Examples/ReadTypes.hs</code></a>.</p>
+<p>And here’s the program itself. You can also find it in the course repository as <a href="https://github.com/moocfi/haskell-mooc/blob/master/exercises/Examples/ReadTypes.hs"><code>exercises/Examples/ReadTypes.hs</code></a>.</p>
 <div class="sourceCode" id="cb163"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb163-1" data-line-number="1"><span class="kw">module</span> <span class="dt">Examples.ReadTypes</span> <span class="kw">where</span></a>
 <a class="sourceLine" id="cb163-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb163-3" data-line-number="3"><span class="kw">import</span> <span class="dt">Control.Monad</span> (forM)</a>
@@ -3652,6 +3664,511 @@ bob
 <ul>
 <li><a href="https://github.com/moocfi/haskell-mooc/blob/master/exercises/Set14a.hs">Set14a</a>: Text &amp; ByteString</li>
 <li><a href="https://github.com/moocfi/haskell-mooc/blob/master/exercises/Set14b.hs">Set14b</a>: HTTP &amp; SQLite</li>
+<li><a href="https://forms.gle/soVtMeGBxSo6u5zp6">Remember to give feedback!</a></li>
+</ul>
+<h1 id="lecture-15-youre-valid-even-without-monads"><span class="header-section-number">15</span> Lecture 15: You’re Valid Even Without Monads</h1>
+<h2 id="introduction-to-applicatives"><span class="header-section-number">15.1</span> Introduction to Applicatives</h2>
+<p>The <code>Applicative</code> type class is a middle ground between <code>Functor</code> (which you can’t do that much with) and <code>Monad</code> (which pretty much allows you to write arbitrary programs). Reasons to use <code>Applicative</code> instead of <code>Monad</code> include:</p>
+<ul>
+<li>Performance: since <code>Applicative</code> allows less operations, it can be optimized better than <code>Monad</code>.</li>
+<li>Simplicity: an <code>Applicative</code> interface is easier to reason about.</li>
+<li>Necessity: there just is no way to define a <code>Monad</code> instance for your type, but there is an <code>Applicative</code> instance. This is rare.</li>
+</ul>
+<p>So what is an <code>Applicative</code>? Let’s look at a definition.</p>
+<div class="sourceCode" id="cb337"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb337-1" data-line-number="1"><span class="kw">class</span> <span class="dt">Functor</span> f <span class="ot">=&gt;</span> <span class="dt">Applicative</span> f <span class="kw">where</span></a>
+<a class="sourceLine" id="cb337-2" data-line-number="2"><span class="ot">  pure ::</span> a <span class="ot">-&gt;</span> f a</a>
+<a class="sourceLine" id="cb337-3" data-line-number="3"><span class="ot">  liftA2 ::</span> (a <span class="ot">-&gt;</span> b <span class="ot">-&gt;</span> c) <span class="ot">-&gt;</span> f a <span class="ot">-&gt;</span> f b <span class="ot">-&gt;</span> f c</a>
+<a class="sourceLine" id="cb337-4" data-line-number="4">  <span class="co">-- other operations omitted for now</span></a></code></pre></div>
+<p>So an <code>Applicative</code> is a <code>Functor</code> that allows us to build singleton values via <code>pure</code>, and combine two values into one using <code>liftA2</code>. This adds a lot of power compared to a bare functor. Computations using functors are necessarily linear: <code>fmap :: (a -&gt; b) -&gt; f a -&gt; f b</code> takes in one functorial value, and outputs another. By contrast, <code>pure</code> takes in no functorial value and outputs one, and <code>liftA2</code> takes in two and returns one.</p>
+<p>Sidenote: the term Applicative comes from the term <a href="https://en.wikipedia.org/wiki/Applicative_functor">Applicative Functor</a>, which sounds like it comes from Category Theory, but was actually introduced in a programming paper.</p>
+<p>That’s enough abstract mumbo jumbo for now. Let’s look at what sort of computations we can express using Applicative operations (and <code>fmap</code>). We’ll start with the <code>Maybe</code> applicative. Here’s a streamlined definition:</p>
+<div class="sourceCode" id="cb338"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb338-1" data-line-number="1"><span class="kw">instance</span> <span class="dt">Applicative</span> <span class="dt">Maybe</span> <span class="kw">where</span></a>
+<a class="sourceLine" id="cb338-2" data-line-number="2">  pure x <span class="fu">=</span> <span class="dt">Just</span> x</a>
+<a class="sourceLine" id="cb338-3" data-line-number="3">  liftA2 f (<span class="dt">Just</span> x) (<span class="dt">Just</span> y) <span class="fu">=</span> <span class="dt">Just</span> (f x y)</a>
+<a class="sourceLine" id="cb338-4" data-line-number="4">  liftA2 f <span class="dt">Nothing</span>  (<span class="dt">Just</span> _) <span class="fu">=</span> <span class="dt">Nothing</span></a>
+<a class="sourceLine" id="cb338-5" data-line-number="5">  liftA2 f (<span class="dt">Just</span> _) <span class="dt">Nothing</span>  <span class="fu">=</span> <span class="dt">Nothing</span></a></code></pre></div>
+<!-- TODO some GHCi examples? -->
+<p>You’ll see the definition uses the same type of failure propagation as the <code>Monad Maybe</code> instance. Let’s use this when parsing monetary values:</p>
+<div class="sourceCode" id="cb339"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb339-1" data-line-number="1"><span class="kw">data</span> <span class="dt">Currency</span> <span class="fu">=</span> <span class="dt">EUR</span> <span class="fu">|</span> <span class="dt">USD</span></a>
+<a class="sourceLine" id="cb339-2" data-line-number="2">  <span class="kw">deriving</span> (<span class="dt">Show</span>, <span class="dt">Eq</span>)</a>
+<a class="sourceLine" id="cb339-3" data-line-number="3"><span class="kw">data</span> <span class="dt">Money</span> <span class="fu">=</span> <span class="dt">Money</span> <span class="dt">Int</span> <span class="dt">Currency</span></a>
+<a class="sourceLine" id="cb339-4" data-line-number="4">  <span class="kw">deriving</span> (<span class="dt">Show</span>, <span class="dt">Eq</span>)</a>
+<a class="sourceLine" id="cb339-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb339-6" data-line-number="6"><span class="ot">parseCurrency ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Maybe</span> <span class="dt">Currency</span></a>
+<a class="sourceLine" id="cb339-7" data-line-number="7">parseCurrency <span class="st">&quot;e&quot;</span> <span class="fu">=</span> pure <span class="dt">EUR</span></a>
+<a class="sourceLine" id="cb339-8" data-line-number="8">parseCurrency <span class="st">&quot;€&quot;</span> <span class="fu">=</span> pure <span class="dt">EUR</span></a>
+<a class="sourceLine" id="cb339-9" data-line-number="9">parseCurrency <span class="st">&quot;$&quot;</span> <span class="fu">=</span> pure <span class="dt">USD</span></a>
+<a class="sourceLine" id="cb339-10" data-line-number="10">parseCurrency _ <span class="fu">=</span> <span class="dt">Nothing</span></a>
+<a class="sourceLine" id="cb339-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb339-12" data-line-number="12"><span class="ot">parseAmount ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Maybe</span> <span class="dt">Int</span></a>
+<a class="sourceLine" id="cb339-13" data-line-number="13">parseAmount <span class="fu">=</span> readMaybe</a>
+<a class="sourceLine" id="cb339-14" data-line-number="14"></a>
+<a class="sourceLine" id="cb339-15" data-line-number="15"><span class="ot">parseMoney ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Maybe</span> <span class="dt">Money</span></a>
+<a class="sourceLine" id="cb339-16" data-line-number="16">parseMoney amountString currencyString <span class="fu">=</span></a>
+<a class="sourceLine" id="cb339-17" data-line-number="17">  liftA2 <span class="dt">Money</span> (parseAmount amountString) (parseCurrency currencyString)</a></code></pre></div>
+<div class="sourceCode" id="cb340"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb340-1" data-line-number="1">parseMoney <span class="st">&quot;123&quot;</span> <span class="st">&quot;€&quot;</span>  <span class="fu">==&gt;</span> <span class="dt">Just</span> (<span class="dt">Money</span> <span class="dv">123</span> <span class="dt">EUR</span>)</a>
+<a class="sourceLine" id="cb340-2" data-line-number="2">parseMoney <span class="st">&quot;45&quot;</span> <span class="st">&quot;$&quot;</span>   <span class="fu">==&gt;</span> <span class="dt">Just</span> (<span class="dt">Money</span> <span class="dv">45</span> <span class="dt">USD</span>)</a>
+<a class="sourceLine" id="cb340-3" data-line-number="3">parseMoney <span class="st">&quot;4x&quot;</span> <span class="st">&quot;€&quot;</span>   <span class="fu">==&gt;</span> <span class="dt">Nothing</span></a>
+<a class="sourceLine" id="cb340-4" data-line-number="4">parseMoney <span class="st">&quot;45&quot;</span> <span class="st">&quot;£&quot;</span>   <span class="fu">==&gt;</span> <span class="dt">Nothing</span></a></code></pre></div>
+<p>That worked out nicely. However, if we try to expand on this we soon run into the limits of <code>Applicative</code>. For example, consider this <code>sumMoney</code> function that sums <code>Money</code> values but fails if they are not in the same currency:</p>
+<div class="sourceCode" id="cb341"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb341-1" data-line-number="1"><span class="ot">sumMoney ::</span> <span class="dt">Money</span> <span class="ot">-&gt;</span> <span class="dt">Money</span> <span class="ot">-&gt;</span> <span class="dt">Maybe</span> <span class="dt">Money</span></a>
+<a class="sourceLine" id="cb341-2" data-line-number="2">sumMoney (<span class="dt">Money</span> a c) (<span class="dt">Money</span> b c&#39;)</a>
+<a class="sourceLine" id="cb341-3" data-line-number="3">    <span class="fu">|</span> c <span class="fu">==</span> c&#39;   <span class="fu">=</span> <span class="dt">Just</span> (<span class="dt">Money</span> (a<span class="fu">+</span>b) c)</a>
+<a class="sourceLine" id="cb341-4" data-line-number="4">    <span class="fu">|</span> otherwise <span class="fu">=</span> <span class="dt">Nothing</span></a></code></pre></div>
+<p>We can’t apply it to two <code>Maybe Money</code> values using <code>Applicative</code> operations. We need the <code>Maybe</code> monad for that:</p>
+<div class="sourceCode" id="cb342"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb342-1" data-line-number="1"><span class="ot">example ::</span> <span class="dt">Maybe</span> <span class="dt">Money</span></a>
+<a class="sourceLine" id="cb342-2" data-line-number="2">example <span class="fu">=</span> <span class="kw">do</span> x <span class="ot">&lt;-</span> parseMoney <span class="st">&quot;123&quot;</span> <span class="st">&quot;€&quot;</span></a>
+<a class="sourceLine" id="cb342-3" data-line-number="3">             y <span class="ot">&lt;-</span> parseMoney <span class="st">&quot;45&quot;</span> <span class="st">&quot;$&quot;</span></a>
+<a class="sourceLine" id="cb342-4" data-line-number="4">             sumMoney x y</a></code></pre></div>
+<p>If we try to use <code>liftA2</code>, we’re stuck with a <code>Maybe (Maybe Money)</code> type. In addition, we can now get two different types of failures: <code>Nothing</code> and <code>Just Nothing</code>, depending on what level the error happens on. This would be a clear case for switching to a <code>Monad</code> instance.</p>
+<pre><code>liftA2 sumMoney (parseMoney &quot;123&quot; &quot;e&quot;) (parseMoney &quot;45&quot; &quot;€&quot;)
+  ==&gt; Just (Just (Money 168 EUR))
+liftA2 sumMoney (parseMoney &quot;123&quot; &quot;e&quot;) (parseMoney &quot;45&quot; &quot;$&quot;)
+  ==&gt; Just Nothing
+liftA2 sumMoney (parseMoney &quot;123&quot; &quot;e&quot;) (parseMoney &quot;xxx&quot; &quot;e&quot;)
+  ==&gt; Nothing</code></pre>
+<p>Sidenote: the name <code>liftA2</code> sounds a bit cumbersome, but it’s an analogy with the <code>liftM</code>, <code>liftM2</code> and so on functions for monads. Recall that <code>liftM</code> was just <code>fmap</code>, so perhaps <code>liftA2</code> should’ve been called <code>fmap2</code>.</p>
+<h2 id="the-list-applicative"><span class="header-section-number">15.2</span> The List Applicative</h2>
+<p>Let’s have a look at the applicative instances for another <code>Functor</code> we’ve seen. The <code>Applicative</code> instance for the list functor goes through all possible combinations of values (just like the list monad). Here’s the instance:</p>
+<div class="sourceCode" id="cb344"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb344-1" data-line-number="1"><span class="kw">instance</span> <span class="dt">Applicative</span> [] <span class="kw">where</span></a>
+<a class="sourceLine" id="cb344-2" data-line-number="2">  pure x <span class="fu">=</span> [x]</a>
+<a class="sourceLine" id="cb344-3" data-line-number="3">  liftA2 f xs ys <span class="fu">=</span> [f x y <span class="fu">|</span> x <span class="ot">&lt;-</span> xs, y <span class="ot">&lt;-</span> ys]</a></code></pre></div>
+<p>And here’s an example: generating some phrases.</p>
+<div class="sourceCode" id="cb345"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb345-1" data-line-number="1"><span class="ot">things ::</span> [<span class="dt">String</span>]</a>
+<a class="sourceLine" id="cb345-2" data-line-number="2">things <span class="fu">=</span> [<span class="st">&quot;tangerine&quot;</span>,<span class="st">&quot;bandit&quot;</span>,<span class="st">&quot;diamond&quot;</span>]</a>
+<a class="sourceLine" id="cb345-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb345-4" data-line-number="4"><span class="ot">fruits ::</span> [<span class="dt">String</span>]</a>
+<a class="sourceLine" id="cb345-5" data-line-number="5">fruits <span class="fu">=</span> [<span class="st">&quot;apple&quot;</span>, <span class="st">&quot;tangerine&quot;</span>]</a>
+<a class="sourceLine" id="cb345-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb345-7" data-line-number="7"><span class="ot">phrases ::</span> [<span class="dt">String</span>]</a>
+<a class="sourceLine" id="cb345-8" data-line-number="8">phrases <span class="fu">=</span> liftA2 combine things fruits</a>
+<a class="sourceLine" id="cb345-9" data-line-number="9">  <span class="kw">where</span> combine t f <span class="fu">=</span> <span class="st">&quot;a &quot;</span> <span class="fu">++</span> t <span class="fu">++</span> <span class="st">&quot; the size of a &quot;</span> <span class="fu">++</span> f</a>
+<a class="sourceLine" id="cb345-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb345-11" data-line-number="11">bunches <span class="fu">=</span> liftA2 copy [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>] fruits</a>
+<a class="sourceLine" id="cb345-12" data-line-number="12">  <span class="kw">where</span> copy n f <span class="fu">=</span> unwords (replicate n f)</a></code></pre></div>
+<div class="sourceCode" id="cb346"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb346-1" data-line-number="1">phrases <span class="fu">==&gt;</span> [<span class="st">&quot;a tangerine the size of a apple&quot;</span>,</a>
+<a class="sourceLine" id="cb346-2" data-line-number="2">             <span class="st">&quot;a tangerine the size of a tangerine&quot;</span>,</a>
+<a class="sourceLine" id="cb346-3" data-line-number="3">             <span class="st">&quot;a bandit the size of a apple&quot;</span>,</a>
+<a class="sourceLine" id="cb346-4" data-line-number="4">             <span class="st">&quot;a bandit the size of a tangerine&quot;</span>,</a>
+<a class="sourceLine" id="cb346-5" data-line-number="5">             <span class="st">&quot;a diamond the size of a apple&quot;</span>,</a>
+<a class="sourceLine" id="cb346-6" data-line-number="6">             <span class="st">&quot;a diamond the size of a tangerine&quot;</span>]</a>
+<a class="sourceLine" id="cb346-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb346-8" data-line-number="8">bunches <span class="fu">==&gt;</span> [<span class="st">&quot;apple&quot;</span>,<span class="st">&quot;tangerine&quot;</span>,</a>
+<a class="sourceLine" id="cb346-9" data-line-number="9">             <span class="st">&quot;apple apple&quot;</span>,<span class="st">&quot;tangerine tangerine&quot;</span>,</a>
+<a class="sourceLine" id="cb346-10" data-line-number="10">             <span class="st">&quot;apple apple apple&quot;</span>,<span class="st">&quot;tangerine tangerine tangerine&quot;</span>]</a></code></pre></div>
+<!-- TODO more examples? -->
+<h2 id="new-operators"><span class="header-section-number">15.3</span> New Operators</h2>
+<p>There are a handful of operators for Applicatives that are quite handy. They are <code>&lt;$&gt;</code>, <code>&lt;*&gt;</code>, <code>&lt;*</code> and <code>*&gt;</code>.</p>
+<p>Let’s start with <code>&lt;$&gt;</code>, which is just an infix version of <code>fmap</code>:</p>
+<div class="sourceCode" id="cb347"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb347-1" data-line-number="1"><span class="ot">(&lt;$&gt;) ::</span> <span class="dt">Functor</span> f <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> f a <span class="ot">-&gt;</span> f b</a>
+<a class="sourceLine" id="cb347-2" data-line-number="2">f <span class="fu">&lt;$&gt;</span> x <span class="fu">=</span> fmap f x</a></code></pre></div>
+<div class="sourceCode" id="cb348"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb348-1" data-line-number="1">not <span class="fu">&lt;$&gt;</span> <span class="dt">Just</span> <span class="dt">True</span>   <span class="fu">==&gt;</span> <span class="dt">Just</span> <span class="dt">False</span></a>
+<a class="sourceLine" id="cb348-2" data-line-number="2">not <span class="fu">&lt;$&gt;</span> <span class="dt">Nothing</span>     <span class="fu">==&gt;</span> <span class="dt">Nothing</span></a>
+<a class="sourceLine" id="cb348-3" data-line-number="3">negate <span class="fu">&lt;$&gt;</span> [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>]  <span class="fu">==&gt;</span> [<span class="fu">-</span><span class="dv">1</span>,<span class="fu">-</span><span class="dv">2</span>,<span class="fu">-</span><span class="dv">3</span>]</a></code></pre></div>
+<p>That’s kinda nice on its own, but it really gets to shine when combined with this Applicative operator:</p>
+<div class="sourceCode" id="cb349"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb349-1" data-line-number="1"><span class="ot">(&lt;*&gt;) ::</span> <span class="dt">Applicative</span> f <span class="ot">=&gt;</span> f (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> f a <span class="ot">-&gt;</span> f b</a></code></pre></div>
+<p>The type tells you what <code>&lt;*&gt;</code> does: it’s function application <em>lifted</em> to an applicative. Here are some standalone examples:</p>
+<div class="sourceCode" id="cb350"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb350-1" data-line-number="1"><span class="dt">Just</span> not <span class="fu">&lt;*&gt;</span> <span class="dt">Just</span> <span class="dt">True</span>    <span class="fu">==&gt;</span> <span class="dt">Just</span> <span class="dt">False</span></a>
+<a class="sourceLine" id="cb350-2" data-line-number="2"><span class="dt">Nothing</span>  <span class="fu">&lt;*&gt;</span> <span class="dt">Just</span> <span class="dt">True</span>    <span class="fu">==&gt;</span> <span class="dt">Nothing</span></a>
+<a class="sourceLine" id="cb350-3" data-line-number="3"><span class="dt">Just</span> not <span class="fu">&lt;*&gt;</span> <span class="dt">Nothing</span>      <span class="fu">==&gt;</span> <span class="dt">Nothing</span></a>
+<a class="sourceLine" id="cb350-4" data-line-number="4">[(<span class="fu">+</span><span class="dv">1</span>),(<span class="fu">*</span><span class="dv">2</span>)] <span class="fu">&lt;*&gt;</span> [<span class="dv">10</span>,<span class="dv">100</span>]  <span class="fu">==&gt;</span> [<span class="dv">11</span>,<span class="dv">101</span>,<span class="dv">20</span>,<span class="dv">200</span>]</a></code></pre></div>
+<p>The real magic happens when we combine <code>&lt;$&gt;</code> and <code>&lt;*&gt;</code>: we can then lift functions of arbitrarily many argments to an Applicative!</p>
+<div class="sourceCode" id="cb351"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb351-1" data-line-number="1"><span class="ot">say ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">String</span></a>
+<a class="sourceLine" id="cb351-2" data-line-number="2">say x i y <span class="fu">=</span> x <span class="fu">++</span> <span class="st">&quot; has &quot;</span> <span class="fu">++</span> show i <span class="fu">++</span> <span class="st">&quot; &quot;</span> <span class="fu">++</span> y</a></code></pre></div>
+<div class="sourceCode" id="cb352"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb352-1" data-line-number="1">say <span class="fu">&lt;$&gt;</span> <span class="dt">Just</span> <span class="st">&quot;haskell&quot;</span> <span class="fu">&lt;*&gt;</span> <span class="dt">Just</span> <span class="dv">99</span> <span class="fu">&lt;*&gt;</span> <span class="dt">Just</span> <span class="st">&quot;operators&quot;</span></a>
+<a class="sourceLine" id="cb352-2" data-line-number="2">  <span class="fu">==&gt;</span> <span class="dt">Just</span> <span class="st">&quot;haskell has 99 operators&quot;</span></a>
+<a class="sourceLine" id="cb352-3" data-line-number="3">say <span class="fu">&lt;$&gt;</span> <span class="dt">Nothing</span> <span class="fu">&lt;*&gt;</span> <span class="dt">Just</span> <span class="dv">99</span> <span class="fu">&lt;*&gt;</span> <span class="dt">Just</span> <span class="st">&quot;operators&quot;</span></a>
+<a class="sourceLine" id="cb352-4" data-line-number="4">  <span class="fu">==&gt;</span> <span class="dt">Nothing</span></a>
+<a class="sourceLine" id="cb352-5" data-line-number="5">say <span class="fu">&lt;$&gt;</span> [<span class="st">&quot;bob&quot;</span>,<span class="st">&quot;jake&quot;</span>] <span class="fu">&lt;*&gt;</span> [<span class="dv">2</span>,<span class="dv">3</span>] <span class="fu">&lt;*&gt;</span> [<span class="st">&quot;bananas&quot;</span>,<span class="st">&quot;cars&quot;</span>]</a>
+<a class="sourceLine" id="cb352-6" data-line-number="6">  <span class="fu">==&gt;</span> [<span class="st">&quot;bob has 2 bananas&quot;</span>,</a>
+<a class="sourceLine" id="cb352-7" data-line-number="7">       <span class="st">&quot;bob has 2 cars&quot;</span>,</a>
+<a class="sourceLine" id="cb352-8" data-line-number="8">       <span class="st">&quot;bob has 3 bananas&quot;</span>,</a>
+<a class="sourceLine" id="cb352-9" data-line-number="9">       <span class="st">&quot;bob has 3 cars&quot;</span>,</a>
+<a class="sourceLine" id="cb352-10" data-line-number="10">       <span class="st">&quot;jake has 2 bananas&quot;</span>,</a>
+<a class="sourceLine" id="cb352-11" data-line-number="11">       <span class="st">&quot;jake has 2 cars&quot;</span>,</a>
+<a class="sourceLine" id="cb352-12" data-line-number="12">       <span class="st">&quot;jake has 3 bananas&quot;</span>,</a>
+<a class="sourceLine" id="cb352-13" data-line-number="13">       <span class="st">&quot;jake has 3 cars&quot;</span>]</a></code></pre></div>
+<p>What’s going on here? Let’s step through the evaluation. The key is that each <code>&lt;*&gt;</code> partially applies one more argument to the function.</p>
+<div class="sourceCode" id="cb353"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb353-1" data-line-number="1">    say <span class="fu">&lt;$&gt;</span> <span class="dt">Just</span> <span class="st">&quot;haskell&quot;</span> <span class="fu">&lt;*&gt;</span> <span class="dt">Just</span> <span class="dv">99</span> <span class="fu">&lt;*&gt;</span> <span class="dt">Just</span> <span class="st">&quot;operators&quot;</span></a>
+<a class="sourceLine" id="cb353-2" data-line-number="2"><span class="fu">===</span> ((say <span class="fu">&lt;$&gt;</span> <span class="dt">Just</span> <span class="st">&quot;haskell&quot;</span>) <span class="fu">&lt;*&gt;</span> <span class="dt">Just</span> <span class="dv">99</span>) <span class="fu">&lt;*&gt;</span> <span class="dt">Just</span> <span class="st">&quot;operators&quot;</span></a>
+<a class="sourceLine" id="cb353-3" data-line-number="3"><span class="fu">===</span> (fmap say (<span class="dt">Just</span> <span class="st">&quot;haskell&quot;</span>) <span class="fu">&lt;*&gt;</span> <span class="dt">Just</span> <span class="dv">99</span>) <span class="fu">&lt;*&gt;</span> <span class="dt">Just</span> <span class="st">&quot;operators&quot;</span></a>
+<a class="sourceLine" id="cb353-4" data-line-number="4"><span class="fu">==&gt;</span> (<span class="dt">Just</span> (say <span class="st">&quot;haskell&quot;</span>) <span class="fu">&lt;*&gt;</span> <span class="dt">Just</span> <span class="dv">99</span>) <span class="fu">&lt;*&gt;</span> <span class="dt">Just</span> <span class="st">&quot;operators&quot;</span></a>
+<a class="sourceLine" id="cb353-5" data-line-number="5"><span class="fu">==&gt;</span> <span class="dt">Just</span> (say <span class="st">&quot;haskell&quot;</span> <span class="dv">99</span>) <span class="fu">&lt;*&gt;</span> <span class="dt">Just</span> <span class="st">&quot;operators&quot;</span></a>
+<a class="sourceLine" id="cb353-6" data-line-number="6"><span class="fu">==&gt;</span> <span class="dt">Just</span> (say <span class="st">&quot;haskell&quot;</span> <span class="dv">99</span> <span class="st">&quot;operators&quot;</span>)</a>
+<a class="sourceLine" id="cb353-7" data-line-number="7"><span class="fu">==&gt;</span> <span class="dt">Just</span> <span class="st">&quot;haskell has 99 operators&quot;</span></a></code></pre></div>
+<p>Perhaps looking at the types will make it clearer:</p>
+<div class="sourceCode" id="cb354"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb354-1" data-line-number="1">say <span class="fu">&lt;$&gt;</span> <span class="dt">Just</span> <span class="st">&quot;haskell&quot;</span><span class="ot">                                  ::</span> <span class="dt">Maybe</span> (<span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">String</span>)</a>
+<a class="sourceLine" id="cb354-2" data-line-number="2">say <span class="fu">&lt;$&gt;</span> <span class="dt">Just</span> <span class="st">&quot;haskell&quot;</span> <span class="fu">&lt;*&gt;</span> <span class="dt">Just</span> <span class="dv">99</span><span class="ot">                      ::</span> <span class="dt">Maybe</span> (       <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">String</span>)</a>
+<a class="sourceLine" id="cb354-3" data-line-number="3">say <span class="fu">&lt;$&gt;</span> <span class="dt">Just</span> <span class="st">&quot;haskell&quot;</span> <span class="fu">&lt;*&gt;</span> <span class="dt">Just</span> <span class="dv">99</span> <span class="fu">&lt;*&gt;</span> <span class="dt">Just</span> <span class="st">&quot;operators&quot;</span><span class="ot"> ::</span> <span class="dt">Maybe</span> (                 <span class="dt">String</span>)</a></code></pre></div>
+<p>The next two operators are a bit simpler:</p>
+<div class="sourceCode" id="cb355"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb355-1" data-line-number="1"><span class="ot">(*&gt;) ::</span> <span class="dt">Applicative</span> f <span class="ot">=&gt;</span> f a <span class="ot">-&gt;</span> f b <span class="ot">-&gt;</span> f b</a>
+<a class="sourceLine" id="cb355-2" data-line-number="2">x <span class="fu">*&gt;</span> y <span class="fu">=</span> liftA2 (\a b <span class="ot">-&gt;</span> b) x y</a>
+<a class="sourceLine" id="cb355-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb355-4" data-line-number="4"><span class="ot">(&lt;*) ::</span> <span class="dt">Applicative</span> f <span class="ot">=&gt;</span> f a <span class="ot">-&gt;</span> f b <span class="ot">-&gt;</span> f a</a>
+<a class="sourceLine" id="cb355-5" data-line-number="5">x <span class="fu">&lt;*</span> y <span class="fu">=</span> liftA2 (\a b <span class="ot">-&gt;</span> a) x y</a></code></pre></div>
+<p>You can compare the types to a more familiar operator:</p>
+<div class="sourceCode" id="cb356"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb356-1" data-line-number="1"><span class="ot">(&gt;&gt;) ::</span> <span class="dt">Monad</span> m <span class="ot">=&gt;</span> m a <span class="ot">-&gt;</span> m b <span class="ot">-&gt;</span> m b</a></code></pre></div>
+<p>What the operators <code>&lt;*</code> and <code>*&gt;</code> mean is: run both of these operations, but only keep one result. The arrow points to the result that’s kept:</p>
+<div class="sourceCode" id="cb357"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb357-1" data-line-number="1"><span class="dt">Just</span> <span class="dv">1</span> <span class="fu">*&gt;</span> <span class="dt">Just</span> <span class="dv">2</span>  <span class="fu">==&gt;</span> <span class="dt">Just</span> <span class="dv">2</span></a>
+<a class="sourceLine" id="cb357-2" data-line-number="2"><span class="dt">Just</span> <span class="dv">1</span> <span class="fu">&lt;*</span> <span class="dt">Just</span> <span class="dv">2</span>  <span class="fu">==&gt;</span> <span class="dt">Just</span> <span class="dv">1</span></a>
+<a class="sourceLine" id="cb357-3" data-line-number="3"><span class="dt">Just</span> <span class="dv">1</span> <span class="fu">&lt;*</span> <span class="dt">Nothing</span> <span class="fu">==&gt;</span> <span class="dt">Nothing</span></a>
+<a class="sourceLine" id="cb357-4" data-line-number="4"><span class="dt">Nothing</span> <span class="fu">&lt;*</span> <span class="dt">Just</span> <span class="dv">2</span> <span class="fu">==&gt;</span> <span class="dt">Nothing</span></a></code></pre></div>
+<p>These operators might seem trivial, but they’re useful when combining checks. For example:</p>
+<div class="sourceCode" id="cb358"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb358-1" data-line-number="1"><span class="ot">decrease ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Maybe</span> <span class="dt">Int</span></a>
+<a class="sourceLine" id="cb358-2" data-line-number="2">decrease i <span class="fu">=</span> <span class="kw">if</span> i<span class="fu">&gt;</span><span class="dv">0</span> <span class="kw">then</span> <span class="dt">Just</span> (i<span class="fu">-</span><span class="dv">1</span>) <span class="kw">else</span> <span class="dt">Nothing</span></a>
+<a class="sourceLine" id="cb358-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb358-4" data-line-number="4"><span class="ot">small ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Maybe</span> <span class="dt">Int</span></a>
+<a class="sourceLine" id="cb358-5" data-line-number="5">small i <span class="fu">=</span> <span class="kw">if</span> i<span class="fu">&lt;</span><span class="dv">10</span> <span class="kw">then</span> <span class="dt">Just</span> i <span class="kw">else</span> <span class="dt">Nothing</span></a>
+<a class="sourceLine" id="cb358-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb358-7" data-line-number="7"><span class="ot">decreaseSmall ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Maybe</span> <span class="dt">Int</span></a>
+<a class="sourceLine" id="cb358-8" data-line-number="8"><span class="co">-- do what decrease does, but fail if small fails</span></a>
+<a class="sourceLine" id="cb358-9" data-line-number="9">decreaseSmall i <span class="fu">=</span> decrease i <span class="fu">&lt;*</span> small i</a></code></pre></div>
+<div class="sourceCode" id="cb359"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb359-1" data-line-number="1">decreaseSmall <span class="dv">4</span>   <span class="fu">==&gt;</span> <span class="dt">Just</span> <span class="dv">3</span></a>
+<a class="sourceLine" id="cb359-2" data-line-number="2">decreaseSmall <span class="dv">0</span>   <span class="fu">==&gt;</span> <span class="dt">Nothing</span></a>
+<a class="sourceLine" id="cb359-3" data-line-number="3">decreaseSmall <span class="dv">11</span>  <span class="fu">==&gt;</span> <span class="dt">Nothing</span></a></code></pre></div>
+<p>Now that we’ve seen all these operators, we can understand the full definition of <code>Applicative</code>. All the operators have definitions in terms of <code>liftA2</code>, so it’s enought to define <code>liftA2</code> and <code>pure</code> when implementing an <code>Applicative</code> instance.</p>
+<div class="sourceCode" id="cb360"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb360-1" data-line-number="1"><span class="kw">class</span> <span class="dt">Functor</span> f <span class="ot">=&gt;</span> <span class="dt">Applicative</span> f <span class="kw">where</span></a>
+<a class="sourceLine" id="cb360-2" data-line-number="2"><span class="ot">  pure ::</span> a <span class="ot">-&gt;</span> f a</a>
+<a class="sourceLine" id="cb360-3" data-line-number="3"><span class="ot">  liftA2 ::</span> (a <span class="ot">-&gt;</span> b <span class="ot">-&gt;</span> c) <span class="ot">-&gt;</span> f a <span class="ot">-&gt;</span> f b <span class="ot">-&gt;</span> f c</a>
+<a class="sourceLine" id="cb360-4" data-line-number="4"><span class="ot">  (&lt;*&gt;) ::</span> f (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> f a <span class="ot">-&gt;</span> f b</a>
+<a class="sourceLine" id="cb360-5" data-line-number="5"><span class="ot">  (*&gt;) ::</span> f a <span class="ot">-&gt;</span> f b <span class="ot">-&gt;</span> f b</a>
+<a class="sourceLine" id="cb360-6" data-line-number="6"><span class="ot">  (&lt;*) ::</span> f a <span class="ot">-&gt;</span> f b <span class="ot">-&gt;</span> f a</a></code></pre></div>
+<h2 id="the-validation-applicative"><span class="header-section-number">15.4</span> The Validation Applicative</h2>
+<p>Let’s look at an Applicative that’s a bit more interesting than Maybe or lists. Often in programming we need to <em>validate</em> some inputs from the user. In these cases it’s useful to gather together all the errors that the input might have. The file <a href="https://github.com/moocfi/haskell-mooc/blob/master/exercises/Examples/Validation.hs"><code>exercises/Examples/Validation.hs</code></a> implements the <code>Validation</code> datatype:</p>
+<div class="sourceCode" id="cb361"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb361-1" data-line-number="1"><span class="kw">data</span> <span class="dt">Validation</span> a <span class="fu">=</span> <span class="dt">Ok</span> a <span class="fu">|</span> <span class="dt">Errors</span> [<span class="dt">String</span>]</a>
+<a class="sourceLine" id="cb361-2" data-line-number="2">  <span class="kw">deriving</span> (<span class="dt">Show</span>,<span class="dt">Eq</span>)</a></code></pre></div>
+<p>The <code>Applicative</code> instance for <code>Validation</code> works like this:</p>
+<div class="sourceCode" id="cb362"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb362-1" data-line-number="1">liftA2 (<span class="fu">+</span>) (<span class="dt">Ok</span> <span class="dv">1</span>) (<span class="dt">Ok</span> <span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb362-2" data-line-number="2">  <span class="fu">==&gt;</span> <span class="dt">Ok</span> <span class="dv">3</span></a>
+<a class="sourceLine" id="cb362-3" data-line-number="3">liftA2 (<span class="fu">+</span>) (<span class="dt">Errors</span> [<span class="st">&quot;oh no&quot;</span>]) (<span class="dt">Errors</span> [<span class="st">&quot;boom&quot;</span>])</a>
+<a class="sourceLine" id="cb362-4" data-line-number="4">  <span class="fu">==&gt;</span> <span class="dt">Errors</span> [<span class="st">&quot;oh no&quot;</span>,<span class="st">&quot;boom&quot;</span>]</a></code></pre></div>
+<p>Note how in contrast to the <code>Maybe</code> Applicative, we have many different kinds of failures.</p>
+<p>Here’s a worked example that introduces some helpers and then uses them to congratulate somebody on their birthday:</p>
+<div class="sourceCode" id="cb363"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb363-1" data-line-number="1"><span class="ot">invalid ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Validation</span> a</a>
+<a class="sourceLine" id="cb363-2" data-line-number="2">invalid err <span class="fu">=</span> <span class="dt">Errors</span> [err]</a>
+<a class="sourceLine" id="cb363-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb363-4" data-line-number="4"><span class="ot">check ::</span> <span class="dt">Bool</span> <span class="ot">-&gt;</span> <span class="dt">String</span> <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> <span class="dt">Validation</span> a</a>
+<a class="sourceLine" id="cb363-5" data-line-number="5">check b err x</a>
+<a class="sourceLine" id="cb363-6" data-line-number="6">  <span class="fu">|</span> b <span class="fu">=</span> pure x</a>
+<a class="sourceLine" id="cb363-7" data-line-number="7">  <span class="fu">|</span> otherwise <span class="fu">=</span> invalid err</a>
+<a class="sourceLine" id="cb363-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb363-9" data-line-number="9"><span class="ot">birthday ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Validation</span> <span class="dt">String</span></a>
+<a class="sourceLine" id="cb363-10" data-line-number="10">birthday name age <span class="fu">=</span> liftA2 congratulate checkedName checkedAge</a>
+<a class="sourceLine" id="cb363-11" data-line-number="11">  <span class="kw">where</span> checkedName <span class="fu">=</span> check (length name <span class="fu">&lt;</span> <span class="dv">10</span>) <span class="st">&quot;Name too long&quot;</span> name</a>
+<a class="sourceLine" id="cb363-12" data-line-number="12">        checkedAge <span class="fu">=</span> check (age <span class="fu">&lt;</span> <span class="dv">99</span>) <span class="st">&quot;Too old&quot;</span> age</a>
+<a class="sourceLine" id="cb363-13" data-line-number="13">        congratulate n a <span class="fu">=</span> <span class="st">&quot;Happy &quot;</span><span class="fu">++</span>show a<span class="fu">++</span><span class="st">&quot;th birthday &quot;</span><span class="fu">++</span>n<span class="fu">++</span><span class="st">&quot;!&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb364"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb364-1" data-line-number="1">birthday <span class="st">&quot;Guy&quot;</span> <span class="dv">31</span></a>
+<a class="sourceLine" id="cb364-2" data-line-number="2">  <span class="fu">==&gt;</span> <span class="dt">Ok</span> <span class="st">&quot;Happy 31th birthday Guy!&quot;</span></a>
+<a class="sourceLine" id="cb364-3" data-line-number="3">birthday <span class="st">&quot;Guybrush Threepwood&quot;</span> <span class="dv">31</span></a>
+<a class="sourceLine" id="cb364-4" data-line-number="4">  <span class="fu">==&gt;</span> <span class="dt">Errors</span> [<span class="st">&quot;Name too long&quot;</span>]</a>
+<a class="sourceLine" id="cb364-5" data-line-number="5">birthday <span class="st">&quot;Yog-sothoth&quot;</span> <span class="dv">10000</span></a>
+<a class="sourceLine" id="cb364-6" data-line-number="6">  <span class="fu">==&gt;</span> <span class="dt">Errors</span> [<span class="st">&quot;Name too long&quot;</span>,<span class="st">&quot;Too old&quot;</span>]</a></code></pre></div>
+<p>Oh right, here are the <code>Functor</code> and <code>Applicative</code> instances for <code>Validation</code>:</p>
+<div class="sourceCode" id="cb365"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb365-1" data-line-number="1"><span class="kw">instance</span> <span class="dt">Functor</span> <span class="dt">Validation</span> <span class="kw">where</span></a>
+<a class="sourceLine" id="cb365-2" data-line-number="2">  fmap f (<span class="dt">Ok</span> x) <span class="fu">=</span> <span class="dt">Ok</span> (f x)</a>
+<a class="sourceLine" id="cb365-3" data-line-number="3">  fmap _ (<span class="dt">Errors</span> e) <span class="fu">=</span> <span class="dt">Errors</span> e</a>
+<a class="sourceLine" id="cb365-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb365-5" data-line-number="5"><span class="kw">instance</span> <span class="dt">Applicative</span> <span class="dt">Validation</span> <span class="kw">where</span></a>
+<a class="sourceLine" id="cb365-6" data-line-number="6">  pure x <span class="fu">=</span> <span class="dt">Ok</span> x</a>
+<a class="sourceLine" id="cb365-7" data-line-number="7">  liftA2 f (<span class="dt">Ok</span> x)      (<span class="dt">Ok</span> y)      <span class="fu">=</span> <span class="dt">Ok</span> (f x y)</a>
+<a class="sourceLine" id="cb365-8" data-line-number="8">  liftA2 f (<span class="dt">Errors</span> e1) (<span class="dt">Ok</span> y)      <span class="fu">=</span> <span class="dt">Errors</span> e1</a>
+<a class="sourceLine" id="cb365-9" data-line-number="9">  liftA2 f (<span class="dt">Ok</span> x)      (<span class="dt">Errors</span> e2) <span class="fu">=</span> <span class="dt">Errors</span> e2</a>
+<a class="sourceLine" id="cb365-10" data-line-number="10">  liftA2 f (<span class="dt">Errors</span> e1) (<span class="dt">Errors</span> e2) <span class="fu">=</span> <span class="dt">Errors</span> (e1<span class="fu">++</span>e2)</a></code></pre></div>
+<p>The definition of <code>liftA2</code> for <code>Validation</code> shows that the errors are collected together left-to-right. This can be seen in the example above where the expression <code>liftA2 congratulate checkedName checkedAge</code> outputs the error (<code>&quot;Name too long&quot;</code>) from <code>checkedName</code> first, and the error (<code>&quot;Too old&quot;</code>) from <code>checkedAge</code> last.</p>
+<p>PS. The same sort of idea has been implemented in the <a href="https://hackage.haskell.org/package/validation">validation</a> and <a href="https://hackage.haskell.org/package/either">either</a> libraries.</p>
+<!-- TODO other applicatives: IO, ? -->
+<h2 id="validating-lists-traverse"><span class="header-section-number">15.5</span> Validating Lists: <code>traverse</code></h2>
+<p>So far we’ve dealt with fixed-size things and Applicatives: we’ve applied a function of two or three arguments to some things. What if we have an arbitrary amount of inputs? What if we need to validate a list?</p>
+<p>Let’s look at some ways to implement a function like this:</p>
+<div class="sourceCode" id="cb366"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb366-1" data-line-number="1">allPositive [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>]</a>
+<a class="sourceLine" id="cb366-2" data-line-number="2">  <span class="fu">==&gt;</span> <span class="dt">Ok</span> [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>]</a>
+<a class="sourceLine" id="cb366-3" data-line-number="3">allPositive [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="fu">-</span><span class="dv">4</span>]</a>
+<a class="sourceLine" id="cb366-4" data-line-number="4">  <span class="fu">==&gt;</span> <span class="dt">Errors</span> [<span class="st">&quot;Not positive: -4&quot;</span>]</a>
+<a class="sourceLine" id="cb366-5" data-line-number="5">allPositive [<span class="dv">1</span>,<span class="fu">-</span><span class="dv">2</span>,<span class="dv">3</span>,<span class="fu">-</span><span class="dv">4</span>]</a>
+<a class="sourceLine" id="cb366-6" data-line-number="6">  <span class="fu">==&gt;</span> <span class="dt">Errors</span> [<span class="st">&quot;Not positive: -2&quot;</span>,<span class="st">&quot;Not positive: -4&quot;</span>]</a></code></pre></div>
+<p>As always, when working with lists, pattern matching and recursion are usually the way to go. Here’s a recursive solution:</p>
+<div class="sourceCode" id="cb367"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb367-1" data-line-number="1"><span class="ot">allPositive ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Validation</span> [<span class="dt">Int</span>]</a>
+<a class="sourceLine" id="cb367-2" data-line-number="2">allPositive [] <span class="fu">=</span> <span class="dt">Ok</span> []</a>
+<a class="sourceLine" id="cb367-3" data-line-number="3">allPositive (x<span class="fu">:</span>xs) <span class="fu">=</span> liftA2 (<span class="fu">:</span>) checkThis checkRest</a>
+<a class="sourceLine" id="cb367-4" data-line-number="4">  <span class="kw">where</span> checkThis <span class="fu">=</span> check (x<span class="fu">&gt;=</span><span class="dv">0</span>) (<span class="st">&quot;Not positive: &quot;</span><span class="fu">++</span>show x) x</a>
+<a class="sourceLine" id="cb367-5" data-line-number="5">        checkRest <span class="fu">=</span> allPositive xs</a></code></pre></div>
+<p>It’s a bit of a chore to always spell out a recursion like this. If we were working in a <code>Monad</code> we could just use a helper like <code>mapM</code>:</p>
+<div class="sourceCode" id="cb368"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb368-1" data-line-number="1">mapM (\x <span class="ot">-&gt;</span> <span class="kw">if</span> x<span class="fu">&gt;=</span><span class="dv">0</span> <span class="kw">then</span> <span class="dt">Just</span> x <span class="kw">else</span> <span class="dt">Nothing</span>) [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>]</a>
+<a class="sourceLine" id="cb368-2" data-line-number="2">  <span class="fu">==&gt;</span> <span class="dt">Just</span> [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>]</a>
+<a class="sourceLine" id="cb368-3" data-line-number="3">mapM (\x <span class="ot">-&gt;</span> <span class="kw">if</span> x<span class="fu">&gt;=</span><span class="dv">0</span> <span class="kw">then</span> <span class="dt">Just</span> x <span class="kw">else</span> <span class="dt">Nothing</span>) [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="fu">-</span><span class="dv">4</span>]</a>
+<a class="sourceLine" id="cb368-4" data-line-number="4">  <span class="fu">==&gt;</span> <span class="dt">Nothing</span></a></code></pre></div>
+<p>The equivalent of <code>mapM</code> for <code>Applicative</code> is called <code>traverse</code>. It’s a member of the type class <code>Traversable</code>:</p>
+<div class="sourceCode" id="cb369"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb369-1" data-line-number="1">traverse<span class="ot"> ::</span> (<span class="dt">Traversable</span> t, <span class="dt">Applicative</span> f) <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> f b) <span class="ot">-&gt;</span> t a <span class="ot">-&gt;</span> f (t b)</a></code></pre></div>
+<p>That’s one heck of a type signature, so let’s simplify it a bit. Lists are <code>Traversable</code>, so we can specialize this type into:</p>
+<div class="sourceCode" id="cb370"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb370-1" data-line-number="1">traverse<span class="ot"> ::</span> <span class="dt">Applicative</span> f <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> f b) <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> f [b]</a></code></pre></div>
+<p>That looks like what we need! For Applicatives that are also Monads, <code>traverse</code> is just another name for <code>mapM</code>:</p>
+<div class="sourceCode" id="cb371"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb371-1" data-line-number="1">traverse (\x <span class="ot">-&gt;</span> <span class="kw">if</span> x<span class="fu">&gt;=</span><span class="dv">0</span> <span class="kw">then</span> <span class="dt">Just</span> x <span class="kw">else</span> <span class="dt">Nothing</span>) [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>]</a>
+<a class="sourceLine" id="cb371-2" data-line-number="2">  <span class="fu">==&gt;</span> <span class="dt">Just</span> [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>]</a>
+<a class="sourceLine" id="cb371-3" data-line-number="3">traverse (\x <span class="ot">-&gt;</span> <span class="kw">if</span> x<span class="fu">&gt;=</span><span class="dv">0</span> <span class="kw">then</span> <span class="dt">Just</span> x <span class="kw">else</span> <span class="dt">Nothing</span>) [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="fu">-</span><span class="dv">4</span>]</a>
+<a class="sourceLine" id="cb371-4" data-line-number="4">  <span class="fu">==&gt;</span> <span class="dt">Nothing</span></a></code></pre></div>
+<p>But for our <code>Validation</code>, which isn’t a <code>Monad</code>, <code>traverse</code> is exactly what we want:</p>
+<div class="sourceCode" id="cb372"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb372-1" data-line-number="1"><span class="ot">allPositive ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Validation</span> [<span class="dt">Int</span>]</a>
+<a class="sourceLine" id="cb372-2" data-line-number="2">allPositive xs <span class="fu">=</span> traverse checkNumber xs</a>
+<a class="sourceLine" id="cb372-3" data-line-number="3">  <span class="kw">where</span> checkNumber x <span class="fu">=</span> check (x<span class="fu">&gt;=</span><span class="dv">0</span>) (<span class="st">&quot;Not positive: &quot;</span><span class="fu">++</span>show x) x</a></code></pre></div>
+<div class="sourceCode" id="cb373"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb373-1" data-line-number="1">allPositive [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>]</a>
+<a class="sourceLine" id="cb373-2" data-line-number="2">  <span class="fu">==&gt;</span> <span class="dt">Ok</span> [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>]</a>
+<a class="sourceLine" id="cb373-3" data-line-number="3">allPositive [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="fu">-</span><span class="dv">4</span>]</a>
+<a class="sourceLine" id="cb373-4" data-line-number="4">  <span class="fu">==&gt;</span> <span class="dt">Errors</span> [<span class="st">&quot;Not positive: -4&quot;</span>]</a>
+<a class="sourceLine" id="cb373-5" data-line-number="5">allPositive [<span class="dv">1</span>,<span class="fu">-</span><span class="dv">2</span>,<span class="dv">3</span>,<span class="fu">-</span><span class="dv">4</span>]</a>
+<a class="sourceLine" id="cb373-6" data-line-number="6">  <span class="fu">==&gt;</span> <span class="dt">Errors</span> [<span class="st">&quot;Not positive: -2&quot;</span>,<span class="st">&quot;Not positive: -4&quot;</span>]</a></code></pre></div>
+<p>Note how <code>traverse</code> for <code>Validation</code> collects all the errors together, in the order they occur in the original list.</p>
+<p>PS. In fact, <code>Validation</code> is one of the few examples of an <code>Applicative</code> that can’t be a <code>Monad</code>. Can you figure out why?</p>
+<!-- TODO `traverse_`? -->
+<h2 id="sidenote-traversable"><span class="header-section-number">15.6</span> Sidenote: <code>Traversable</code></h2>
+<p>So what things are <code>Traversable</code>? Many familiar structures. Here are some examples:</p>
+<div class="sourceCode" id="cb374"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb374-1" data-line-number="1"><span class="ot">decrease ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Maybe</span> <span class="dt">Int</span></a>
+<a class="sourceLine" id="cb374-2" data-line-number="2">decrease i <span class="fu">=</span> <span class="kw">if</span> i<span class="fu">&gt;</span><span class="dv">0</span> <span class="kw">then</span> <span class="dt">Just</span> (i<span class="fu">-</span><span class="dv">1</span>) <span class="kw">else</span> <span class="dt">Nothing</span></a></code></pre></div>
+<div class="sourceCode" id="cb375"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb375-1" data-line-number="1"><span class="co">-- Lists are Traversable</span></a>
+<a class="sourceLine" id="cb375-2" data-line-number="2">traverse decrease [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>] <span class="fu">==&gt;</span> <span class="dt">Just</span> [<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>]</a>
+<a class="sourceLine" id="cb375-3" data-line-number="3">traverse decrease [<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">3</span>] <span class="fu">==&gt;</span> <span class="dt">Nothing</span></a>
+<a class="sourceLine" id="cb375-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb375-5" data-line-number="5"><span class="co">-- Arrays are Traversable</span></a>
+<a class="sourceLine" id="cb375-6" data-line-number="6">traverse decrease (array (<span class="dv">1</span>,<span class="dv">3</span>) [(<span class="dv">1</span>,<span class="dv">10</span>),(<span class="dv">2</span>,<span class="dv">11</span>),(<span class="dv">3</span>,<span class="dv">12</span>)])</a>
+<a class="sourceLine" id="cb375-7" data-line-number="7">         <span class="fu">==&gt;</span> <span class="dt">Just</span> (array (<span class="dv">1</span>,<span class="dv">3</span>) [(<span class="dv">1</span>,<span class="dv">9</span>),(<span class="dv">2</span>,<span class="dv">10</span>),(<span class="dv">3</span>,<span class="dv">11</span>)])</a>
+<a class="sourceLine" id="cb375-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb375-9" data-line-number="9"><span class="co">-- Maps are Traversable</span></a>
+<a class="sourceLine" id="cb375-10" data-line-number="10">traverse decrease (M.fromList [(<span class="st">&quot;a&quot;</span>,<span class="dv">1</span>),(<span class="st">&quot;b&quot;</span>,<span class="dv">2</span>)])</a>
+<a class="sourceLine" id="cb375-11" data-line-number="11">         <span class="fu">==&gt;</span> <span class="dt">Just</span> (M.fromList [(<span class="st">&quot;a&quot;</span>,<span class="dv">0</span>),(<span class="st">&quot;b&quot;</span>,<span class="dv">1</span>)])</a>
+<a class="sourceLine" id="cb375-12" data-line-number="12">traverse decrease (M.fromList [(<span class="st">&quot;a&quot;</span>,<span class="dv">1</span>),(<span class="st">&quot;b&quot;</span>,<span class="dv">0</span>)])</a>
+<a class="sourceLine" id="cb375-13" data-line-number="13">         <span class="fu">==&gt;</span> <span class="dt">Nothing</span></a>
+<a class="sourceLine" id="cb375-14" data-line-number="14"></a>
+<a class="sourceLine" id="cb375-15" data-line-number="15"><span class="co">-- Either is Traversable</span></a>
+<a class="sourceLine" id="cb375-16" data-line-number="16">traverse decrease (<span class="dt">Left</span> <span class="st">&quot;abc&quot;</span>) <span class="fu">==&gt;</span> <span class="dt">Just</span> (<span class="dt">Left</span> <span class="st">&quot;abc&quot;</span>)</a>
+<a class="sourceLine" id="cb375-17" data-line-number="17">traverse decrease (<span class="dt">Right</span> <span class="dv">3</span>)    <span class="fu">==&gt;</span> <span class="dt">Just</span> (<span class="dt">Right</span> <span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb375-18" data-line-number="18">traverse decrease (<span class="dt">Right</span> <span class="dv">0</span>)    <span class="fu">==&gt;</span> <span class="dt">Nothing</span></a></code></pre></div>
+<p>So <code>Traversable</code> is a type class for all sorts of containers, kind of like <code>Foldable</code>. Indeed, if you look at the definition, <code>Traversable</code> is a subclass of <code>Foldable</code>. It also turns out that <code>traverse</code> and <code>mapM</code> are methods of the class!</p>
+<div class="sourceCode" id="cb376"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb376-1" data-line-number="1"><span class="kw">class</span> (<span class="dt">Functor</span> t, <span class="dt">Foldable</span> t) <span class="ot">=&gt;</span> <span class="dt">Traversable</span> t <span class="kw">where</span></a>
+<a class="sourceLine" id="cb376-2" data-line-number="2"><span class="ot">  traverse ::</span> <span class="dt">Applicative</span> f <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> f b) <span class="ot">-&gt;</span> t a <span class="ot">-&gt;</span> f (t b)</a>
+<a class="sourceLine" id="cb376-3" data-line-number="3"><span class="ot">  mapM ::</span> <span class="dt">Monad</span> m <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> m b) <span class="ot">-&gt;</span> t a <span class="ot">-&gt;</span> m (t b)</a></code></pre></div>
+<p>It can be hard to keep the types straight here. Let’s go back to the type of <code>traverse</code>:</p>
+<div class="sourceCode" id="cb377"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb377-1" data-line-number="1">traverse<span class="ot"> ::</span> (<span class="dt">Traversable</span> t, <span class="dt">Applicative</span> f) <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> f b) <span class="ot">-&gt;</span> t a <span class="ot">-&gt;</span> f (t b)</a></code></pre></div>
+<p>Here we have two functors: <code>t</code> and <code>f</code>. The <code>t</code> functor is also a <code>Foldable</code> and a <code>Traversable</code> and the <code>f</code> functor is also an <code>Applicative</code>. The <code>traverse</code> function lets us run <code>f</code>-operations inside a <code>t</code>-container.</p>
+<p>Don’t worry if that feels abstract. In practice, you pretty much always use <code>traverse</code> on lists.</p>
+<h2 id="dealing-with-failure-alternative"><span class="header-section-number">15.7</span> Dealing with Failure: <code>Alternative</code></h2>
+<p>If you play around with applicatives a bit you’ll start to notice some limits to their power. For example, when writing parsers like we did in the <code>parseMoney</code> example, it would be nice to be able to try some a couple of different parsers and take any non-failure result. This is easy enough to write for a concrete Applicative like <code>Maybe</code>, as can be seen below.</p>
+<div class="sourceCode" id="cb378"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb378-1" data-line-number="1"><span class="kw">data</span> <span class="dt">Answer</span> <span class="fu">=</span> <span class="dt">Yes</span> <span class="fu">|</span> <span class="dt">No</span></a>
+<a class="sourceLine" id="cb378-2" data-line-number="2">  <span class="kw">deriving</span> (<span class="dt">Show</span>, <span class="dt">Eq</span>)</a>
+<a class="sourceLine" id="cb378-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb378-4" data-line-number="4"><span class="ot">parseYes ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Maybe</span> <span class="dt">Answer</span></a>
+<a class="sourceLine" id="cb378-5" data-line-number="5">parseYes <span class="st">&quot;y&quot;</span> <span class="fu">=</span> <span class="dt">Just</span> <span class="dt">Yes</span></a>
+<a class="sourceLine" id="cb378-6" data-line-number="6">parseYes <span class="st">&quot;yes&quot;</span> <span class="fu">=</span> <span class="dt">Just</span> <span class="dt">Yes</span></a>
+<a class="sourceLine" id="cb378-7" data-line-number="7">parseYes <span class="st">&quot;maybe&quot;</span> <span class="fu">=</span> <span class="dt">Just</span> <span class="dt">Yes</span></a>
+<a class="sourceLine" id="cb378-8" data-line-number="8">parseYes _ <span class="fu">=</span> <span class="dt">Nothing</span></a>
+<a class="sourceLine" id="cb378-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb378-10" data-line-number="10"><span class="ot">parseNo ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Maybe</span> <span class="dt">Answer</span></a>
+<a class="sourceLine" id="cb378-11" data-line-number="11">parseNo <span class="st">&quot;n&quot;</span> <span class="fu">=</span> <span class="dt">Just</span> <span class="dt">No</span></a>
+<a class="sourceLine" id="cb378-12" data-line-number="12">parseNo <span class="st">&quot;no&quot;</span> <span class="fu">=</span> <span class="dt">Just</span> <span class="dt">No</span></a>
+<a class="sourceLine" id="cb378-13" data-line-number="13">parseNo <span class="st">&quot;maybe&quot;</span> <span class="fu">=</span> <span class="dt">Just</span> <span class="dt">No</span></a>
+<a class="sourceLine" id="cb378-14" data-line-number="14">parseNo _ <span class="fu">=</span> <span class="dt">Nothing</span></a>
+<a class="sourceLine" id="cb378-15" data-line-number="15"></a>
+<a class="sourceLine" id="cb378-16" data-line-number="16"><span class="ot">eitherOf ::</span> <span class="dt">Maybe</span> x <span class="ot">-&gt;</span> <span class="dt">Maybe</span> x <span class="ot">-&gt;</span> <span class="dt">Maybe</span> x</a>
+<a class="sourceLine" id="cb378-17" data-line-number="17">eitherOf (<span class="dt">Just</span> x) _  <span class="fu">=</span> <span class="dt">Just</span> x</a>
+<a class="sourceLine" id="cb378-18" data-line-number="18">eitherOf <span class="dt">Nothing</span>  mx <span class="fu">=</span> mx</a>
+<a class="sourceLine" id="cb378-19" data-line-number="19"></a>
+<a class="sourceLine" id="cb378-20" data-line-number="20"><span class="ot">parseAnswer ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Maybe</span> <span class="dt">Answer</span></a>
+<a class="sourceLine" id="cb378-21" data-line-number="21"><span class="co">-- prefer positive answers!</span></a>
+<a class="sourceLine" id="cb378-22" data-line-number="22">parseAnswer s <span class="fu">=</span> eitherOf (parseYes s) (parseNo s)</a></code></pre></div>
+<div class="sourceCode" id="cb379"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb379-1" data-line-number="1">parseAnswer <span class="st">&quot;yes&quot;</span>    <span class="fu">==&gt;</span> <span class="dt">Just</span> <span class="dt">Yes</span></a>
+<a class="sourceLine" id="cb379-2" data-line-number="2">parseAnswer <span class="st">&quot;y&quot;</span>      <span class="fu">==&gt;</span> <span class="dt">Just</span> <span class="dt">Yes</span></a>
+<a class="sourceLine" id="cb379-3" data-line-number="3">parseAnswer <span class="st">&quot;n&quot;</span>      <span class="fu">==&gt;</span> <span class="dt">Just</span> <span class="dt">No</span></a>
+<a class="sourceLine" id="cb379-4" data-line-number="4">parseAnswer <span class="st">&quot;maybe&quot;</span>  <span class="fu">==&gt;</span> <span class="dt">Just</span> <span class="dt">Yes</span></a>
+<a class="sourceLine" id="cb379-5" data-line-number="5">parseAnswer <span class="st">&quot;x&quot;</span>      <span class="fu">==&gt;</span> <span class="dt">Nothing</span></a></code></pre></div>
+<p>How could we generalize <code>eitherOf</code>? We can’t give it the type <code>Applicative f =&gt; f x -&gt; f x -&gt; f x</code> because then the implementation would need to be effectively something like <code>eitherOf a b = liftA2 something a b</code>, but then <code>eitherOf Nothing (Just x)</code> would be <code>Nothing</code> (since that’s how the instance Applicative instance works)!</p>
+<p>It turns out we need a new type class: <code>Alternative</code>. An Alternative adds two operations to Applicative: <code>empty</code> means no results, and <code>&lt;|&gt;</code> means combining results.</p>
+<div class="sourceCode" id="cb380"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb380-1" data-line-number="1"><span class="kw">class</span> <span class="dt">Applicative</span> f <span class="ot">=&gt;</span> <span class="dt">Alternative</span> f <span class="kw">where</span></a>
+<a class="sourceLine" id="cb380-2" data-line-number="2"><span class="ot">  empty ::</span> f a</a>
+<a class="sourceLine" id="cb380-3" data-line-number="3"><span class="ot">  (&lt;|&gt;) ::</span> f a <span class="ot">-&gt;</span> f a <span class="ot">-&gt;</span> f a</a>
+<a class="sourceLine" id="cb380-4" data-line-number="4">  <span class="co">-- some other operations omitted</span></a></code></pre></div>
+<p>Now we can rewrite our parsing code using general operations:</p>
+<div class="sourceCode" id="cb381"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb381-1" data-line-number="1"><span class="kw">data</span> <span class="dt">Answer</span> <span class="fu">=</span> <span class="dt">Yes</span> <span class="fu">|</span> <span class="dt">No</span></a>
+<a class="sourceLine" id="cb381-2" data-line-number="2">  <span class="kw">deriving</span> (<span class="dt">Show</span>, <span class="dt">Eq</span>)</a>
+<a class="sourceLine" id="cb381-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb381-4" data-line-number="4"><span class="ot">parseYes ::</span> <span class="dt">Alternative</span> f <span class="ot">=&gt;</span> <span class="dt">String</span> <span class="ot">-&gt;</span> f <span class="dt">Answer</span></a>
+<a class="sourceLine" id="cb381-5" data-line-number="5">parseYes <span class="st">&quot;y&quot;</span> <span class="fu">=</span> pure <span class="dt">Yes</span></a>
+<a class="sourceLine" id="cb381-6" data-line-number="6">parseYes <span class="st">&quot;yes&quot;</span> <span class="fu">=</span> pure <span class="dt">Yes</span></a>
+<a class="sourceLine" id="cb381-7" data-line-number="7">parseYes <span class="st">&quot;maybe&quot;</span> <span class="fu">=</span> pure <span class="dt">Yes</span></a>
+<a class="sourceLine" id="cb381-8" data-line-number="8">parseYes _ <span class="fu">=</span> empty</a>
+<a class="sourceLine" id="cb381-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb381-10" data-line-number="10"><span class="ot">parseNo ::</span> <span class="dt">Alternative</span> f <span class="ot">=&gt;</span> <span class="dt">String</span> <span class="ot">-&gt;</span> f <span class="dt">Answer</span></a>
+<a class="sourceLine" id="cb381-11" data-line-number="11">parseNo <span class="st">&quot;n&quot;</span> <span class="fu">=</span> pure <span class="dt">No</span></a>
+<a class="sourceLine" id="cb381-12" data-line-number="12">parseNo <span class="st">&quot;no&quot;</span> <span class="fu">=</span> pure <span class="dt">No</span></a>
+<a class="sourceLine" id="cb381-13" data-line-number="13">parseNo <span class="st">&quot;maybe&quot;</span> <span class="fu">=</span> pure <span class="dt">No</span></a>
+<a class="sourceLine" id="cb381-14" data-line-number="14">parseNo _ <span class="fu">=</span> empty</a>
+<a class="sourceLine" id="cb381-15" data-line-number="15"></a>
+<a class="sourceLine" id="cb381-16" data-line-number="16"><span class="ot">parseAnswer ::</span> <span class="dt">Alternative</span> f <span class="ot">=&gt;</span> <span class="dt">String</span> <span class="ot">-&gt;</span> f <span class="dt">Answer</span></a>
+<a class="sourceLine" id="cb381-17" data-line-number="17">parseAnswer s <span class="fu">=</span> parseYes s <span class="fu">&lt;|&gt;</span> parseNo s</a></code></pre></div>
+<p>We can also pick which <code>Alternative</code> we run our parser in to get different behaviours. <code>Maybe</code> gives us only one result, while <code>[]</code> gives us all possible results.</p>
+<div class="sourceCode" id="cb382"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb382-1" data-line-number="1"><span class="fu">&gt;</span> parseAnswer <span class="st">&quot;yes&quot;</span><span class="ot"> ::</span> <span class="dt">Maybe</span> <span class="dt">Answer</span></a>
+<a class="sourceLine" id="cb382-2" data-line-number="2"><span class="dt">Just</span> <span class="dt">Yes</span></a>
+<a class="sourceLine" id="cb382-3" data-line-number="3"><span class="fu">&gt;</span> parseAnswer <span class="st">&quot;maybe&quot;</span><span class="ot"> ::</span> <span class="dt">Maybe</span> <span class="dt">Answer</span></a>
+<a class="sourceLine" id="cb382-4" data-line-number="4"><span class="dt">Just</span> <span class="dt">Yes</span></a>
+<a class="sourceLine" id="cb382-5" data-line-number="5"><span class="fu">&gt;</span> parseAnswer <span class="st">&quot;yes&quot;</span><span class="ot"> ::</span> [<span class="dt">Answer</span>]</a>
+<a class="sourceLine" id="cb382-6" data-line-number="6">[<span class="dt">Yes</span>]</a>
+<a class="sourceLine" id="cb382-7" data-line-number="7"><span class="fu">&gt;</span> parseAnswer <span class="st">&quot;maybe&quot;</span><span class="ot"> ::</span> [<span class="dt">Answer</span>]</a>
+<a class="sourceLine" id="cb382-8" data-line-number="8">[<span class="dt">Yes</span>,<span class="dt">No</span>]</a></code></pre></div>
+<p>The <code>Alternative</code> instances for <code>[]</code> and <code>Maybe</code> are unsurprising:</p>
+<div class="sourceCode" id="cb383"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb383-1" data-line-number="1"><span class="kw">instance</span> <span class="dt">Alternative</span> [] <span class="kw">where</span></a>
+<a class="sourceLine" id="cb383-2" data-line-number="2">  empty <span class="fu">=</span> []</a>
+<a class="sourceLine" id="cb383-3" data-line-number="3">  (<span class="fu">&lt;|&gt;</span>) <span class="fu">=</span> (<span class="fu">++</span>)</a>
+<a class="sourceLine" id="cb383-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb383-5" data-line-number="5"><span class="kw">instance</span> <span class="dt">Alternative</span> <span class="dt">Maybe</span> <span class="kw">where</span></a>
+<a class="sourceLine" id="cb383-6" data-line-number="6">  empty <span class="fu">=</span> <span class="dt">Nothing</span></a>
+<a class="sourceLine" id="cb383-7" data-line-number="7">  <span class="dt">Just</span> x  <span class="fu">&lt;|&gt;</span> _  <span class="fu">=</span> <span class="dt">Just</span> x</a>
+<a class="sourceLine" id="cb383-8" data-line-number="8">  <span class="dt">Nothing</span> <span class="fu">&lt;|&gt;</span> mx <span class="fu">=</span> mx</a></code></pre></div>
+<p>The <code>Validation</code> type is also an <code>Alternative</code>. The instance collects together all error messages, just like the <code>Applicative</code> instance did.</p>
+<div class="sourceCode" id="cb384"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb384-1" data-line-number="1"><span class="kw">instance</span> <span class="dt">Alternative</span> <span class="dt">Validation</span> <span class="kw">where</span></a>
+<a class="sourceLine" id="cb384-2" data-line-number="2">  empty <span class="fu">=</span> <span class="dt">Errors</span> []</a>
+<a class="sourceLine" id="cb384-3" data-line-number="3">  <span class="dt">Ok</span> x <span class="fu">&lt;|&gt;</span> _ <span class="fu">=</span> <span class="dt">Ok</span> x</a>
+<a class="sourceLine" id="cb384-4" data-line-number="4">  <span class="dt">Errors</span> e1 <span class="fu">&lt;|&gt;</span> <span class="dt">Ok</span> y <span class="fu">=</span> <span class="dt">Ok</span> y</a>
+<a class="sourceLine" id="cb384-5" data-line-number="5">  <span class="dt">Errors</span> e1 <span class="fu">&lt;|&gt;</span> <span class="dt">Errors</span> e2 <span class="fu">=</span> <span class="dt">Errors</span> (e1<span class="fu">++</span>e2)</a></code></pre></div>
+<p>Here’s a final example: validating contact information, which is either a phone number or an email address.</p>
+<div class="sourceCode" id="cb385"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb385-1" data-line-number="1"><span class="kw">data</span> <span class="dt">ContactInfo</span> <span class="fu">=</span> <span class="dt">Email</span> <span class="dt">String</span> <span class="fu">|</span> <span class="dt">Phone</span> <span class="dt">String</span></a>
+<a class="sourceLine" id="cb385-2" data-line-number="2">  <span class="kw">deriving</span> <span class="dt">Show</span></a>
+<a class="sourceLine" id="cb385-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb385-4" data-line-number="4"><span class="ot">validateEmail ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Validation</span> <span class="dt">ContactInfo</span></a>
+<a class="sourceLine" id="cb385-5" data-line-number="5">validateEmail s <span class="fu">=</span> check (elem <span class="ch">&#39;@&#39;</span> s) <span class="st">&quot;Not an email: should contain a @&quot;</span> (<span class="dt">Email</span> s)</a>
+<a class="sourceLine" id="cb385-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb385-7" data-line-number="7"><span class="ot">checkLength ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Validation</span> <span class="dt">ContactInfo</span></a>
+<a class="sourceLine" id="cb385-8" data-line-number="8">checkLength s <span class="fu">=</span> check (length s <span class="fu">&lt;=</span> <span class="dv">10</span>) <span class="st">&quot;Not a phone number: should be at most 10 digits&quot;</span> (<span class="dt">Phone</span> s)</a>
+<a class="sourceLine" id="cb385-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb385-10" data-line-number="10"><span class="ot">checkDigits ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Validation</span> <span class="dt">ContactInfo</span></a>
+<a class="sourceLine" id="cb385-11" data-line-number="11">checkDigits s <span class="fu">=</span> check (all isDigit s) <span class="st">&quot;Not a phone number: should be all numbers&quot;</span> (<span class="dt">Phone</span> s)</a>
+<a class="sourceLine" id="cb385-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb385-13" data-line-number="13"><span class="ot">validatePhone ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Validation</span> <span class="dt">ContactInfo</span></a>
+<a class="sourceLine" id="cb385-14" data-line-number="14">validatePhone s <span class="fu">=</span> checkDigits s <span class="fu">*&gt;</span> checkLength s</a>
+<a class="sourceLine" id="cb385-15" data-line-number="15"></a>
+<a class="sourceLine" id="cb385-16" data-line-number="16"><span class="ot">validateContactInfo ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Validation</span> <span class="dt">ContactInfo</span></a>
+<a class="sourceLine" id="cb385-17" data-line-number="17">validateContactInfo s <span class="fu">=</span> validateEmail s <span class="fu">&lt;|&gt;</span> validatePhone s</a></code></pre></div>
+<div class="sourceCode" id="cb386"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb386-1" data-line-number="1">validateContactInfo <span class="st">&quot;user@example.com&quot;</span></a>
+<a class="sourceLine" id="cb386-2" data-line-number="2">  <span class="fu">==&gt;</span> <span class="dt">Ok</span> (<span class="dt">Email</span> <span class="st">&quot;user@example.com&quot;</span>)</a>
+<a class="sourceLine" id="cb386-3" data-line-number="3">validateContactInfo <span class="st">&quot;01234&quot;</span></a>
+<a class="sourceLine" id="cb386-4" data-line-number="4">  <span class="fu">==&gt;</span> <span class="dt">Ok</span> (<span class="dt">Phone</span> <span class="st">&quot;01234&quot;</span>)</a>
+<a class="sourceLine" id="cb386-5" data-line-number="5">validateContactInfo <span class="st">&quot;01234567890&quot;</span></a>
+<a class="sourceLine" id="cb386-6" data-line-number="6">  <span class="fu">==&gt;</span> <span class="dt">Errors</span> [<span class="st">&quot;Not an email: should contain a @&quot;</span>,<span class="st">&quot;Not a phone number: should be at most 10 digits&quot;</span>]</a>
+<a class="sourceLine" id="cb386-7" data-line-number="7">validateContactInfo <span class="st">&quot;01234567890x&quot;</span></a>
+<a class="sourceLine" id="cb386-8" data-line-number="8">  <span class="fu">==&gt;</span> <span class="dt">Errors</span> [<span class="st">&quot;Not an email: should contain a @&quot;</span>,</a>
+<a class="sourceLine" id="cb386-9" data-line-number="9">              <span class="st">&quot;Not a phone number: should be all numbers&quot;</span>,</a>
+<a class="sourceLine" id="cb386-10" data-line-number="10">              <span class="st">&quot;Not a phone number: should be at most 10 digits&quot;</span>]</a>
+<a class="sourceLine" id="cb386-11" data-line-number="11">validateContactInfo <span class="st">&quot;x&quot;</span></a>
+<a class="sourceLine" id="cb386-12" data-line-number="12">  <span class="fu">==&gt;</span> <span class="dt">Errors</span> [<span class="st">&quot;Not an email: should contain a @&quot;</span>,</a>
+<a class="sourceLine" id="cb386-13" data-line-number="13">              <span class="st">&quot;Not a phone number: should be all numbers&quot;</span>]</a></code></pre></div>
+<p>Note how here, just like in previous examples, the errors are collected left-to-right: the errors from <code>validateEmail</code> come before the errors from <code>validatePhone</code>. The error from <code>checkDigits</code> comes before the error from <code>checkLength</code>.</p>
+<!--
+TODO compare to `Monoid`?
+
+TODO another example
+
+TODO explain `some` and `many`
+-->
+<h2 id="sidenote-monads-and-applicatives"><span class="header-section-number">15.8</span> Sidenote: Monads and Applicatives</h2>
+<p>So what’s the relationship between an Monad and an Applicative? If an Applicative is also a Monad, the following laws hold:</p>
+<div class="sourceCode" id="cb387"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb387-1" data-line-number="1">pure             <span class="fu">===</span> return</a>
+<a class="sourceLine" id="cb387-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb387-3" data-line-number="3">fmap             <span class="fu">===</span> liftM</a>
+<a class="sourceLine" id="cb387-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb387-5" data-line-number="5">fmap f op        <span class="fu">===</span> <span class="kw">do</span> x <span class="ot">&lt;-</span> op</a>
+<a class="sourceLine" id="cb387-6" data-line-number="6">                        return (f x)</a>
+<a class="sourceLine" id="cb387-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb387-8" data-line-number="8">liftA2           <span class="fu">===</span> liftM2</a>
+<a class="sourceLine" id="cb387-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb387-10" data-line-number="10">liftA2 f op1 op2 <span class="fu">===</span> <span class="kw">do</span> x <span class="ot">&lt;-</span> op1</a>
+<a class="sourceLine" id="cb387-11" data-line-number="11">                        y <span class="ot">&lt;-</span> op2</a>
+<a class="sourceLine" id="cb387-12" data-line-number="12">                        return (f x y)</a>
+<a class="sourceLine" id="cb387-13" data-line-number="13"></a>
+<a class="sourceLine" id="cb387-14" data-line-number="14">op1 <span class="fu">*&gt;</span> op2       <span class="fu">===</span> op1 <span class="fu">&gt;&gt;</span> op2</a>
+<a class="sourceLine" id="cb387-15" data-line-number="15"></a>
+<a class="sourceLine" id="cb387-16" data-line-number="16">op1 <span class="fu">&lt;*&gt;</span> op2      <span class="fu">===</span> <span class="kw">do</span> f <span class="ot">&lt;-</span> op1</a>
+<a class="sourceLine" id="cb387-17" data-line-number="17">                        x <span class="ot">&lt;-</span> op2</a>
+<a class="sourceLine" id="cb387-18" data-line-number="18">                        return (f x)</a></code></pre></div>
+<p>When working in a <code>Monad</code>, you can freely mix <code>Applicative</code> and <code>Functor</code> with <code>Monad</code> operations. As an example, let’s rewrite <code>mapM</code> until it only uses applicative operations, and thus get an implementation for <code>traverse</code>. This is our starting point:</p>
+<div class="sourceCode" id="cb388"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb388-1" data-line-number="1">myMapM op [] <span class="fu">=</span> return []</a>
+<a class="sourceLine" id="cb388-2" data-line-number="2">myMapM op (x<span class="fu">:</span>xs) <span class="fu">=</span> <span class="kw">do</span> y <span class="ot">&lt;-</span> op x</a>
+<a class="sourceLine" id="cb388-3" data-line-number="3">                      ys <span class="ot">&lt;-</span> myMapM op xs</a>
+<a class="sourceLine" id="cb388-4" data-line-number="4">                      return (y<span class="fu">:</span>ys)</a></code></pre></div>
+<p>GHCi tells us it only works for Monads:</p>
+<div class="sourceCode" id="cb389"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb389-1" data-line-number="1"><span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="fu">:</span>t myMapM</a>
+<a class="sourceLine" id="cb389-2" data-line-number="2"><span class="ot">myMapM ::</span> <span class="dt">Monad</span> m <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> m b) <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> m [b]</a></code></pre></div>
+<p>Let’s apply the <code>pure === return</code> and the <code>liftA2</code> laws from above:</p>
+<div class="sourceCode" id="cb390"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb390-1" data-line-number="1">myMapM op [] <span class="fu">=</span> pure []</a>
+<a class="sourceLine" id="cb390-2" data-line-number="2">myMapM op (x<span class="fu">:</span>xs) <span class="fu">=</span> liftA2 (<span class="fu">:</span>) (op x) (myMapM op xs)</a></code></pre></div>
+<p>Ta-da! Now <code>myMapM</code> works for any <code>Applicative</code>:</p>
+<div class="sourceCode" id="cb391"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb391-1" data-line-number="1"><span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="fu">:</span>t myMapM</a>
+<a class="sourceLine" id="cb391-2" data-line-number="2"><span class="ot">myMapM ::</span> <span class="dt">Applicative</span> f <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> f b) <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> f [b]</a></code></pre></div>
+<h2 id="quiz-5"><span class="header-section-number">15.9</span> Quiz</h2>
+<p>What’s the type of <code>x</code> in <code>liftA2 not Nothing x</code>?</p>
+<ol class="quiz">
+<li>
+<code>Applicative f =&gt; f Bool</code>
+</li>
+<li>
+<code>Applicative Bool</code>
+</li>
+<li class="correct">
+<code>Maybe Bool</code>
+</li>
+</ol>
+<p>How many elements does <code>liftA2 f xs ys</code> have when <code>xs</code> and <code>ys</code> are lists?</p>
+<ol class="quiz">
+<li>
+<code>length xs + length ys</code>
+</li>
+<li class="correct">
+<code>length xs * length ys</code>
+</li>
+<li>
+<code>min (length xs) (length ys)</code>
+</li>
+</ol>
+<p>Which of these expressions is equivalent to <code>liftA2 f x y</code>? There might be multiple correct answers.</p>
+<ol class="quiz">
+<li class="correct">
+<code>f &lt;$&gt; x &lt;*&gt; y</code>
+</li>
+<li>
+<code>f &lt;*&gt; x &lt;*&gt; y</code>
+</li>
+<li>
+<code>f &lt;*&gt; x &lt;$&gt; y</code>
+</li>
+<li class="correct">
+<code>fmap f x &lt;*&gt; y</code>
+</li>
+<li class="correct">
+<code>pure f &lt;*&gt; x &lt;*&gt; y</code>
+</li>
+</ol>
+<p>If <code>f :: X -&gt; Maybe Y</code> and <code>xs :: [X]</code>, which of these expressions has a type different from the others?</p>
+<ol class="quiz">
+<li>
+<code>fmap f xs</code>
+</li>
+<li class="correct">
+<code>traverse f xs</code>
+</li>
+<li>
+<code>map f xs</code>
+</li>
+</ol>
+<p>For which <code>Applicative</code> do the expressions <code>pure x &lt;* pure y</code> and <code>pure x &lt;|&gt; pure y</code> have the different result?</p>
+<ol class="quiz">
+<li>
+<code>Maybe</code>
+</li>
+<li>
+<code>[]</code>
+</li>
+<li class="correct">
+<code>Validation</code>
+</li>
+</ol>
+<h2 id="exercises-6"><span class="header-section-number">15.10</span> Exercises</h2>
+<ul>
+<li><a href="https://github.com/moocfi/haskell-mooc/blob/master/exercises/Set15.hs">Set15</a></li>
 <li><a href="https://forms.gle/soVtMeGBxSo6u5zp6">Remember to give feedback!</a></li>
 </ul>
 </div>

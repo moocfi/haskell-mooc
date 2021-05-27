@@ -230,6 +230,11 @@ testing call = do
 -- TH pprint prints all names as qualified, let's convert the names to unqualified locals
 unqualifyName (Name n _) = Name n NameS
 
+unqualifyType :: Type -> Type
+unqualifyType (AppT f x) = AppT (unqualifyType f) (unqualifyType x)
+unqualifyType (ConT n) = ConT (unqualifyName n)
+unqualifyType x = error $ "Unsupported: " ++ show x
+
 unqualify :: Exp -> Exp
 unqualify (VarE n) = VarE (unqualifyName n)
 unqualify (UnboundVarE n) = UnboundVarE (unqualifyName n)
@@ -241,6 +246,7 @@ unqualify (LitE l) = LitE l
 unqualify (TupE exps) = TupE (map (fmap unqualify) exps)
 unqualify (ListE exps) = ListE (map unqualify exps)
 unqualify (ArithSeqE (FromR x)) = ArithSeqE (FromR (unqualify x))
+unqualify (SigE e t) = SigE (unqualify e) (unqualifyType t)
 unqualify x = error $ "Unsupported: " ++ show x
 
 testing' :: Q Exp -> Q Exp
