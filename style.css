@@ -17,6 +17,9 @@ a[href]:hover {
 a[href]:focus {
   background: #c2a200;
 }
+body h1 {
+  margin: 70px 0 0 0;
+}
 body h2 {
   font-size: 1.4em;
   margin: 35px 0 0 0;
