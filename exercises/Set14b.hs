@@ -53,11 +53,11 @@ import Database.SQLite.Simple (open,execute,execute_,query,query_,Connection,Que
 -- testing!
 --
 -- Example in GHCi:
---   Set14x> db <- openDatabase ""
---   Set14x> deposit db (T.pack "xxx") 13
---   Set14x> deposit db (T.pack "yyy") 5
---   Set14x> deposit db (T.pack "xxx") 7
---   Set14x> query_ db getAllQuery :: IO [(String,Int)]
+--   Set14b> db <- openDatabase ""
+--   Set14b> deposit db (T.pack "xxx") 13
+--   Set14b> deposit db (T.pack "yyy") 5
+--   Set14b> deposit db (T.pack "xxx") 7
+--   Set14b> query_ db getAllQuery :: IO [(String,Int)]
 --   [("xxx",13),("yyy",5),("xxx",7)]
 
 
@@ -93,15 +93,15 @@ deposit = todo
 -- itself.
 --
 -- Example in GHCi:
---   Set14x> db <- openDatabase ""
---   Set14x> deposit db (T.pack "xxx") 13
---   Set14x> deposit db (T.pack "yyy") 5
---   Set14x> deposit db (T.pack "xxx") 7
---   Set14x> balance db (T.pack "xxx")
+--   Set14b> db <- openDatabase ""
+--   Set14b> deposit db (T.pack "xxx") 13
+--   Set14b> deposit db (T.pack "yyy") 5
+--   Set14b> deposit db (T.pack "xxx") 7
+--   Set14b> balance db (T.pack "xxx")
 --   20
---   Set14x> balance db (T.pack "yyy")
+--   Set14b> balance db (T.pack "yyy")
 --   5
---   Set14x> balance db (T.pack "zzz")
+--   Set14b> balance db (T.pack "zzz")
 --   0
 
 balanceQuery :: Query
@@ -163,13 +163,13 @@ parseCommand = todo
 -- you'll get to deal with that in exercise 8.
 --
 -- Example in GHCi:
---   Set14x> perform db (Just (Deposit (T.pack "madoff") 123456))
+--   Set14b> perform db (Just (Deposit (T.pack "madoff") 123456))
 --   "OK"
---   Set14x> perform db (Just (Deposit (T.pack "madoff") 654321))
+--   Set14b> perform db (Just (Deposit (T.pack "madoff") 654321))
 --   "OK"
---   Set14x> perform db (Just (Balance (T.pack "madoff")))
+--   Set14b> perform db (Just (Balance (T.pack "madoff")))
 --   "777777"
---   Set14x> perform db (Just (Balance (T.pack "unknown")))
+--   Set14b> perform db (Just (Balance (T.pack "unknown")))
 --   "0"
 
 perform :: Connection -> Maybe Command -> IO T.Text
@@ -204,14 +204,14 @@ simpleServer request respond = todo
 --
 -- After you've implemented server, you can run the bank API from the
 -- command line with
---   stack runhaskell Set14x.hs
+--   stack runhaskell Set14b.hs
 -- This uses the main function provided below.
 --
 -- Tip: it can make debugging easier if you print the command before
 -- performing it.
 --
 -- Example:
---   - Run the server with "stack runhaskell Set14x.hs"
+--   - Run the server with "stack runhaskell Set14b.hs"
 --   - Open <http://localhost:3421/deposit/lopez/17> in your browser.
 --     You should see the text OK.
 --   - Open <http://localhost:3421/deposit/lopez/8> in your browser.
@@ -245,7 +245,7 @@ main = do
 -- withdraw. You don't need new SQL queries.
 --
 -- Example:
---   - Run the server with "stack runhaskell Set14x.hs"
+--   - Run the server with "stack runhaskell Set14b.hs"
 --   - Open <http://localhost:3421/deposit/simon/17> in your browser.
 --     You should see the text OK.
 --   - Open <http://localhost:3421/withdraw/simon/6> in your browser.
@@ -263,7 +263,7 @@ main = do
 -- also just write normal code instead.
 --
 -- Examples:
---  - Run the server with "stack runhaskell Set14x.hs"
+--  - Run the server with "stack runhaskell Set14b.hs"
 --  - All of these URLs should produce the text ERROR:
 --    - http://localhost:3421/unknown/path
 --    - http://localhost:3421/deposit/pekka
