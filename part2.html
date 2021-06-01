@@ -170,6 +170,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="#quiz-5"><span class="toc-section-number">15.9</span> Quiz</a></li>
 <li><a href="#exercises-6"><span class="toc-section-number">15.10</span> Exercises</a></li>
 </ul></li>
+<li><a href="#lecture-16-odds-and-ends"><span class="toc-section-number">16</span> Lecture 16: Odds and Ends</a><ul>
+<li><a href="#testing-with-quickcheck"><span class="toc-section-number">16.1</span> Testing with QuickCheck</a></li>
+<li><a href="#phantom-types"><span class="toc-section-number">16.2</span> Phantom Types</a></li>
+<li><a href="#simultaneity"><span class="toc-section-number">16.3</span> Simultaneity</a></li>
+<li><a href="#exercises-7"><span class="toc-section-number">16.4</span> Exercises</a></li>
+<li><a href="#where-to-go-from-here"><span class="toc-section-number">16.5</span> Where to Go From Here?</a></li>
+<li><a href="#acknowledgements"><span class="toc-section-number">16.6</span> Acknowledgements</a></li>
+</ul></li>
 </ul>
 </nav>
 <div id="text-container">
@@ -179,7 +187,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1 class="title">Haskell Mooc, part 2</h1>
 </header>
 <p>by Joel Kaasinen (<a href="https://nitor.com/en">Nitor</a>) and John Lång (University of Helsinki)</p>
-<p><strong>Beware!</strong> This is a <em>preview</em> of part 2 of the course. It contains lectures 9 to 15. Further lectures will be added before the course is ready. The material presented here is roughly ready, and shouldn’t change too much. However, you should know that:</p>
+<p><strong>Beware!</strong> This is a <em>preview</em> of part 2 of the course. The material presented here is roughly ready, and shouldn’t change too much. However, you should know that:</p>
 <ul>
 <li>Some exercises might change or be replaced with new exercises for the final release.</li>
 <li>Feedback on this preview is much appreciated! You can help make part 2 better by testing it out. There are feedback links at the end of each section.</li>
@@ -4179,6 +4187,428 @@ TODO explain `some` and `many`
 <li><a href="https://github.com/moocfi/haskell-mooc/blob/master/exercises/Set15.hs">Set15</a></li>
 <li><a href="https://forms.gle/soVtMeGBxSo6u5zp6">Remember to give feedback!</a></li>
 </ul>
+<h1 id="lecture-16-odds-and-ends"><span class="header-section-number">16</span> Lecture 16: Odds and Ends</h1>
+<p>This final lecture will go over some minor topics that didn’t fit in anywhere else. You’ve finished all the hard parts of the course. Now it’s time to sit back, relax, and enjoy some cool Haskell!</p>
+<h2 id="testing-with-quickcheck"><span class="header-section-number">16.1</span> Testing with QuickCheck</h2>
+<p>One of the benefits of purity is that pure functions are easy to test: you don’t need to set up any global state, you can just pass in arguments and check that the result is ok. In this section, we’ll take a quick tour of the <em>property-based testing</em> library QuickCheck, which has also been used for checking that your answers to exercises are right on this course!</p>
+<p>Let’s look at testing a (faulty) implementation of <code>reverse</code>. You can find this and the following examples in the file <a href="https://github.com/moocfi/haskell-mooc/blob/master/exercises/Examples/QuickCheck.hs"><code>exercises/Examples/QuickCheck.hs</code></a>.</p>
+<div class="sourceCode" id="cb392"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb392-1" data-line-number="1"><span class="ot">rev ::</span> [a] <span class="ot">-&gt;</span> [a]</a>
+<a class="sourceLine" id="cb392-2" data-line-number="2">rev [] <span class="fu">=</span> []</a>
+<a class="sourceLine" id="cb392-3" data-line-number="3">rev (x<span class="fu">:</span>xs) <span class="fu">=</span> xs <span class="fu">++</span> [x]</a></code></pre></div>
+<p>We can write and individual test case using the <code>===</code> operator from QuickCheck:</p>
+<div class="sourceCode" id="cb393"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb393-1" data-line-number="1"><span class="ot">(===) ::</span> (<span class="dt">Eq</span> a, <span class="dt">Show</span> a) <span class="ot">=&gt;</span> a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> <span class="dt">Property</span></a></code></pre></div>
+<div class="sourceCode" id="cb394"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb394-1" data-line-number="1"><span class="ot">propRevSmall ::</span> <span class="dt">Property</span></a>
+<a class="sourceLine" id="cb394-2" data-line-number="2">propRevSmall <span class="fu">=</span> rev [<span class="dv">1</span>,<span class="dv">2</span>] <span class="fu">===</span> [<span class="dv">2</span>,<span class="dv">1</span>]</a></code></pre></div>
+<p>We can ask QuickCheck to run them in GHCi:</p>
+<div class="sourceCode" id="cb395"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb395-1" data-line-number="1"><span class="fu">*</span><span class="dt">Examples.QuickCheck</span><span class="fu">&gt;</span> quickCheck propRevSmall</a>
+<a class="sourceLine" id="cb395-2" data-line-number="2"><span class="fu">+++</span> <span class="dt">OK</span>, passed <span class="dv">1</span> test<span class="fu">.</span></a></code></pre></div>
+<p>So far so good. However this isn’t really what QuickCheck was made for. QuickCheck was designer for <em>property-based testing</em> where you can state a property your code should have, and QuickCheck runs your code with randomized inputs, checking the property every time. What would be a simple property that a correct implementation of <code>reverse</code> has? Reversing a list twice should certainly give us back the same list. Let’s write it out:</p>
+<div class="sourceCode" id="cb396"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb396-1" data-line-number="1"><span class="ot">propRevTwice ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Property</span></a>
+<a class="sourceLine" id="cb396-2" data-line-number="2">propRevTwice xs <span class="fu">=</span> reverse (reverse xs) <span class="fu">===</span> xs</a></code></pre></div>
+<p>Our <code>Property</code> has an argument, which means that QuickCheck will generate random values and run the test. We can use the <code>verboseCheck</code> function to see which values are run. We can also give a parameter to the test ourselves if we wish to check a specific value.</p>
+<div class="sourceCode" id="cb397"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb397-1" data-line-number="1"><span class="fu">*</span><span class="dt">Examples.QuickCheck</span><span class="fu">&gt;</span> quickCheck propRevTwice</a>
+<a class="sourceLine" id="cb397-2" data-line-number="2"><span class="fu">+++</span> <span class="dt">OK</span>, passed <span class="dv">100</span> tests<span class="fu">.</span></a>
+<a class="sourceLine" id="cb397-3" data-line-number="3"><span class="fu">*</span><span class="dt">Examples.QuickCheck</span><span class="fu">&gt;</span> verboseCheck propRevTwice</a>
+<a class="sourceLine" id="cb397-4" data-line-number="4"><span class="dt">Passed</span><span class="fu">:</span></a>
+<a class="sourceLine" id="cb397-5" data-line-number="5">[]</a>
+<a class="sourceLine" id="cb397-6" data-line-number="6">[] <span class="fu">==</span> []</a>
+<a class="sourceLine" id="cb397-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb397-8" data-line-number="8"><span class="dt">Passed</span><span class="fu">:</span></a>
+<a class="sourceLine" id="cb397-9" data-line-number="9">[<span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb397-10" data-line-number="10">[<span class="dv">1</span>] <span class="fu">==</span> [<span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb397-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb397-12" data-line-number="12"><span class="dt">Passed</span><span class="fu">:</span></a>
+<a class="sourceLine" id="cb397-13" data-line-number="13">[<span class="fu">-</span><span class="dv">2</span>,<span class="dv">1</span>,<span class="fu">-</span><span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb397-14" data-line-number="14">[<span class="fu">-</span><span class="dv">2</span>,<span class="dv">1</span>,<span class="fu">-</span><span class="dv">1</span>] <span class="fu">==</span> [<span class="fu">-</span><span class="dv">2</span>,<span class="dv">1</span>,<span class="fu">-</span><span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb397-15" data-line-number="15"><span class="co">-- lots of output</span></a>
+<a class="sourceLine" id="cb397-16" data-line-number="16"><span class="fu">+++</span> <span class="dt">OK</span>, passed <span class="dv">100</span> tests<span class="fu">.</span></a>
+<a class="sourceLine" id="cb397-17" data-line-number="17"><span class="fu">*</span><span class="dt">Examples.QuickCheck</span><span class="fu">&gt;</span> quickCheck (propRevTwice [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>])</a>
+<a class="sourceLine" id="cb397-18" data-line-number="18"><span class="fu">+++</span> <span class="dt">OK</span>, passed <span class="dv">1</span> test<span class="fu">.</span></a></code></pre></div>
+<p>Even this property didn’t catch the bug in our implementation. Let’s try another one. Here’s a property about how <code>rev (xs ++ ys)</code> behaves. You might want to take a moment to convince yourself that it should hold for a correct <code>rev</code> function.</p>
+<div class="sourceCode" id="cb398"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb398-1" data-line-number="1"><span class="ot">propRevTwo ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Property</span></a>
+<a class="sourceLine" id="cb398-2" data-line-number="2">propRevTwo xs ys <span class="fu">=</span> rev (xs <span class="fu">++</span> ys) <span class="fu">===</span> rev ys <span class="fu">++</span> rev xs</a></code></pre></div>
+<p>Let’s see if it holds for our implementation:</p>
+<div class="sourceCode" id="cb399"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb399-1" data-line-number="1"><span class="fu">*</span><span class="dt">Examples.QuickCheck</span><span class="fu">&gt;</span> quickCheck propRevTwo</a>
+<a class="sourceLine" id="cb399-2" data-line-number="2"><span class="fu">***</span> <span class="dt">Failed</span><span class="fu">!</span> <span class="dt">Falsified</span> (after <span class="dv">5</span> tests and <span class="dv">3</span> shrinks)<span class="fu">:</span></a>
+<a class="sourceLine" id="cb399-3" data-line-number="3">[<span class="dv">0</span>,<span class="dv">0</span>]</a>
+<a class="sourceLine" id="cb399-4" data-line-number="4">[<span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb399-5" data-line-number="5">[<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>] <span class="fu">/=</span> [<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>]</a></code></pre></div>
+<p>Finally, a failure! There’s a bit to unpack here. First off, QuickCheck tells us the arguments with which the property failed: they are <code>[0,0]</code> and <code>[1]</code>. We can check this ourselves:</p>
+<div class="sourceCode" id="cb400"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb400-1" data-line-number="1"><span class="fu">*</span><span class="dt">Examples.QuickCheck</span><span class="fu">&gt;</span> quickCheck (propRevTwo [<span class="dv">0</span>,<span class="dv">0</span>] [<span class="dv">1</span>])</a>
+<a class="sourceLine" id="cb400-2" data-line-number="2"><span class="fu">***</span> <span class="dt">Failed</span><span class="fu">!</span> <span class="dt">Falsified</span> (after <span class="dv">1</span> test)<span class="fu">:</span></a>
+<a class="sourceLine" id="cb400-3" data-line-number="3">[<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>] <span class="fu">/=</span> [<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>]</a></code></pre></div>
+<p>Next up, what does “after 5 tests and 3 shrinks” mean? One of the cool things about QuickCheck is that when it finds a failure, it tries some related values in order to find a nicer, smaller failure. We can see this in action with <code>verboseShrinking</code>, which prints out all the failures QuickCheck goes through:</p>
+<div class="sourceCode" id="cb401"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb401-1" data-line-number="1"><span class="fu">*</span><span class="dt">Examples.QuickCheck</span><span class="fu">&gt;</span> quickCheck (verboseShrinking propRevTwo)</a>
+<a class="sourceLine" id="cb401-2" data-line-number="2"><span class="dt">Failed</span><span class="fu">:</span></a>
+<a class="sourceLine" id="cb401-3" data-line-number="3">[<span class="dv">4</span>,<span class="fu">-</span><span class="dv">1</span>,<span class="fu">-</span><span class="dv">4</span>]</a>
+<a class="sourceLine" id="cb401-4" data-line-number="4">[<span class="dv">1</span>,<span class="dv">4</span>]</a>
+<a class="sourceLine" id="cb401-5" data-line-number="5">[<span class="fu">-</span><span class="dv">1</span>,<span class="fu">-</span><span class="dv">4</span>,<span class="dv">1</span>,<span class="dv">4</span>,<span class="dv">4</span>] <span class="fu">/=</span> [<span class="dv">4</span>,<span class="dv">1</span>,<span class="fu">-</span><span class="dv">1</span>,<span class="fu">-</span><span class="dv">4</span>,<span class="dv">4</span>]</a>
+<a class="sourceLine" id="cb401-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb401-7" data-line-number="7"><span class="dt">Failed</span><span class="fu">:</span></a>
+<a class="sourceLine" id="cb401-8" data-line-number="8">[<span class="fu">-</span><span class="dv">1</span>,<span class="fu">-</span><span class="dv">4</span>]</a>
+<a class="sourceLine" id="cb401-9" data-line-number="9">[<span class="dv">1</span>,<span class="dv">4</span>]</a>
+<a class="sourceLine" id="cb401-10" data-line-number="10">[<span class="fu">-</span><span class="dv">4</span>,<span class="dv">1</span>,<span class="dv">4</span>,<span class="fu">-</span><span class="dv">1</span>] <span class="fu">/=</span> [<span class="dv">4</span>,<span class="dv">1</span>,<span class="fu">-</span><span class="dv">4</span>,<span class="fu">-</span><span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb401-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb401-12" data-line-number="12"><span class="dt">Failed</span><span class="fu">:</span></a>
+<a class="sourceLine" id="cb401-13" data-line-number="13">[<span class="fu">-</span><span class="dv">4</span>]</a>
+<a class="sourceLine" id="cb401-14" data-line-number="14">[<span class="dv">1</span>,<span class="dv">4</span>]</a>
+<a class="sourceLine" id="cb401-15" data-line-number="15">[<span class="dv">1</span>,<span class="dv">4</span>,<span class="fu">-</span><span class="dv">4</span>] <span class="fu">/=</span> [<span class="dv">4</span>,<span class="dv">1</span>,<span class="fu">-</span><span class="dv">4</span>]</a>
+<a class="sourceLine" id="cb401-16" data-line-number="16"></a>
+<a class="sourceLine" id="cb401-17" data-line-number="17"><span class="dt">Failed</span><span class="fu">:</span></a>
+<a class="sourceLine" id="cb401-18" data-line-number="18">[<span class="dv">4</span>]</a>
+<a class="sourceLine" id="cb401-19" data-line-number="19">[<span class="dv">1</span>,<span class="dv">4</span>]</a>
+<a class="sourceLine" id="cb401-20" data-line-number="20">[<span class="dv">1</span>,<span class="dv">4</span>,<span class="dv">4</span>] <span class="fu">/=</span> [<span class="dv">4</span>,<span class="dv">1</span>,<span class="dv">4</span>]</a>
+<a class="sourceLine" id="cb401-21" data-line-number="21"></a>
+<a class="sourceLine" id="cb401-22" data-line-number="22"><span class="dt">Failed</span><span class="fu">:</span></a>
+<a class="sourceLine" id="cb401-23" data-line-number="23">[<span class="dv">0</span>]</a>
+<a class="sourceLine" id="cb401-24" data-line-number="24">[<span class="dv">1</span>,<span class="dv">4</span>]</a>
+<a class="sourceLine" id="cb401-25" data-line-number="25">[<span class="dv">1</span>,<span class="dv">4</span>,<span class="dv">0</span>] <span class="fu">/=</span> [<span class="dv">4</span>,<span class="dv">1</span>,<span class="dv">0</span>]</a>
+<a class="sourceLine" id="cb401-26" data-line-number="26"></a>
+<a class="sourceLine" id="cb401-27" data-line-number="27"><span class="dt">Failed</span><span class="fu">:</span></a>
+<a class="sourceLine" id="cb401-28" data-line-number="28">[<span class="dv">0</span>]</a>
+<a class="sourceLine" id="cb401-29" data-line-number="29">[<span class="dv">0</span>,<span class="dv">4</span>]</a>
+<a class="sourceLine" id="cb401-30" data-line-number="30">[<span class="dv">0</span>,<span class="dv">4</span>,<span class="dv">0</span>] <span class="fu">/=</span> [<span class="dv">4</span>,<span class="dv">0</span>,<span class="dv">0</span>]</a>
+<a class="sourceLine" id="cb401-31" data-line-number="31"></a>
+<a class="sourceLine" id="cb401-32" data-line-number="32"><span class="dt">Failed</span><span class="fu">:</span></a>
+<a class="sourceLine" id="cb401-33" data-line-number="33">[<span class="dv">0</span>]</a>
+<a class="sourceLine" id="cb401-34" data-line-number="34">[<span class="dv">0</span>,<span class="dv">2</span>]</a>
+<a class="sourceLine" id="cb401-35" data-line-number="35">[<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">0</span>] <span class="fu">/=</span> [<span class="dv">2</span>,<span class="dv">0</span>,<span class="dv">0</span>]</a>
+<a class="sourceLine" id="cb401-36" data-line-number="36"></a>
+<a class="sourceLine" id="cb401-37" data-line-number="37"><span class="dt">Failed</span><span class="fu">:</span></a>
+<a class="sourceLine" id="cb401-38" data-line-number="38">[<span class="dv">0</span>]</a>
+<a class="sourceLine" id="cb401-39" data-line-number="39">[<span class="dv">0</span>,<span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb401-40" data-line-number="40">[<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>] <span class="fu">/=</span> [<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>]</a></code></pre></div>
+<p>QuickCheck went down from a counterexample of <code>[4,1,-1,4,4]</code> all the way to <code>[1,0,0]</code>. Pretty sweet!</p>
+<h3 id="modifiers"><span class="header-section-number">16.1.1</span> Modifiers</h3>
+<p>Sometimes you need to limit the values QuickCheck generates. Your function might not work on all inputs, for instance? Let’s try writing a test for <code>last</code>.</p>
+<div class="sourceCode" id="cb402"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb402-1" data-line-number="1"><span class="ot">propLast ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Property</span></a>
+<a class="sourceLine" id="cb402-2" data-line-number="2">propLast xs <span class="fu">=</span> last xs <span class="fu">===</span> head (reverse xs)</a></code></pre></div>
+<div class="sourceCode" id="cb403"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb403-1" data-line-number="1"><span class="fu">*</span><span class="dt">Examples.QuickCheck</span><span class="fu">&gt;</span> quickCheck propLast</a>
+<a class="sourceLine" id="cb403-2" data-line-number="2"><span class="fu">***</span> <span class="dt">Failed</span><span class="fu">!</span> <span class="dt">Exception</span><span class="fu">:</span> <span class="ch">&#39;Prelude.last: empty list&#39;</span> (after <span class="dv">1</span> test)<span class="fu">:</span></a>
+<a class="sourceLine" id="cb403-3" data-line-number="3">[]</a></code></pre></div>
+<p>In this case, we can fix the test just by switching to another input type. QuickCheck defines the <code>NonEmptyList</code> type (not to be confused with <code>Data.List.NonEmpty</code>!), which is just a wrapper for a normal list. However, when generating values of <code>NonEmptyList</code>, QuickCheck won’t generate empty lists.</p>
+<div class="sourceCode" id="cb404"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb404-1" data-line-number="1"><span class="kw">newtype</span> <span class="dt">NonEmptyList</span> a <span class="fu">=</span> <span class="dt">NonEmpty</span> [a]</a></code></pre></div>
+<div class="sourceCode" id="cb405"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb405-1" data-line-number="1"><span class="ot">propLastFixed ::</span> <span class="dt">NonEmptyList</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Property</span></a>
+<a class="sourceLine" id="cb405-2" data-line-number="2">propLastFixed (<span class="dt">NonEmpty</span> xs) <span class="fu">=</span> last xs <span class="fu">===</span> head (reverse xs)</a></code></pre></div>
+<div class="sourceCode" id="cb406"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb406-1" data-line-number="1"><span class="fu">*</span><span class="dt">Examples.QuickCheck</span><span class="fu">&gt;</span> quickCheck propLastFixed</a>
+<a class="sourceLine" id="cb406-2" data-line-number="2"><span class="fu">+++</span> <span class="dt">OK</span>, passed <span class="dv">100</span> tests<span class="fu">.</span></a></code></pre></div>
+<p>There are <a href="https://hackage.haskell.org/package/QuickCheck-2.14.2/docs/Test-QuickCheck.html#g:16">other modifiers</a> like this, for example <code>Positive</code> for positive numbers, <code>NonNegative</code> for non-negative numbers, or <code>SortedList</code> for a sorted list. Here’s an example of a more complex test. We check that the nth element of <code>cycle xs</code> is correct. Both of the modifiers are needed, since <code>!!</code> doesn’t work with negative inputs, and <code>cycle []</code> is an error.</p>
+<div class="sourceCode" id="cb407"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb407-1" data-line-number="1"><span class="ot">propCycle ::</span> <span class="dt">NonEmptyList</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">NonNegative</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Property</span></a>
+<a class="sourceLine" id="cb407-2" data-line-number="2">propCycle (<span class="dt">NonEmpty</span> xs) (<span class="dt">NonNegative</span> n) <span class="fu">=</span></a>
+<a class="sourceLine" id="cb407-3" data-line-number="3">  cycle xs <span class="fu">!!</span> n <span class="fu">===</span> xs <span class="fu">!!</span> (mod n (length xs))</a></code></pre></div>
+<h3 id="generators-and-forall"><span class="header-section-number">16.1.2</span> Generators and <code>forAll</code></h3>
+<p>Sometimes we need to limit the range of inputs to a test even further. As a simple example, here’s a test that <code>Data.Char.toUpper</code> changes the character passed to it:</p>
+<div class="sourceCode" id="cb408"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb408-1" data-line-number="1"><span class="ot">propToUpperChanges ::</span> <span class="dt">Char</span> <span class="ot">-&gt;</span> <span class="dt">Property</span></a>
+<a class="sourceLine" id="cb408-2" data-line-number="2">propToUpperChanges c <span class="fu">=</span> toUpper c <span class="fu">=/=</span> c</a></code></pre></div>
+<div class="sourceCode" id="cb409"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb409-1" data-line-number="1">quickCheck propToUpperChanges</a>
+<a class="sourceLine" id="cb409-2" data-line-number="2"><span class="fu">***</span> <span class="dt">Failed</span><span class="fu">!</span> <span class="dt">Falsified</span> (after <span class="dv">1</span> test and <span class="dv">1</span> shrink)<span class="fu">:</span></a>
+<a class="sourceLine" id="cb409-3" data-line-number="3"><span class="ch">&#39;A&#39;</span></a>
+<a class="sourceLine" id="cb409-4" data-line-number="4"><span class="ch">&#39;A&#39;</span> <span class="fu">==</span> <span class="ch">&#39;A&#39;</span></a></code></pre></div>
+<p>Of course, it only changes <em>lowercase letters</em>. How can we write a test for that? There is no <code>Lowercase</code> modifier available that would work like <code>Positive</code> or <code>NonEmptyList</code>. We need to fall back to explicit generation of values using <code>forAll</code>:</p>
+<div class="sourceCode" id="cb410"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb410-1" data-line-number="1"><span class="ot">propToUpperChangesLetter ::</span> <span class="dt">Property</span></a>
+<a class="sourceLine" id="cb410-2" data-line-number="2">propToUpperChangesLetter <span class="fu">=</span> forAll (elements [<span class="ch">&#39;a&#39;</span><span class="fu">..</span><span class="ch">&#39;z&#39;</span>]) propToUpperChanges</a></code></pre></div>
+<div class="sourceCode" id="cb411"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb411-1" data-line-number="1"><span class="fu">*</span><span class="dt">Examples.QuickCheck</span><span class="fu">&gt;</span> verboseCheck propToUpperChangesLetter</a>
+<a class="sourceLine" id="cb411-2" data-line-number="2"><span class="dt">Passed</span><span class="fu">:</span></a>
+<a class="sourceLine" id="cb411-3" data-line-number="3"><span class="ch">&#39;s&#39;</span></a>
+<a class="sourceLine" id="cb411-4" data-line-number="4"><span class="ch">&#39;S&#39;</span> <span class="fu">/=</span> <span class="ch">&#39;s&#39;</span></a>
+<a class="sourceLine" id="cb411-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb411-6" data-line-number="6"><span class="dt">Passed</span><span class="fu">:</span></a>
+<a class="sourceLine" id="cb411-7" data-line-number="7"><span class="ch">&#39;z&#39;</span></a>
+<a class="sourceLine" id="cb411-8" data-line-number="8"><span class="ch">&#39;Z&#39;</span> <span class="fu">/=</span> <span class="ch">&#39;z&#39;</span></a>
+<a class="sourceLine" id="cb411-9" data-line-number="9"><span class="co">-- lots of output omitted</span></a>
+<a class="sourceLine" id="cb411-10" data-line-number="10"><span class="fu">+++</span> <span class="dt">OK</span>, passed <span class="dv">100</span> tests<span class="fu">.</span></a></code></pre></div>
+<p>Perfect! Let’s look at the types to see what’s going on here.</p>
+<div class="sourceCode" id="cb412"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb412-1" data-line-number="1"><span class="ot">elements ::</span> [a] <span class="ot">-&gt;</span> <span class="dt">Gen</span> a</a>
+<a class="sourceLine" id="cb412-2" data-line-number="2">elements [<span class="ch">&#39;a&#39;</span><span class="fu">..</span><span class="ch">&#39;z&#39;</span>]<span class="ot"> ::</span> <span class="dt">Gen</span> <span class="dt">Char</span></a>
+<a class="sourceLine" id="cb412-3" data-line-number="3"><span class="ot">forAll ::</span> (<span class="dt">Show</span> a, <span class="dt">Testable</span> prop) <span class="ot">=&gt;</span> <span class="dt">Gen</span> a <span class="ot">-&gt;</span> (a <span class="ot">-&gt;</span> prop) <span class="ot">-&gt;</span> <span class="dt">Property</span></a>
+<a class="sourceLine" id="cb412-4" data-line-number="4">forAll (elements [<span class="ch">&#39;a&#39;</span><span class="fu">..</span><span class="ch">&#39;z&#39;</span>])<span class="ot"> ::</span> <span class="dt">Testable</span> prop <span class="ot">=&gt;</span> (<span class="dt">Char</span> <span class="ot">-&gt;</span> prop) <span class="ot">-&gt;</span> <span class="dt">Property</span></a></code></pre></div>
+<p>There are some new types here. A value of type <code>Gen a</code> is a generator for values of type <code>a</code>. We’ll talk a bit more about <code>Gen</code> in the next section, but in this section you’ll see a couple of functions that return <code>Gen</code>s so that we can use them with <code>forAll</code>. The <code>elements</code> function is a generator that returns one of the elements of the given list at random, as you might have guessed.</p>
+<p>The <code>Testable</code> type class is the same that the <code>quickCheck</code> function uses. It exists so that <code>quickCheck</code> can test types like <code>[Int] -&gt; Bool -&gt; Property</code> in addition to just plain <code>Property</code> values.</p>
+<div class="sourceCode" id="cb413"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb413-1" data-line-number="1"><span class="ot">quickCheck ::</span> <span class="dt">Testable</span> prop <span class="ot">=&gt;</span> prop <span class="ot">-&gt;</span> <span class="dt">IO</span> ()</a></code></pre></div>
+<p>In addition, some simple types like <code>Bool</code> have a <code>Testable</code> instance, so that you can write tests using normal Haskell predicates instead of <code>===</code>:</p>
+<div class="sourceCode" id="cb414"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb414-1" data-line-number="1"><span class="ot">listHasZero ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Bool</span></a>
+<a class="sourceLine" id="cb414-2" data-line-number="2">listHasZero xs <span class="fu">=</span> elem <span class="dv">0</span> xs</a></code></pre></div>
+<div class="sourceCode" id="cb415"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb415-1" data-line-number="1"><span class="fu">*</span><span class="dt">Examples.QuickCheck</span><span class="fu">&gt;</span> quickCheck (listHasZero [<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">2</span>])</a>
+<a class="sourceLine" id="cb415-2" data-line-number="2"><span class="fu">+++</span> <span class="dt">OK</span>, passed <span class="dv">1</span> test<span class="fu">.</span></a>
+<a class="sourceLine" id="cb415-3" data-line-number="3"><span class="fu">*</span><span class="dt">Examples.QuickCheck</span><span class="fu">&gt;</span> quickCheck listHasZero</a>
+<a class="sourceLine" id="cb415-4" data-line-number="4"><span class="fu">***</span> <span class="dt">Failed</span><span class="fu">!</span> <span class="dt">Falsified</span> (after <span class="dv">1</span> test)<span class="fu">:</span></a>
+<a class="sourceLine" id="cb415-5" data-line-number="5">[]</a></code></pre></div>
+<p>Getting back to <code>forAll</code>, we can use <code>forAll</code> to write more complex tests. Here’s a test that checks that <code>sort xs</code> has the same elements as <code>xs</code>. Note how we use <code>NonEmptyList</code> to guarantee that the <code>forAll</code> has some elements to pick from.</p>
+<div class="sourceCode" id="cb416"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb416-1" data-line-number="1"><span class="ot">propSort ::</span> <span class="dt">NonEmptyList</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Property</span></a>
+<a class="sourceLine" id="cb416-2" data-line-number="2">propSort (<span class="dt">NonEmpty</span> xs) <span class="fu">=</span></a>
+<a class="sourceLine" id="cb416-3" data-line-number="3">  forAll (elements xs) (\x <span class="ot">-&gt;</span> elem x (sort xs))</a></code></pre></div>
+<h3 id="further-with-quickcheck"><span class="header-section-number">16.1.3</span> Further with QuickCheck</h3>
+<p>We’ve only just scratched the surface of QuickCheck. Here are some pointers to some things you’ll find useful when you start writing larger QuickCheck tests.</p>
+<p>Sometimes the output from QuickCheck isn’t quite verbose enough. You can add your own lines to the output by using the <code>counterexample</code> combinator:</p>
+<div class="sourceCode" id="cb417"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb417-1" data-line-number="1"><span class="ot">counterexample ::</span> <span class="dt">Testable</span> prop <span class="ot">=&gt;</span> <span class="dt">String</span> <span class="ot">-&gt;</span> prop <span class="ot">-&gt;</span> <span class="dt">Property</span></a></code></pre></div>
+<p>As an example, let’s add logging of the input to <code>rev</code> to <code>propRevTwo</code>:</p>
+<div class="sourceCode" id="cb418"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb418-1" data-line-number="1"><span class="ot">propRevTwo&#39; ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Property</span></a>
+<a class="sourceLine" id="cb418-2" data-line-number="2">propRevTwo&#39; xs ys <span class="fu">=</span></a>
+<a class="sourceLine" id="cb418-3" data-line-number="3">  <span class="kw">let</span> input <span class="fu">=</span> xs <span class="fu">++</span> ys</a>
+<a class="sourceLine" id="cb418-4" data-line-number="4">  <span class="kw">in</span> counterexample (<span class="st">&quot;Input: &quot;</span> <span class="fu">++</span> show input) <span class="fu">$</span></a>
+<a class="sourceLine" id="cb418-5" data-line-number="5">     rev input <span class="fu">===</span> rev ys <span class="fu">++</span> rev xs</a></code></pre></div>
+<div class="sourceCode" id="cb419"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb419-1" data-line-number="1"><span class="fu">*</span><span class="dt">Examples.QuickCheck</span><span class="fu">&gt;</span> quickCheck propRevTwo&#39;</a>
+<a class="sourceLine" id="cb419-2" data-line-number="2"><span class="fu">***</span> <span class="dt">Failed</span><span class="fu">!</span> <span class="dt">Falsified</span> (after <span class="dv">4</span> tests and <span class="dv">5</span> shrinks)<span class="fu">:</span></a>
+<a class="sourceLine" id="cb419-3" data-line-number="3">[<span class="dv">0</span>]</a>
+<a class="sourceLine" id="cb419-4" data-line-number="4">[<span class="dv">0</span>,<span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb419-5" data-line-number="5"><span class="dt">Input</span><span class="fu">:</span> [<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb419-6" data-line-number="6">[<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>] <span class="fu">/=</span> [<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>]</a></code></pre></div>
+<p>As you might have guessed, <code>Gen</code> is a <code>Monad</code>. You can write your own generators by combining the generators defined by QuickCheck. You can check what your generators output using <code>sample</code>.</p>
+<div class="sourceCode" id="cb420"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb420-1" data-line-number="1"><span class="ot">someLetters ::</span> <span class="dt">Gen</span> <span class="dt">String</span></a>
+<a class="sourceLine" id="cb420-2" data-line-number="2">someLetters <span class="fu">=</span> <span class="kw">do</span></a>
+<a class="sourceLine" id="cb420-3" data-line-number="3">  c <span class="ot">&lt;-</span> elements <span class="st">&quot;xyzw&quot;</span></a>
+<a class="sourceLine" id="cb420-4" data-line-number="4">  n <span class="ot">&lt;-</span> choose (<span class="dv">1</span>,<span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb420-5" data-line-number="5">  return (replicate n c)</a></code></pre></div>
+<div class="sourceCode" id="cb421"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb421-1" data-line-number="1"><span class="fu">*</span><span class="dt">Examples.QuickCheck</span><span class="fu">&gt;</span> sample someLetters</a>
+<a class="sourceLine" id="cb421-2" data-line-number="2"><span class="st">&quot;yyyyyyyy&quot;</span></a>
+<a class="sourceLine" id="cb421-3" data-line-number="3"><span class="st">&quot;zzzzzzzzz&quot;</span></a>
+<a class="sourceLine" id="cb421-4" data-line-number="4"><span class="st">&quot;xxxxxxxxx&quot;</span></a>
+<a class="sourceLine" id="cb421-5" data-line-number="5"><span class="st">&quot;yyyyyyy&quot;</span></a>
+<a class="sourceLine" id="cb421-6" data-line-number="6"><span class="st">&quot;yyy&quot;</span></a>
+<a class="sourceLine" id="cb421-7" data-line-number="7"><span class="st">&quot;ww&quot;</span></a>
+<a class="sourceLine" id="cb421-8" data-line-number="8"><span class="st">&quot;xxxxxx&quot;</span></a>
+<a class="sourceLine" id="cb421-9" data-line-number="9"><span class="st">&quot;yyy&quot;</span></a>
+<a class="sourceLine" id="cb421-10" data-line-number="10"><span class="st">&quot;yyyyyyy&quot;</span></a>
+<a class="sourceLine" id="cb421-11" data-line-number="11"><span class="st">&quot;xxxxxxxxxx&quot;</span></a>
+<a class="sourceLine" id="cb421-12" data-line-number="12"><span class="st">&quot;y&quot;</span></a></code></pre></div>
+<p>Closely related to generators is the <code>Arbitrary</code> type class. <code>Arbitrary</code> is how QuickCheck generates all those inputs automatically.</p>
+<div class="sourceCode" id="cb422"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb422-1" data-line-number="1"><span class="kw">class</span> <span class="dt">Arbitrary</span> a <span class="kw">where</span></a>
+<a class="sourceLine" id="cb422-2" data-line-number="2"><span class="ot">  arbitrary ::</span> <span class="dt">Gen</span> a</a>
+<a class="sourceLine" id="cb422-3" data-line-number="3"><span class="ot">  shrink ::</span> a <span class="ot">-&gt;</span> [a]</a></code></pre></div>
+<p>If you’re writing tests for custom types, you either need to use <code>forAll</code>, or implement an <code>Arbitrary</code> instance. Here’s what happens if you’re missing an instance:</p>
+<div class="sourceCode" id="cb423"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb423-1" data-line-number="1"><span class="kw">data</span> <span class="dt">Switch</span> <span class="fu">=</span> <span class="dt">On</span> <span class="fu">|</span> <span class="dt">Off</span></a>
+<a class="sourceLine" id="cb423-2" data-line-number="2">  <span class="kw">deriving</span> (<span class="dt">Show</span>, <span class="dt">Eq</span>)</a>
+<a class="sourceLine" id="cb423-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb423-4" data-line-number="4"><span class="ot">toggle ::</span> <span class="dt">Switch</span> <span class="ot">-&gt;</span> <span class="dt">Switch</span></a>
+<a class="sourceLine" id="cb423-5" data-line-number="5">toggle <span class="dt">On</span> <span class="fu">=</span> <span class="dt">Off</span></a>
+<a class="sourceLine" id="cb423-6" data-line-number="6">toggle <span class="dt">Off</span> <span class="fu">=</span> <span class="dt">On</span></a>
+<a class="sourceLine" id="cb423-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb423-8" data-line-number="8"><span class="ot">propToggleTwice ::</span> <span class="dt">Switch</span> <span class="ot">-&gt;</span> <span class="dt">Property</span></a>
+<a class="sourceLine" id="cb423-9" data-line-number="9">propToggleTwice s <span class="fu">=</span> s <span class="fu">===</span> toggle (toggle s)</a></code></pre></div>
+<div class="sourceCode" id="cb424"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb424-1" data-line-number="1"><span class="fu">*</span><span class="dt">Examples.QuickCheck</span><span class="fu">&gt;</span> quickCheck propToggleTwice</a>
+<a class="sourceLine" id="cb424-2" data-line-number="2">error<span class="fu">:</span></a>
+<a class="sourceLine" id="cb424-3" data-line-number="3">    • <span class="dt">No</span> <span class="kw">instance</span> for (<span class="dt">Arbitrary</span> <span class="dt">Switch</span>)</a>
+<a class="sourceLine" id="cb424-4" data-line-number="4">        arising from a use <span class="kw">of</span> ‘quickCheck’</a>
+<a class="sourceLine" id="cb424-5" data-line-number="5">    • <span class="dt">In</span> the expression<span class="fu">:</span> quickCheck propToggleTwice</a></code></pre></div>
+<p>Here are the two ways to fix it:</p>
+<div class="sourceCode" id="cb425"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb425-1" data-line-number="1"><span class="fu">*</span><span class="dt">Examples.QuickCheck</span><span class="fu">&gt;</span> quickCheck (forAll (elements [<span class="dt">On</span>,<span class="dt">Off</span>]) propToggleTwice)</a>
+<a class="sourceLine" id="cb425-2" data-line-number="2"><span class="fu">+++</span> <span class="dt">OK</span>, passed <span class="dv">100</span> tests<span class="fu">.</span></a></code></pre></div>
+<div class="sourceCode" id="cb426"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb426-1" data-line-number="1"><span class="kw">instance</span> <span class="dt">Arbitrary</span> <span class="dt">Switch</span> <span class="kw">where</span></a>
+<a class="sourceLine" id="cb426-2" data-line-number="2">  arbitrary <span class="fu">=</span> elements [<span class="dt">On</span>,<span class="dt">Off</span>]</a></code></pre></div>
+<!-- TODO (==>)? -->
+<h2 id="phantom-types"><span class="header-section-number">16.2</span> Phantom Types</h2>
+<p>Boo! There’s a ghost in the type system! Let’s have a look at what <em>phantom types</em> can do for you.</p>
+<p>Phantom types are types that don’t take any values. They are related to newtypes (see lecture 10) in that both are a way to add additional type checking without affecting the evaluation of the program at all.</p>
+<p>Let’s use phantom types to track which currency an amount of money is in. We define the phantom types <code>EUR</code> and <code>USD</code> (note how they don’t have any constructors!), and the parameterized type <code>Money a</code> that doesn’t use the type parameter <code>a</code> for anything. Then we can define two constants, one in euros and the other in dollars. You can find all of the code from this section in the file <a href="https://github.com/moocfi/haskell-mooc/blob/master/exercises/Examples/Phantom.hs"><code>exercises/Examples/Phantom.hs</code></a>.</p>
+<div class="sourceCode" id="cb427"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb427-1" data-line-number="1"><span class="kw">data</span> <span class="dt">EUR</span></a>
+<a class="sourceLine" id="cb427-2" data-line-number="2"><span class="kw">data</span> <span class="dt">USD</span></a>
+<a class="sourceLine" id="cb427-3" data-line-number="3"><span class="kw">data</span> <span class="dt">Money</span> currency <span class="fu">=</span> <span class="dt">Money</span> <span class="dt">Double</span></a>
+<a class="sourceLine" id="cb427-4" data-line-number="4">  <span class="kw">deriving</span> <span class="dt">Show</span></a>
+<a class="sourceLine" id="cb427-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb427-6" data-line-number="6"><span class="ot">dollar ::</span> <span class="dt">Money</span> <span class="dt">USD</span></a>
+<a class="sourceLine" id="cb427-7" data-line-number="7">dollar <span class="fu">=</span> <span class="dt">Money</span> <span class="dv">1</span></a>
+<a class="sourceLine" id="cb427-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb427-9" data-line-number="9"><span class="ot">twoEuros ::</span> <span class="dt">Money</span> <span class="dt">EUR</span></a>
+<a class="sourceLine" id="cb427-10" data-line-number="10">twoEuros <span class="fu">=</span> <span class="dt">Money</span> <span class="dv">2</span></a></code></pre></div>
+<p>Note how the type signatures for <code>dollar</code> and <code>twoEuros</code> are doing all the work here. An expression like <code>Money 1</code> has the polymorphic type <code>Money currency</code> if we don’t restrict it to a more specific type. We give <code>dollar</code> and <code>twoEuros</code> more limited types explicitly. This is analogous to defining something like <code>one :: Int; one = 1</code>, since the constant <code>1</code> has the polymorphic type <code>Num p =&gt; p</code> but we give it a more restricted type.</p>
+<div class="sourceCode" id="cb428"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb428-1" data-line-number="1"><span class="fu">*</span><span class="dt">Examples.Phantom</span><span class="fu">&gt;</span> <span class="fu">:</span>t <span class="dt">Money</span></a>
+<a class="sourceLine" id="cb428-2" data-line-number="2"><span class="dt">Money</span><span class="ot"> ::</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> <span class="dt">Money</span> currency</a>
+<a class="sourceLine" id="cb428-3" data-line-number="3"><span class="fu">*</span><span class="dt">Examples.Phantom</span><span class="fu">&gt;</span> <span class="fu">:</span>t <span class="dt">Money</span> <span class="dv">1</span></a>
+<a class="sourceLine" id="cb428-4" data-line-number="4"><span class="dt">Money</span> <span class="dv">1</span><span class="ot"> ::</span> <span class="dt">Money</span> currency</a></code></pre></div>
+<p>Now that we have some constants, we can write functions that operate on them. Let’s start with a function <code>scaleMoney</code> that multiplies an amount of money by a number. The currency stays constant. Here too, the type signature is doing the work: without the type signature, Haskell would infer a type of <code>Double -&gt; Money a -&gt; Money b</code>.</p>
+<div class="sourceCode" id="cb429"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb429-1" data-line-number="1"><span class="ot">scaleMoney ::</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> <span class="dt">Money</span> currency <span class="ot">-&gt;</span> <span class="dt">Money</span> currency</a>
+<a class="sourceLine" id="cb429-2" data-line-number="2">scaleMoney factor (<span class="dt">Money</span> a) <span class="fu">=</span> <span class="dt">Money</span> (factor <span class="fu">*</span> a)</a></code></pre></div>
+<div class="sourceCode" id="cb430"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb430-1" data-line-number="1"><span class="fu">*</span><span class="dt">Examples.Phantom</span><span class="fu">&gt;</span> <span class="fu">:</span>t scaleMoney <span class="dv">3</span> twoEuros</a>
+<a class="sourceLine" id="cb430-2" data-line-number="2">scaleMoney <span class="dv">3</span><span class="ot"> euro ::</span> <span class="dt">Money</span> <span class="dt">EUR</span></a>
+<a class="sourceLine" id="cb430-3" data-line-number="3"><span class="fu">*</span><span class="dt">Examples.Phantom</span><span class="fu">&gt;</span> <span class="fu">:</span>t scaleMoney <span class="dv">3</span> dollar</a>
+<a class="sourceLine" id="cb430-4" data-line-number="4">scaleMoney <span class="dv">3</span><span class="ot"> dollar ::</span> <span class="dt">Money</span> <span class="dt">USD</span></a></code></pre></div>
+<p>Next up: adding two amounts that are in the same currency. We get a nice type error if we try to add values in two different currencies.</p>
+<div class="sourceCode" id="cb431"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb431-1" data-line-number="1"><span class="ot">addMoney ::</span> <span class="dt">Money</span> currency <span class="ot">-&gt;</span> <span class="dt">Money</span> currency <span class="ot">-&gt;</span> <span class="dt">Money</span> currency</a>
+<a class="sourceLine" id="cb431-2" data-line-number="2">addMoney (<span class="dt">Money</span> a) (<span class="dt">Money</span> b) <span class="fu">=</span> <span class="dt">Money</span> (a<span class="fu">+</span>b)</a></code></pre></div>
+<div class="sourceCode" id="cb432"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb432-1" data-line-number="1"><span class="fu">*</span><span class="dt">Examples.Phantom</span><span class="fu">&gt;</span> <span class="fu">:</span>t addMoney dollar dollar</a>
+<a class="sourceLine" id="cb432-2" data-line-number="2">addMoney dollar<span class="ot"> dollar ::</span> <span class="dt">Money</span> <span class="dt">USD</span></a>
+<a class="sourceLine" id="cb432-3" data-line-number="3"><span class="fu">*</span><span class="dt">Examples.Phantom</span><span class="fu">&gt;</span> <span class="fu">:</span>t addMoney twoEuros twoEuros</a>
+<a class="sourceLine" id="cb432-4" data-line-number="4">addMoney twoEuros<span class="ot"> twoEuros ::</span> <span class="dt">Money</span> <span class="dt">EUR</span></a>
+<a class="sourceLine" id="cb432-5" data-line-number="5"><span class="fu">*</span><span class="dt">Examples.Phantom</span><span class="fu">&gt;</span> <span class="fu">:</span>t addMoney twoEuros dollar</a>
+<a class="sourceLine" id="cb432-6" data-line-number="6">error<span class="fu">:</span></a>
+<a class="sourceLine" id="cb432-7" data-line-number="7">    • <span class="dt">Couldn&#39;t</span> match <span class="kw">type</span> ‘<span class="dt">USD</span>’ with ‘<span class="dt">EUR</span>’</a>
+<a class="sourceLine" id="cb432-8" data-line-number="8">      <span class="dt">Expected</span> <span class="kw">type</span><span class="fu">:</span> <span class="dt">Money</span> <span class="dt">EUR</span></a>
+<a class="sourceLine" id="cb432-9" data-line-number="9">        <span class="dt">Actual</span> <span class="kw">type</span><span class="fu">:</span> <span class="dt">Money</span> <span class="dt">USD</span></a>
+<a class="sourceLine" id="cb432-10" data-line-number="10">    • <span class="dt">In</span> the second argument <span class="kw">of</span> ‘addMoney’, namely ‘dollar’</a>
+<a class="sourceLine" id="cb432-11" data-line-number="11">      <span class="dt">In</span> the expression<span class="fu">:</span> addMoney twoEuros dollar</a></code></pre></div>
+<p>As before, the type signature is crucial. Here’s the same implementation with an unrestricted type. Now we can add anything to anything!</p>
+<div class="sourceCode" id="cb433"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb433-1" data-line-number="1"><span class="ot">addMoneyUnsafe ::</span> <span class="dt">Money</span> x <span class="ot">-&gt;</span> <span class="dt">Money</span> y <span class="ot">-&gt;</span> <span class="dt">Money</span> z</a>
+<a class="sourceLine" id="cb433-2" data-line-number="2">addMoneyUnsafe (<span class="dt">Money</span> a) (<span class="dt">Money</span> b) <span class="fu">=</span> <span class="dt">Money</span> (a<span class="fu">+</span>b)</a></code></pre></div>
+<div class="sourceCode" id="cb434"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb434-1" data-line-number="1"><span class="fu">*</span><span class="dt">Examples.Phantom</span><span class="fu">&gt;</span> addMoneyUnsafe twoEuros dollar</a>
+<a class="sourceLine" id="cb434-2" data-line-number="2"><span class="dt">Money</span> <span class="fl">3.0</span></a></code></pre></div>
+<p>We can keep going with this approach, and define currency conversions. We define the type <code>Rate</code> that uses phantom types to track the currencies it’s translating between. The types of <code>convert</code> and <code>invert</code> are restricted to have the properties we want. There’s also an unrestricted version of the convert function to let you compare the types.</p>
+<div class="sourceCode" id="cb435"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb435-1" data-line-number="1"><span class="kw">data</span> <span class="dt">Rate</span> from to <span class="fu">=</span> <span class="dt">Rate</span> <span class="dt">Double</span></a>
+<a class="sourceLine" id="cb435-2" data-line-number="2">  <span class="kw">deriving</span> <span class="dt">Show</span></a>
+<a class="sourceLine" id="cb435-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb435-4" data-line-number="4"><span class="ot">eurToUsd ::</span> <span class="dt">Rate</span> <span class="dt">EUR</span> <span class="dt">USD</span></a>
+<a class="sourceLine" id="cb435-5" data-line-number="5">eurToUsd <span class="fu">=</span> <span class="dt">Rate</span> <span class="fl">1.22</span></a>
+<a class="sourceLine" id="cb435-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb435-7" data-line-number="7"><span class="ot">convert ::</span> <span class="dt">Rate</span> from to <span class="ot">-&gt;</span> <span class="dt">Money</span> from <span class="ot">-&gt;</span> <span class="dt">Money</span> to</a>
+<a class="sourceLine" id="cb435-8" data-line-number="8">convert (<span class="dt">Rate</span> r) (<span class="dt">Money</span> a) <span class="fu">=</span> <span class="dt">Money</span> (r<span class="fu">*</span>a)</a>
+<a class="sourceLine" id="cb435-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb435-10" data-line-number="10"><span class="ot">invert ::</span> <span class="dt">Rate</span> from to <span class="ot">-&gt;</span> <span class="dt">Rate</span> to from</a>
+<a class="sourceLine" id="cb435-11" data-line-number="11">invert (<span class="dt">Rate</span> r) <span class="fu">=</span> <span class="dt">Rate</span> (<span class="dv">1</span><span class="fu">/</span>r)</a>
+<a class="sourceLine" id="cb435-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb435-13" data-line-number="13"><span class="ot">convertUnsafe ::</span> <span class="dt">Rate</span> from to <span class="ot">-&gt;</span> <span class="dt">Money</span> x <span class="ot">-&gt;</span> <span class="dt">Money</span> y</a>
+<a class="sourceLine" id="cb435-14" data-line-number="14">convertUnsafe (<span class="dt">Rate</span> r) (<span class="dt">Money</span> a) <span class="fu">=</span> <span class="dt">Money</span> (r<span class="fu">*</span>a)</a></code></pre></div>
+<div class="sourceCode" id="cb436"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb436-1" data-line-number="1"><span class="fu">*</span><span class="dt">Examples.Phantom</span><span class="fu">&gt;</span> convert eurToUsd twoEuros</a>
+<a class="sourceLine" id="cb436-2" data-line-number="2"><span class="dt">Money</span> <span class="fl">2.44</span></a>
+<a class="sourceLine" id="cb436-3" data-line-number="3"><span class="fu">*</span><span class="dt">Examples.Phantom</span><span class="fu">&gt;</span> convert eurToUsd dollar</a>
+<a class="sourceLine" id="cb436-4" data-line-number="4">error<span class="fu">:</span></a>
+<a class="sourceLine" id="cb436-5" data-line-number="5">    • <span class="dt">Couldn&#39;t</span> match <span class="kw">type</span> ‘<span class="dt">USD</span>’ with ‘<span class="dt">EUR</span>’</a>
+<a class="sourceLine" id="cb436-6" data-line-number="6">      <span class="dt">Expected</span> <span class="kw">type</span><span class="fu">:</span> <span class="dt">Money</span> <span class="dt">EUR</span></a>
+<a class="sourceLine" id="cb436-7" data-line-number="7">        <span class="dt">Actual</span> <span class="kw">type</span><span class="fu">:</span> <span class="dt">Money</span> <span class="dt">USD</span></a>
+<a class="sourceLine" id="cb436-8" data-line-number="8">    • <span class="dt">In</span> the second argument <span class="kw">of</span> ‘convert’, namely ‘dollar’</a>
+<a class="sourceLine" id="cb436-9" data-line-number="9">      <span class="dt">In</span> the expression<span class="fu">:</span> convert eurToUsd dollar</a>
+<a class="sourceLine" id="cb436-10" data-line-number="10">      <span class="dt">In</span> an equation for ‘it’<span class="fu">:</span> it <span class="fu">=</span> convert eurToUsd dollar</a>
+<a class="sourceLine" id="cb436-11" data-line-number="11"><span class="fu">*</span><span class="dt">Examples.Phantom</span><span class="fu">&gt;</span> convert (invert eurToUsd) dollar</a>
+<a class="sourceLine" id="cb436-12" data-line-number="12"><span class="dt">Money</span> <span class="fl">0.819672131147541</span></a>
+<a class="sourceLine" id="cb436-13" data-line-number="13"><span class="fu">*</span><span class="dt">Examples.Phantom</span><span class="fu">&gt;</span> convertUnsafe eurToUsd dollar</a>
+<a class="sourceLine" id="cb436-14" data-line-number="14"><span class="dt">Money</span> <span class="fl">1.22</span></a></code></pre></div>
+<p>Note! The words <code>currency</code>, <code>from</code>, <code>to</code> and so for in the previous examples are <em>just type variables</em>. There’s nothing special going on with them. We could’ve as well given <code>invert</code> a type like <code>Rate a b -&gt; Rate b a</code> without any change in type safety.</p>
+<p>This approach that uses phantom types has clear benefits: giving us type errors for invalid code. Also, compared to defining lots of concrete types like <code>data MoneyEur = MoneyEur Double</code>, with phantom types we need to implement functions like <code>scaleMoney</code> and <code>addMoney</code> only once. Also, we’re able to define polymorphic and reusable concepts like <code>Rate</code>. You can contrast this approach with the Boxing section of Lecture 7.</p>
+<p>However, phantom types also have downsides. Without advanced tricks we can’t really handle currencies that are defined at runtime (for example: reading an amount from a user). It’s also easy to end up in a place where you start needing language extensions like <a href="https://wiki.haskell.org/GADTs_for_dummies"><em>Generalized Algebraic Datatypes</em></a>, <a href="https://wiki.haskell.org/GHC/Type_families"><em>type families</em></a> and other <a href="https://aphyr.com/posts/342-typing-the-technical-interview"><em>type-level programming</em></a> constructs. Eventually you’re all the way in the world of <a href="https://mitpress.mit.edu/books/little-typer"><em>dependent typing</em></a>.</p>
+<p>So what are good applications for phantom types? When you need to track some simple, but crucial information, that is known at compile-time. An example that’s somewhat better than currencies is tracking whether inputs from the user have been sanitated to prevent attacks like <a href="https://en.wikipedia.org/wiki/SQL_injection">SQL injection</a> or <a href="https://en.wikipedia.org/wiki/Cross-site_scripting">cross-site scripting</a>.</p>
+<p>We can use the types <code>Input Safe</code> and <code>Input Unsafe</code> to track whether strings are safe for passing into the database or not. If our module only exports the <code>makeInput</code> function, and not the <code>Input</code> constructor, the type system ensures that any inputs must pass through the <code>escapeInput</code> function at some point before going into a database function like <code>addForumComment</code>.</p>
+<div class="sourceCode" id="cb437"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb437-1" data-line-number="1"><span class="kw">data</span> <span class="dt">Safe</span></a>
+<a class="sourceLine" id="cb437-2" data-line-number="2"><span class="kw">data</span> <span class="dt">Unsafe</span></a>
+<a class="sourceLine" id="cb437-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb437-4" data-line-number="4"><span class="kw">data</span> <span class="dt">Input</span> a <span class="fu">=</span> <span class="dt">Input</span> <span class="dt">String</span></a>
+<a class="sourceLine" id="cb437-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb437-6" data-line-number="6"><span class="co">-- Public constructor function for Input, only allows constructing</span></a>
+<a class="sourceLine" id="cb437-7" data-line-number="7"><span class="co">-- Unsafe Inputs from Strings.</span></a>
+<a class="sourceLine" id="cb437-8" data-line-number="8"><span class="ot">makeInput ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Input</span> <span class="dt">Unsafe</span></a>
+<a class="sourceLine" id="cb437-9" data-line-number="9">makeInput xs <span class="fu">=</span> <span class="dt">Input</span> xs</a>
+<a class="sourceLine" id="cb437-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb437-11" data-line-number="11"><span class="co">-- Adds comment to the database.</span></a>
+<a class="sourceLine" id="cb437-12" data-line-number="12"><span class="ot">addForumComment ::</span> <span class="dt">Input</span> <span class="dt">Safe</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> <span class="dt">Result</span></a>
+<a class="sourceLine" id="cb437-13" data-line-number="13">addForumComment <span class="fu">=</span> <span class="fu">...</span></a>
+<a class="sourceLine" id="cb437-14" data-line-number="14"></a>
+<a class="sourceLine" id="cb437-15" data-line-number="15"><span class="co">-- We can combine inputs, but that won&#39;t change their safety</span></a>
+<a class="sourceLine" id="cb437-16" data-line-number="16"><span class="ot">concatInputs ::</span> <span class="dt">Input</span> a <span class="ot">-&gt;</span> <span class="dt">Input</span> a <span class="ot">-&gt;</span> <span class="dt">Input</span> a</a>
+<a class="sourceLine" id="cb437-17" data-line-number="17">concatInputs (<span class="dt">Input</span> xs) (<span class="dt">Input</span> ys) <span class="fu">=</span> <span class="dt">Input</span> (xs<span class="fu">++</span>ys)</a>
+<a class="sourceLine" id="cb437-18" data-line-number="18"></a>
+<a class="sourceLine" id="cb437-19" data-line-number="19"><span class="co">-- Strip bad characters to turn an unsafe input safe</span></a>
+<a class="sourceLine" id="cb437-20" data-line-number="20"><span class="ot">escapeInput ::</span> <span class="dt">Input</span> <span class="dt">Unsafe</span> <span class="ot">-&gt;</span> <span class="dt">Input</span> <span class="dt">Safe</span></a>
+<a class="sourceLine" id="cb437-21" data-line-number="21">escapeInput (<span class="dt">Input</span> xs) <span class="fu">=</span> <span class="dt">Input</span> (filter (\c <span class="ot">-&gt;</span> isAlpha c <span class="fu">||</span> isSpace c) xs)</a></code></pre></div>
+<h2 id="simultaneity"><span class="header-section-number">16.3</span> Simultaneity</h2>
+<h3 id="parallelism"><span class="header-section-number">16.3.1</span> Parallelism</h3>
+<p>One of the great things about purity is that it makes <em>parallelism</em>, computing many things at the same time, very easy. Let’s have a look at how we can do this in Haskell. First off, we need to start a new GHCi that has parallel execution enabled. The simplest way is:</p>
+<pre><code>$ stack ghci --ghci-options &quot;+RTS -N&quot;</code></pre>
+<p>Next up, let’s define a very naive version of the Fibonacci function (remember Lecture 1?) , enable performance statistics with <code>:set +s</code>, and see how long it takes to compute five values of the function:</p>
+<div class="sourceCode" id="cb439"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb439-1" data-line-number="1"><span class="dt">Prelude</span><span class="fu">&gt;</span> fib <span class="dv">0</span> <span class="fu">=</span> <span class="dv">1</span>; fib <span class="dv">1</span> <span class="fu">=</span> <span class="dv">1</span>; fib n <span class="fu">=</span> fib (n<span class="fu">-</span><span class="dv">1</span>) <span class="fu">+</span> fib (n<span class="fu">-</span><span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb439-2" data-line-number="2"><span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="fu">:</span>set <span class="fu">+</span>s</a>
+<a class="sourceLine" id="cb439-3" data-line-number="3"><span class="dt">Prelude</span><span class="fu">&gt;</span> map fib [<span class="dv">29</span>,<span class="dv">29</span>,<span class="dv">29</span>,<span class="dv">29</span>,<span class="dv">29</span>]</a>
+<a class="sourceLine" id="cb439-4" data-line-number="4">[<span class="dv">832040</span>,<span class="dv">832040</span>,<span class="dv">832040</span>,<span class="dv">832040</span>,<span class="dv">832040</span>]</a>
+<a class="sourceLine" id="cb439-5" data-line-number="5">(<span class="fl">7.54</span> secs, <span class="dv">2</span>,<span class="dv">440</span>,<span class="dv">860</span>,<span class="dv">632</span> bytes)</a></code></pre></div>
+<p>Now let’s bring in the module <a href="https://hackage.haskell.org/package/parallel-3.2.1.1/docs/Control-Parallel-Strategies.html">Control.Parallel.Strategies</a> that defines ways to evaluate values in parallel. We’ll use the <code>parList rseq</code> strategy to evaluate all the elements of the list to WHNF, <em>in parallel</em>.</p>
+<div class="sourceCode" id="cb440"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb440-1" data-line-number="1"><span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="kw">import</span> <span class="dt">Control.Parallel.Strategies</span></a>
+<a class="sourceLine" id="cb440-2" data-line-number="2"><span class="dt">Prelude</span> <span class="dt">Control.Parallel.Strategies</span><span class="fu">&gt;</span> withStrategy (parList rseq) (map fib [<span class="dv">29</span>,<span class="dv">29</span>,<span class="dv">29</span>,<span class="dv">29</span>,<span class="dv">29</span>])</a>
+<a class="sourceLine" id="cb440-3" data-line-number="3">[<span class="dv">832040</span>,<span class="dv">832040</span>,<span class="dv">832040</span>,<span class="dv">832040</span>,<span class="dv">832040</span>]</a>
+<a class="sourceLine" id="cb440-4" data-line-number="4">(<span class="fl">4.80</span> secs, <span class="dv">488</span>,<span class="dv">531</span>,<span class="dv">384</span> bytes)</a></code></pre></div>
+<p>That’s almost 2 times as fast, on the 2-core machine that this example is being run on. Pretty nice. The coolest thing here is that we were able to define the <em>computation</em> (<code>map fib ...</code>) completely separately from the <em>evaluation strategy</em> (<code>parList rseq</code>), separating the <em>what to compute</em> from the <em>how to compute</em>.</p>
+<h3 id="concurrency"><span class="header-section-number">16.3.2</span> Concurrency</h3>
+<p>Computer science makes the distinction between parallel and <em>concurrent</em> computations. Parallel computations are those that just run separate independent computations in parallel (in other words, parallelism is <em>pure</em>). Concurrent computations are those where there are multiple interacting threads of computation. Concurrency usually involves threads, locks, messages and deadlocks.</p>
+<p>In addition to great tooling for parallelism, Haskell also has good tooling for concurrency via <em>threads</em>. Since concurrency is all about side-effects, concurrent computations happen in the <code>IO</code> Monad. The classic example of threading is two threads, the other one printing a stream of As and the other a stream of Bs. Here it is in Haskell:</p>
+<div class="sourceCode" id="cb441"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb441-1" data-line-number="1"><span class="ot">printA ::</span> <span class="dt">IO</span> ()</a>
+<a class="sourceLine" id="cb441-2" data-line-number="2">printA <span class="fu">=</span> putStrLn (replicate <span class="dv">40</span> <span class="ch">&#39;A&#39;</span>)</a>
+<a class="sourceLine" id="cb441-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb441-4" data-line-number="4"><span class="ot">printB ::</span> <span class="dt">IO</span> ()</a>
+<a class="sourceLine" id="cb441-5" data-line-number="5">printB <span class="fu">=</span> putStrLn (replicate <span class="dv">40</span> <span class="ch">&#39;B&#39;</span>)</a>
+<a class="sourceLine" id="cb441-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb441-7" data-line-number="7"><span class="ot">concurrency ::</span> <span class="dt">IO</span> ()</a>
+<a class="sourceLine" id="cb441-8" data-line-number="8">concurrency <span class="fu">=</span> <span class="kw">do</span></a>
+<a class="sourceLine" id="cb441-9" data-line-number="9">  forkIO printA</a>
+<a class="sourceLine" id="cb441-10" data-line-number="10">  forkIO printB</a>
+<a class="sourceLine" id="cb441-11" data-line-number="11">  return ()</a></code></pre></div>
+<pre><code>Prelude Control.Concurrent&gt; concurrency
+AABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABB</code></pre>
+<p>The operation <code>forkIO :: IO () -&gt; IO ThreadId</code> takes an IO operation and starts running it in the backgroud. It produces a <code>ThreadId</code> that can be used to e.g. terminate the thread.</p>
+<p>If we want to add actual communication between threads, we can use abstractions like <a href="https://hackage.haskell.org/package/base-4.14.1.0/docs/Control-Concurrent-MVar.html"><code>MVar</code></a> (a mutable thread-safe variable) or <a href="https://hackage.haskell.org/package/base-4.14.1.0/docs/Control-Concurrent-Chan.html"><code>Chan</code></a> (a queue).</p>
+<p>Here’s a simple example where one thread writes a values to an <code>MVar</code> and another one waits for them and prints them. An <code>MVar</code> works like a mailbox: it is either empty or full. Calling <code>takeMVar</code> on an empty box waits for the box to get filled (with a <code>putMVar</code>). Symmetrically, trying to <code>putMVar</code> into a full box waits until the box is empty.</p>
+<div class="sourceCode" id="cb443"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb443-1" data-line-number="1"><span class="ot">takeMVar ::</span> <span class="dt">MVar</span> a <span class="ot">-&gt;</span> <span class="dt">IO</span> a</a>
+<a class="sourceLine" id="cb443-2" data-line-number="2"><span class="ot">putMVar ::</span> <span class="dt">MVar</span> a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> <span class="dt">IO</span> ()</a>
+<a class="sourceLine" id="cb443-3" data-line-number="3"><span class="ot">newEmptyMVar ::</span> <span class="dt">IO</span> (<span class="dt">MVar</span> a)</a></code></pre></div>
+<div class="sourceCode" id="cb444"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb444-1" data-line-number="1"><span class="ot">send ::</span> [<span class="dt">String</span>] <span class="ot">-&gt;</span> <span class="dt">MVar</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> ()</a>
+<a class="sourceLine" id="cb444-2" data-line-number="2">send values var <span class="fu">=</span> mapM_ (putMVar var) values</a>
+<a class="sourceLine" id="cb444-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb444-4" data-line-number="4"><span class="ot">receive ::</span> <span class="dt">MVar</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> ()</a>
+<a class="sourceLine" id="cb444-5" data-line-number="5">receive var <span class="fu">=</span> <span class="kw">do</span> val <span class="ot">&lt;-</span> takeMVar var</a>
+<a class="sourceLine" id="cb444-6" data-line-number="6">                 print val</a>
+<a class="sourceLine" id="cb444-7" data-line-number="7">                 <span class="co">-- loop unless at last value</span></a>
+<a class="sourceLine" id="cb444-8" data-line-number="8">                 when (val<span class="fu">/=</span><span class="st">&quot;end&quot;</span>) (receive var)</a>
+<a class="sourceLine" id="cb444-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb444-10" data-line-number="10"><span class="ot">concurrency2 ::</span> <span class="dt">IO</span> ()</a>
+<a class="sourceLine" id="cb444-11" data-line-number="11">concurrency2 <span class="fu">=</span> <span class="kw">do</span></a>
+<a class="sourceLine" id="cb444-12" data-line-number="12">  var <span class="ot">&lt;-</span> newEmptyMVar</a>
+<a class="sourceLine" id="cb444-13" data-line-number="13">  forkIO (send [<span class="st">&quot;hello&quot;</span>,<span class="st">&quot;world&quot;</span>,<span class="st">&quot;and&quot;</span>,<span class="st">&quot;goodbye&quot;</span>,<span class="st">&quot;end&quot;</span>] var)</a>
+<a class="sourceLine" id="cb444-14" data-line-number="14">  forkIO (receive var)</a>
+<a class="sourceLine" id="cb444-15" data-line-number="15">  return ()</a></code></pre></div>
+<div class="sourceCode" id="cb445"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb445-1" data-line-number="1"><span class="dt">Prelude</span> <span class="dt">Control.Concurrent</span> <span class="dt">Control.Monad</span><span class="fu">&gt;</span> concurrency2</a>
+<a class="sourceLine" id="cb445-2" data-line-number="2"><span class="st">&quot;hello&quot;</span></a>
+<a class="sourceLine" id="cb445-3" data-line-number="3"><span class="st">&quot;world&quot;</span></a>
+<a class="sourceLine" id="cb445-4" data-line-number="4"><span class="st">&quot;and&quot;</span></a>
+<a class="sourceLine" id="cb445-5" data-line-number="5"><span class="st">&quot;goodbye&quot;</span></a>
+<a class="sourceLine" id="cb445-6" data-line-number="6"><span class="st">&quot;end&quot;</span></a></code></pre></div>
+<h2 id="exercises-7"><span class="header-section-number">16.4</span> Exercises</h2>
+<ul>
+<li>Set16a: QuickCheck</li>
+<li>Set16b: Phantom types</li>
+<li>No exercises for parallel or concurrent Haskel, sorry!</li>
+</ul>
+<h2 id="where-to-go-from-here"><span class="header-section-number">16.5</span> Where to Go From Here?</h2>
+<p>Congratulations! You’ve reached the end of this two part course on Functional Programming in Haskell. What next? You definitely know enough Haskell to keep learning on your own. The online Haskell community is very friendly and there are lots of blog posts and other content explaining advanced techniques and features. You can find lots of interesting stuff by following for example:</p>
+<ul>
+<li><a href="https://www.reddit.com/r/haskell/">/r/haskell</a> on reddit</li>
+<li><code>#haskell</code> on <a href="https://libera.chat">libera.chat</a></li>
+<li><a href="https://haskellweekly.news/">Haskell Weekly</a></li>
+<li>StackOverflow</li>
+</ul>
+<p>Just keep writing Haskell, studying things (like libraries and tools) when you bump into them, and slowly accumulate experience. Lots of the things you learn with Haskell will be transferable to other languages like <a href="https://www.typescriptlang.org/">TypeScript</a>, <a href="https://elm-lang.org/">Elm</a>, <a href="https://www.rust-lang.org/">Rust</a> or <a href="https://fsharp.org/">F#</a>.</p>
+<p>Finally, here is an incomplete list of things that got left out of this course, but are worth looking into:</p>
+<ul>
+<li>Language features
+<ul>
+<li><a href="https://en.wikibooks.org/wiki/Haskell/Modules">Modules</a></li>
+<li>Lazy patterns (<code>~</code> patterns) and <code>@</code> patterns. See e.g. <a href="https://www.haskell.org/tutorial/patterns.html">A Gentle Introduction to Haskell</a>.</li>
+<li>Language extensions like <code>MultiParamTypeClasses</code>, <code>ViewPatterns</code> etc. <a href="https://limperg.de/ghc-extensions/">This is one good guide</a></li>
+<li>The <code>fix</code> function</li>
+<li>The Foreign Function Interface for calling C code from Haskell</li>
+</ul></li>
+<li>Abstractions
+<ul>
+<li>Monad transformers: <a href="http://book.realworldhaskell.org/read/monad-transformers.html">RWH</a>, <a href="https://en.wikibooks.org/wiki/Haskell/Monad_transformers">Wikibook</a></li>
+<li>Free monads (advanced topic): <a href="https://www.haskellforall.com/2012/06/you-could-have-invented-free-monads.html">blog</a></li>
+<li>Lenses (advanced topic): <a href="https://hackage.haskell.org/package/lens-tutorial-1.0.3/docs/Control-Lens-Tutorial.html">tutorial</a> <a href="http://oleg.fi/gists/posts/2017-04-18-glassery.html">glassery</a></li>
+<li><a href="https://bartoszmilewski.com/">Bartosz Milewski</a> covers lots of intermediate and advanced topics on his blog</li>
+</ul></li>
+<li>Tooling
+<ul>
+<li>Using <a href="https://www.haskell.org/cabal/">Cabal</a> and <a href="https://www.haskellstack.org">Stack</a> to build your own projects</li>
+<li>Profiling: <a href="http://book.realworldhaskell.org/read/profiling-and-optimization.html">RWH</a>, <a href="https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/profiling.html">GHC</a></li>
+<li><a href="https://github.com/ndmitchell/hlint#readme">Hlint</a></li>
+</ul></li>
+<li>Libraries
+<ul>
+<li>Parsec (parsing): <a href="http://book.realworldhaskell.org/read/using-parsec.html">RWH</a></li>
+<li>Scotty (simple web framework), Aeson (json): <a href="https://seanhess.github.io/2015/08/19/practical-haskell-json-api.html">blog</a></li>
+<li><a href="https://haskell-servant.github.io/">Servant</a> (fancy web framework with phantom types)</li>
+</ul></li>
+</ul>
+<h2 id="acknowledgements"><span class="header-section-number">16.6</span> Acknowledgements</h2>
+<p>This course was made possible by <a href="https://nitor.com/en">Nitor</a> who donated hours and hours of Joel’s working time for this project. Thank you!</p>
+<p>Thanks to the whole Haskell Mooc team, especially</p>
+<ul>
+<li>John Lång for help on the material</li>
+<li>Antti Laaksonen for setting up the course and helping with arrangements</li>
+<li>Topi Talvitie for the exercise checking infrastructure</li>
+</ul>
+<p>Thanks to all the students who patiently waited for part 2 and reported errors in the material &amp; exercises!</p>
 </div>
 </div>
 </body>
