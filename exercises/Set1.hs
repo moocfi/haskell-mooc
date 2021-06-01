@@ -20,6 +20,8 @@ import Mooc.Todo
 ------------------------------------------------------------------------------
 -- Ex 1: define variables one and two. They should have type Int and
 -- values 1 and 2, respectively.
+one :: Int
+two :: Int
 one = 1
 two = 2
 
@@ -63,7 +65,7 @@ distance x1 y1 x2 y2 = sqrt((x1 - x2) ^ 2 + (y1 - y2) ^ 2)
 -- Ps. have a look at the built in function "even"
 
 eeny :: Integer -> String
-eeny = todo
+eeny  x = if even x then "eeny" else "meeny"
 
 ------------------------------------------------------------------------------
 -- Ex 6: here's the function checkPassword from the course material.
@@ -71,7 +73,7 @@ eeny = todo
 -- "mellon".
 
 checkPassword :: String -> String
-checkPassword password = if password == "swordfish" 
+checkPassword password = if password == "swordfish" || password == "mellon"
                          then "You're in."
                          else "ACCESS DENIED!"
 
@@ -85,7 +87,10 @@ checkPassword password = if password == "swordfish"
 -- in grams, and returns the cost in credits.
 
 postagePrice :: Int -> Int
-postagePrice = todo
+postagePrice grams
+   | grams <= 500 = 250 
+   | grams <= 5000 = 300 + 1 * grams
+   | grams > 5000 = 6000
 
 ------------------------------------------------------------------------------
 -- Ex 8: define a function isZero that returns True if it is given an
