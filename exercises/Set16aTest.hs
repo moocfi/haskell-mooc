@@ -38,7 +38,8 @@ qFail p = monadicIO $ do
     counterexample "  Should fail" $
     counterexample "quickCheck output:" $
     counterexample (output res) $
-    not (isSuccess res)
+    case res of Failure{} -> True
+                _ -> False
 
 letter = choose ('a','z')
 
