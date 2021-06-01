@@ -21,7 +21,7 @@ import Data.List
 -- Ex 1: Define the constant years, that is a list of the values 1982,
 -- 2004 and 2020 in this order.
 
-years = todo
+years = [1982, 2004, 2020]
 
 ------------------------------------------------------------------------------
 -- Ex 2: define the function takeFinal, which returns the n last
@@ -30,9 +30,10 @@ years = todo
 -- If the list is shorter than n, return all elements.
 --
 -- Hint! remember the take and drop functions.
+-- *** drop n xs returns the suffix of xs after the first n elements, or [] if n > length xs.
 
 takeFinal :: Int -> [a] -> [a]
-takeFinal n xs = todo
+takeFinal n xs = drop (length xs - n) xs
 
 ------------------------------------------------------------------------------
 -- Ex 3: Update an element at a certain index in a list. More
