@@ -149,7 +149,7 @@ sow (x:xs) (y:ys) = oneof [fmap (x:) $ sow xs (y:ys)
                           ,fmap (y:) $ sow (x:xs) ys]
 
 ex7_fail = forAll_ $ \(i::Int) ->
-  forAllBlind (choose ('a','z')) $ \c ->
+  forAllBlind (choose ('a','n')) $ \c -> -- don't generate 0o or 0x by accident
   forAllBlind (shuffle (c:show i)) $ \ni ->
   forAll_ $ \(b::Bool) ->
   forAllBlind (sow [c] (show b)) $ \nb ->

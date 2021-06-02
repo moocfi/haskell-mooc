@@ -133,6 +133,9 @@ twoPersons name1 age1 employed1 name2 age2 employed2 = todo
 --
 -- Hint: remember readMaybe
 --
+-- PS. The tests won't test special cases of Int literals like hexadecimal
+-- (0x3a) or octal (0o14).
+--
 -- Examples:
 --  boolOrInt "True"    ==> Ok (Left True)
 --  boolOrInt "13"      ==> Ok (Right 13)
