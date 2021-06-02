@@ -21,7 +21,7 @@ tests = [(1,"workload",[ex1_small, ex1_medium, ex1_big])
         ,(6,"Lock",[ex6_examples, ex6_gen])
         ,(7,"Eq Text",[ex7])
         ,(8,"compose",[ex8_one_one, ex8_many_one, ex8_bijection, ex8_surjective])
-        ,(9,"permute",[ex9_id, ex9_compose])
+        ,(9,"permute",[ex9_id, ex9_simple, ex9_compose])
         ]
 
 -- -- -- -- --
@@ -190,6 +190,11 @@ ex9_id = property $ do
   let id = [(i,i) | i <- [0..n-1]]
   xs <- shuffle (take n "abcdefghij")
   return $ $(testing [|permute id xs|]) (?== xs)
+
+ex9_simple = forAllShrink_ (sublistOf "pqrstuv") $ \sorted ->
+  forAllBlind (shuffle sorted) $ \cs ->
+  let res = [(i,j) | (i,c) <- zip [0..] cs, let Just j = elemIndex c sorted]
+  in $(testing [|permute res cs|]) (?==sorted)
 
 ex9_compose = property $ do
   n  <- choose (2,5)
