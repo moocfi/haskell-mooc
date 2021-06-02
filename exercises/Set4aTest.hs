@@ -140,7 +140,8 @@ ex8_tie = property $
      let inp = Map.fromList [(first,score),(second,score),(third,thirdScore)]
      return $ $(testing [|winner inp first second|]) (?==first)
 
-ex9_bool = forAll_ $ \bs ->
+ex9_bool = forAllBlind (choose (0,10)) $ \n ->
+  forAllBlind (vectorOf n arbitrary) $ \bs ->
   $(testing [|freqs bs|]) . was $ \m ->
   let (t,f) = partition id bs
       ntrue = length t
@@ -151,7 +152,8 @@ ex9_bool = forAll_ $ \bs ->
              ,counterexample ("  Number of False values should be "++show nfalse) $
               null f || (False,nfalse) `elem` out]
 
-ex9_int = forAll_ $ \(is::[Int]) ->
+ex9_int = forAllBlind (choose (0,15)) $ \n ->
+  forAllBlind (vectorOf n arbitrary) $ \(is::[Int]) ->
   $(testing [|freqs is|]) . was $ \out ->
   let vals = nub is
   in counterexample "  Number of keys" (length (Map.keys out) ?== length vals)
