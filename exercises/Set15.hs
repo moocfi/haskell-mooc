@@ -77,7 +77,7 @@ validateDiv = todo
 -- Ex 5: Validating street addresses. A street address consists of a
 -- street name, a street number, and a postcode.
 --
--- Implement the functoin validateAddress which constructs an Address
+-- Implement the function validateAddress which constructs an Address
 -- value if the input is valid:
 --
 -- * Street length should be at most 20 characters
