@@ -3545,8 +3545,8 @@ None of the above
 <a class="sourceLine" id="cb322-12" data-line-number="12">main <span class="fu">=</span> run port application</a>
 <a class="sourceLine" id="cb322-13" data-line-number="13"></a>
 <a class="sourceLine" id="cb322-14" data-line-number="14"><span class="co">-- type Application = Request -&gt; (Response -&gt; IO ResponseReceived) -&gt; IO ResponseReceived</span></a>
-<a class="sourceLine" id="cb322-15" data-line-number="15"><span class="ot">server ::</span> <span class="dt">Application</span></a>
-<a class="sourceLine" id="cb322-16" data-line-number="16">server request respond <span class="fu">=</span></a>
+<a class="sourceLine" id="cb322-15" data-line-number="15"><span class="ot">application ::</span> <span class="dt">Application</span></a>
+<a class="sourceLine" id="cb322-16" data-line-number="16">application request respond <span class="fu">=</span></a>
 <a class="sourceLine" id="cb322-17" data-line-number="17">  respond (responseLBS status200 [] (LB.pack <span class="st">&quot;Hello World!&quot;</span>))</a></code></pre></div>
 <p>Let’s look at the types in this example. There’s a lot going on here. First off, <code>Application</code> is a <em>type alias</em> for a thing that implements the logic of a web server. The <a href="http://hackage.haskell.org/package/warp-3.3.14/docs/Network-Wai-Handler-Warp.html#v:run"><code>run</code> function from Warp</a> can run <code>Application</code>s:</p>
 <div class="sourceCode" id="cb323"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb323-1" data-line-number="1"><span class="ot">run ::</span> <span class="dt">Port</span> <span class="ot">-&gt;</span> <span class="dt">Application</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> ()</a>
