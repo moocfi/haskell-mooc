@@ -4116,7 +4116,7 @@ TODO explain `some` and `many`
 <div class="sourceCode" id="cb391"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb391-1" data-line-number="1"><span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="fu">:</span>t myMapM</a>
 <a class="sourceLine" id="cb391-2" data-line-number="2"><span class="ot">myMapM ::</span> <span class="dt">Applicative</span> f <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> f b) <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> f [b]</a></code></pre></div>
 <h2 id="quiz-5"><span class="header-section-number">15.9</span> Quiz</h2>
-<p>What’s the type of <code>x</code> in <code>liftA2 not Nothing x</code>?</p>
+<p>What’s the type of <code>x</code> in <code>liftA2 (&amp;&amp;) Nothing x</code>?</p>
 <ol class="quiz">
 <li>
 <code>Applicative f =&gt; f Bool</code>
