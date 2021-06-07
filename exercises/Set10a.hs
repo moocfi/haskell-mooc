@@ -137,6 +137,7 @@ chunks = todo
 --   ignorecase "abC" == ignorecase "ABc"  ==>  True
 --   ignorecase "acC" == ignorecase "ABc"  ==>  False
 
+ignorecase = todo
 
 ------------------------------------------------------------------------------
 -- Ex 9: Here's the Room type and some helper functions from the
