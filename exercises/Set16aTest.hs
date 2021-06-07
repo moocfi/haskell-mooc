@@ -114,7 +114,8 @@ ex6_1 = testGen genList $ \l ->
 
 ex6_2 = once $ testGenMany genList 30 $ \ls ->
   conjoin [counterexample "  should have lists of all lengths" $ nub (sort (map length ls)) ?== [3,4,5]
-          ,counterexample "  should at least 7 different ints" $ length (nub (sort (concat ls))) >= 7]
+          ,counterexample "  should at least 7 different ints" $ length (nub (sort (concat ls))) >= 7
+          ,counterexample "  should have a list with differing elements" $ any ((>1).length.nub) ls]
 
 ex7_arg_1 = counterexample "arbitrary :: Gen Arg" $
   testGen (arbitrary :: Gen Arg) $ \a ->
