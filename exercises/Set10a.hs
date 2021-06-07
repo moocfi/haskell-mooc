@@ -107,7 +107,11 @@ lengthAtLeast = todo
 
 ------------------------------------------------------------------------------
 -- Ex 7: The function chunks should take in a list, and a number n,
--- and return all sublists of length n of the original list.
+-- and return all sublists of length n of the original list. The
+-- sublists should be in the order that they appear in the original
+-- list. A sublist means a slice, that is, a list of elements
+-- a,b,c,... that occur in the original list next to each other and in
+-- the same order.
 --
 -- Make sure your function works with infinite inputs. The function
 -- lengthAtLeast can help with this.
