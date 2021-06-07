@@ -1,6 +1,7 @@
 module Set10a where
 
 import Data.Char
+import Data.List
 
 import Mooc.Todo
 
