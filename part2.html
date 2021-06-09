@@ -2540,7 +2540,7 @@ Query the user for a number and return it.
 <a class="sourceLine" id="cb208-4" data-line-number="4">    check <span class="fu">?&gt;</span></a>
 <a class="sourceLine" id="cb208-5" data-line-number="5">    buildResult</a>
 <a class="sourceLine" id="cb208-6" data-line-number="6">  <span class="kw">where</span> check x</a>
-<a class="sourceLine" id="cb208-7" data-line-number="7">           <span class="fu">|</span> x <span class="fu">&lt;</span> val   <span class="fu">=</span> <span class="dt">Nothing</span></a>
+<a class="sourceLine" id="cb208-7" data-line-number="7">           <span class="fu">|</span> val <span class="fu">&lt;</span> x   <span class="fu">=</span> <span class="dt">Nothing</span></a>
 <a class="sourceLine" id="cb208-8" data-line-number="8">           <span class="fu">|</span> otherwise <span class="fu">=</span> <span class="dt">Just</span> x</a>
 <a class="sourceLine" id="cb208-9" data-line-number="9">        buildResult x <span class="fu">=</span> <span class="dt">Just</span> ((key,val) <span class="fu">:</span> delete (key,x) assocs)</a></code></pre></div>
 <p>Here’s another example: safe list indexing built from <code>safeHead</code> and <code>safeTail</code>:</p>
