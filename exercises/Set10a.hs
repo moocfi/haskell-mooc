@@ -40,8 +40,8 @@ interleave :: [a] -> [a] -> [a]
 interleave = todo
 
 ------------------------------------------------------------------------------
--- Ex 3: Deal out cards. Given a list of cards (strings), and a list
--- of players (strings), deal out the cards to the players in a cycle.
+-- Ex 3: Deal out cards. Given a list of players (strings), and a list
+-- of cards (strings), deal out the cards to the players in a cycle.
 --
 -- Make sure your function works with infinite inputs as well!
 --
