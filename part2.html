@@ -2124,7 +2124,7 @@ Prelude&gt; final
 <code>ans &lt;- return [y,z]</code>
 </li>
 </ol>
-<p>What values does <code>blorg [1,2,3]</code> print?</p>
+<p>What values does <code>blorg [1,2,3]</code> print? That is, what values <code>x</code> does it call <code>print x</code> for. The value produced by <code>blorg</code> doesn’t count.</p>
 <div class="sourceCode" id="cb175"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb175-1" data-line-number="1">blorg [] <span class="fu">=</span> return <span class="dv">0</span></a>
 <a class="sourceLine" id="cb175-2" data-line-number="2">blorg (x<span class="fu">:</span>xs) <span class="fu">=</span> <span class="kw">do</span> m <span class="ot">&lt;-</span> blorg xs</a>
 <a class="sourceLine" id="cb175-3" data-line-number="3">                  print x</a>
