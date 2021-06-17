@@ -242,7 +242,7 @@ parensMatch s = count == 0
 -- PS. The order of the list of pairs doesn't matter
 
 count :: Eq a => a -> State [(a,Int)] ()
-count x = return ()
+count x = todo
 
 ------------------------------------------------------------------------------
 -- Ex 10: Implement the operation occurrences, which
