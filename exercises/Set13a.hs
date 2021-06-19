@@ -14,7 +14,7 @@ import Examples.Bank
 ------------------------------------------------------------------------------
 -- Ex 1: Your task is to help implement the function readName that
 -- given a string like "Forename Surname" produces the pair
--- ("Forname", "Surname"). readName should fail (return Nothing) in
+-- ("Forename", "Surname"). readName should fail (return Nothing) in
 -- the following cases:
 --
 --   1. the input string doesn't contain a space
