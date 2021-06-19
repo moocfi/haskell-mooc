@@ -13,7 +13,7 @@ module Set14b where
 import Mooc.Todo
 
 -- Utilities
-import qualified Data.ByteString.Lazy as B
+import qualified Data.ByteString.Lazy as LB
 import Data.Maybe
 import qualified Data.Text as T
 import qualified Data.Text.Read as TR
@@ -90,7 +90,8 @@ deposit = todo
 --
 -- PS. if you know SQL you can do the summing in SQL by changing
 -- balanceQuery, otherwise you can do it in the balance operation
--- itself.
+-- itself. If you choose to edit the SQL query, remember that sum
+-- can return null.
 --
 -- Example in GHCi:
 --   Set14b> db <- openDatabase ""
@@ -187,8 +188,8 @@ perform = todo
 --   - In GHCi: run 8899 simpleServer
 --   - Go to <http://localhost:8899> in your browser, you should see the text BANK
 
-encodeResponse :: T.Text -> B.ByteString
-encodeResponse t = B.fromStrict (encodeUtf8 t)
+encodeResponse :: T.Text -> LB.ByteString
+encodeResponse t = LB.fromStrict (encodeUtf8 t)
 
 -- Remember:
 -- type Application = Request -> (Response -> IO ResponseReceived) -> IO ResponseReceived
