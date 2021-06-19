@@ -1793,7 +1793,7 @@ Prelude&gt; final
 <a class="sourceLine" id="cb142-3" data-line-number="3">  return value</a></code></pre></div>
 <p>The function <code>quux</code> will have type <code>A -&gt; IO B</code>, where <code>x :: A</code> and <code>value :: B</code>.</p>
 <p>Let’s look at the typing of <code>&lt;-</code> next. If <code>op :: IO X</code> and you have <code>var &lt;- op</code>, <code>var</code> will have type <code>X</code>. We’ve seen this in many GHCi examples.</p>
-<p>The last line of a <code>do</code> cannot be <code>foo &lt;- bar</code>. The last line determines what the whole operation produces, so it must be an operation (for example, <code>return something</code>).</p>
+<p>The last line of a <code>do</code> cannot be <code>foo &lt;- bar</code>. It can’t be <code>let foo = bar</code> either. The last line determines what the whole operation produces, so it must be an operation (for example, <code>return something</code>).</p>
 <p>Here’s a worked example:</p>
 <div class="sourceCode" id="cb143"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb143-1" data-line-number="1"><span class="ot">alwaysFine ::</span> <span class="dt">IO</span> <span class="dt">Bool</span></a>
 <a class="sourceLine" id="cb143-2" data-line-number="2">alwaysFine <span class="fu">=</span> <span class="kw">do</span></a>
