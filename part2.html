@@ -2257,7 +2257,7 @@ Query the user for a number and return it.
 <a class="sourceLine" id="cb185-3" data-line-number="3"><span class="kw">instance</span> <span class="dt">Functor</span> <span class="dt">Tree</span> <span class="kw">where</span></a>
 <a class="sourceLine" id="cb185-4" data-line-number="4">  fmap _ <span class="dt">Leaf</span> <span class="fu">=</span> <span class="dt">Leaf</span></a>
 <a class="sourceLine" id="cb185-5" data-line-number="5">  fmap f (<span class="dt">Node</span> val left right) <span class="fu">=</span> <span class="dt">Node</span> (f val) (fmap f left) (fmap f right)</a></code></pre></div>
-<p>Sidenote: the term functor comes originally from a branch of mathematics called <a href="https://en.wikipedia.org/wiki/Category_theory">category theory</a>. However, to work with Haskell you don’t need to know any category theory. When you see functor, you can just think “something I can map over”, or perhaps “a container”.</p>
+<p>Sidenote: the term functor comes originally from a branch of mathematics called <a href="https://en.wikipedia.org/wiki/Category_theory">category theory</a>. However, to work with Haskell you don’t need to know any category theory. As you progress in learning Haskell, you might get interested in category theory, and it can be a valuable source of new ideas for programming. Category theory can feel intimidating, so it’s good to know that you can get on fine without it. For now, when you see functor, you can just think “something I can map over”, or perhaps “a container”.</p>
 <p>Let’s zoom out a bit. When we have an instance <code>Functor MyFun</code> we know that we can map a type <code>X</code> into a new type <code>MyFun X</code> (since <code>MyFun</code> is a type constructor), but also that we can lift a function <code>f</code> that takes an <code>X</code> argument into a function <code>fmap f</code> that takes a <code>MyFun X</code> argument! So you could say we’re mapping both on the type level and the value level.</p>
 <p>Oh right, one more thing. Once you’ve gotten the hang of <code>fmap</code> you might find yourself using it quite a bit. For code that uses <code>fmap</code> heavily it can be nice to use its infix alias, <code>&lt;$&gt;</code>. Consider the symmetry between <code>$</code> and <code>&lt;$&gt;</code> in these examples:</p>
 <div class="sourceCode" id="cb186"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb186-1" data-line-number="1">(<span class="fu">+</span><span class="dv">1</span>) <span class="fu">&lt;$&gt;</span> [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>]    <span class="fu">==&gt;</span>  [<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>]</a>
@@ -2487,7 +2487,7 @@ Query the user for a number and return it.
 <p>In this lecture we’ll build up to the concept of a <em>monad</em> using a number of examples. By now you should be familiar with all the Haskell features needed for understanding monads.</p>
 <p>Monads are a famously hard topic in programming, which is partly due to weird terminology, partly due to bad tutorials, and partly due to trying to understand monads too early when learning Haskell. Monads are introduced this late in the course in an attempt to make understanding them easier.</p>
 <p>If you find this lecture hard, don’t despair, many others have found the topic hard as well. There are many many productive Haskell programmers who have managed to understand monads, so the task is not hopeless.</p>
-<p>One final word of caution: monads, like functors, are a concept originally from a branch of mathematics called Category Theory. However, and I can’t stress this enough, <em>you do not need to know anything or even care about category theory to understand monads in Haskell programming.</em> Just like one can work with object-oriented programming or functional programming without knowing the theory of objects or functions, one can work with monads without understanding the math associated with them.</p>
+<p>One final word of caution: monads, like functors, are a concept originally from a branch of mathematics called Category Theory. However, and I can’t stress this enough, <em>you do not need to know anything or even care about category theory to understand monads in Haskell programming.</em> Just like one can work with object-oriented programming or functional programming without knowing the theory of objects or functions, one can work with monads without understanding the math associated with them. Category theory can be a rewarding topic for a functional programmer, but it’s not a mandatory one.</p>
 <h2 id="example-1-maybes"><span class="header-section-number">13.1</span> Example 1: Maybes</h2>
 <p>When working with many <code>Maybe</code> values, the code tends to become a bit messy. Let’s look at some examples. First, we combine some functions returning <code>Maybe String</code>. Note the nested <code>case</code> we need in <code>stealSecret</code>: not fun to write.</p>
 <div class="sourceCode" id="cb202"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb202-1" data-line-number="1"><span class="co">-- Try to login with a password. `Just username` on success, `Nothing` otherwise.</span></a>
@@ -4610,6 +4610,14 @@ AABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABB
 <li>Parsec (parsing): <a href="http://book.realworldhaskell.org/read/using-parsec.html">RWH</a></li>
 <li>Scotty (simple web framework), Aeson (json): <a href="https://seanhess.github.io/2015/08/19/practical-haskell-json-api.html">blog</a></li>
 <li><a href="https://haskell-servant.github.io/">Servant</a> (fancy web framework with phantom types)</li>
+</ul></li>
+<li>Category theory
+<ul>
+<li>Many Haskell abstractions are based on Category theory</li>
+<li>Category theory can be a valuable source of new ideas for programming</li>
+<li>Category theory can feel intimidating, so it’s good to know that you can get on fine without it</li>
+<li>Bartosz Milewski has lots of good material, for example <a href="https://bartoszmilewski.com/2014/10/28/category-theory-for-programmers-the-preface/">Category Theory for Programmers</a></li>
+<li>The <a href="https://wiki.haskell.org/Category_theory">Haskell Wiki</a> and <a href="https://en.wikibooks.org/wiki/Haskell/Category_theory">Wikibook</a> have sections on category theory</li>
 </ul></li>
 </ul>
 <h2 id="acknowledgements"><span class="header-section-number">16.6</span> Acknowledgements</h2>
