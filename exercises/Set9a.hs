@@ -10,6 +10,7 @@
 
 module Set9a where
 
+import Data.Char
 import Data.List
 import Data.Ord
 
@@ -136,6 +137,8 @@ changeCode = todo
 -- Ex 7: Here's a type Text that just wraps a String. Implement an Eq
 -- instance for Text that ignores all white space (space characters
 -- and line returns).
+--
+-- Hint: Data.Char.isSpace
 --
 -- Examples
 --   Text "abc"  == Text "abc"      ==> True
