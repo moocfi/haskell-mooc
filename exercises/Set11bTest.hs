@@ -23,7 +23,6 @@ tests = [(1,"appendAll",[ex1])
         ,(2,"swapIORefs",[ex2])
         ,(3,"doubleCall",[ex3_doubleCall, ex3_doubleCall_2])
         ,(4,"composeIO",[ex4_composeIO_1, ex4_composeIO_2])
-        ,(5,"mkCounter",[ex5_mkCounter])
         ,(6,"hFetchLines",[ex6])
         ,(7,"hSelectLines",[ex7_hSelectLines])
         ,(8,"interact'",[ex8_interact_terminates, ex8_interact_example, ex8_interact_loop])]
@@ -79,15 +78,6 @@ ex4_composeIO_2 =
   counterexample ("compose (\\x -> return (x*2)) (\\y -> return (y+1)) " ++ show i) $
   ($ compose (return . (*2)) (return . (+1)) i) . withNoInput $
     checkResult (?== (i+1)*2)
-
-
-ex5_mkCounter = forAllBlind (choose (0,20)) $ \n ->
-  counterexample "(inc,get) <- mkCounter" $
-  counterexample (" Called inc "++show n++" times, then called get") $
-  monadicIO $ do m <- run $ do (i,g) <- mkCounter
-                               replicateM_ n i
-                               g
-                 stop_ $ m ?== n
 
 ex6 = forAllBlind (listOf1 word) $ \lines ->
   counterexample ("Contents of handle h:\n"++unlines lines) $

@@ -5,6 +5,7 @@ import Mooc.Todo
 import Control.Monad
 import Control.Monad.Trans.State
 import Data.Char
+import Data.IORef
 import Data.List
 
 
@@ -323,3 +324,31 @@ instance Monad SL where
   -- implement return and >>=
   return = todo
   (>>=) = todo
+
+------------------------------------------------------------------------------
+-- Ex 9: Implement the operation mkCounter that produces the IO operations
+-- inc :: IO () and get :: IO Int. These operations should work like this:
+--
+--   get returns the number of times inc has been called
+--
+-- In other words, a simple stateful counter. Use an IORef to store the count.
+--
+-- Note: this is an IO operation that produces two IO operations. Thus
+-- the type of mkCounter is IO (IO (), IO Int).
+--
+-- This exercise is tricky. Feel free to leave it until later.
+--
+-- An example of how mkCounter works in GHCi:
+--
+--  *Set11b> (inc,get) <- mkCounter
+--  *Set11b> inc
+--  *Set11b> inc
+--  *Set11b> get
+--  2
+--  *Set11b> inc
+--  *Set11b> inc
+--  *Set11b> get
+--  4
+
+mkCounter :: IO (IO (), IO Int)
+mkCounter = todo

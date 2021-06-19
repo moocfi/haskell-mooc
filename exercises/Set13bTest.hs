@@ -11,9 +11,11 @@ import qualified Data.Bits
 import Data.Char
 import Data.Either
 import Data.Function
+import Data.IORef
 import Data.List
 import qualified Data.Map as Map
 import Test.QuickCheck hiding (Result,Failure)
+import Test.QuickCheck.Monadic
 
 import Examples.Bank
 import Set13b hiding (perhapsIncrement,sumBounded,sumNotTwice)
@@ -28,7 +30,8 @@ tests = [(1,"ifM",[ex1_maybe, ex1_state])
         ,(5,"allSums", [ex5_bits])
         ,(6,"foldM", [ex6_sumBounded_ok, ex6_sumBounded_fail, ex6_sumNotTwice])
         ,(7,"Monad Result", [ex7])
-        ,(8,"Monad SL", [ex8_fmap_1, ex8_fmap_2, ex8_1, ex8_2, ex8_stress])]
+        ,(8,"Monad SL", [ex8_fmap_1, ex8_fmap_2, ex8_1, ex8_2, ex8_stress])
+        ,(9,"mkCounter",[ex9_mkCounter])]
 
 -- -- -- -- -- -- --
 
@@ -268,3 +271,11 @@ ex8_stress =
       (incs,msgs) = partitionEithers ops
       state = sum incs
   in counterexample desc $ runSL op 0 ?== ((),state,msgs)
+
+ex9_mkCounter = forAllBlind (choose (0,20)) $ \n ->
+  counterexample "(inc,get) <- mkCounter" $
+  counterexample (" Called inc "++show n++" times, then called get") $
+  monadicIO $ do m <- run $ do (i,g) <- mkCounter
+                               replicateM_ n i
+                               g
+                 stop_ $ m ?== n
