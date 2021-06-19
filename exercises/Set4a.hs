@@ -82,14 +82,16 @@ rangeOf :: [a] -> a
 rangeOf = todo
 
 ------------------------------------------------------------------------------
--- Ex 5: given a list of lists, return the longest list. If there
--- are multiple lists of the same length, return the list that has
--- the smallest _first element_.
+-- Ex 5: given a (non-empty) list of (non-empty) lists, return the longest
+-- list. If there are multiple lists of the same length, return the list that
+-- has the smallest _first element_.
 --
 -- (If multiple lists have the same length and same first element,
 -- you can return any one of them.)
 --
--- Give the longest function a suitable type.
+-- Give the function "longest" a suitable type.
+--
+-- Challenge: Can you solve this exercise without sorting the list of lists?
 --
 -- Examples:
 --   longest [[1,2,3],[4,5],[6]] ==> [1,2,3]
