@@ -23,9 +23,9 @@ tests = [(1,"appendAll",[ex1])
         ,(2,"swapIORefs",[ex2])
         ,(3,"doubleCall",[ex3_doubleCall, ex3_doubleCall_2])
         ,(4,"composeIO",[ex4_composeIO_1, ex4_composeIO_2])
-        ,(6,"hFetchLines",[ex6])
-        ,(7,"hSelectLines",[ex7_hSelectLines])
-        ,(8,"interact'",[ex8_interact_terminates, ex8_interact_example, ex8_interact_loop])]
+        ,(5,"hFetchLines",[ex5])
+        ,(6,"hSelectLines",[ex6_hSelectLines])
+        ,(7,"interact'",[ex7_interact_terminates, ex7_interact_example, ex7_interact_loop])]
 
 -- -- -- -- --
 
@@ -79,7 +79,7 @@ ex4_composeIO_2 =
   ($ compose (return . (*2)) (return . (+1)) i) . withNoInput $
     checkResult (?== (i+1)*2)
 
-ex6 = forAllBlind (listOf1 word) $ \lines ->
+ex5 = forAllBlind (listOf1 word) $ \lines ->
   counterexample ("Contents of handle h:\n"++unlines lines) $
   counterexample "hFetchLines h" $
   monadicIO $ do
@@ -92,7 +92,7 @@ ex6 = forAllBlind (listOf1 word) $ \lines ->
     run $ hClose h
     stop_ $ outs ?== lines
 
-ex7_hSelectLines =
+ex6_hSelectLines =
   forAllBlind (listOf1 word) $ \lines ->
   forAllBlind (fmap (nub.sort) . listOf1 $ choose (1,length lines)) $ \inds ->
   counterexample ("Contents of handle h:\n"++unlines lines) $
@@ -115,7 +115,7 @@ counter ("inc",n)   = (True,"done",n+1)
 counter ("print",n) = (True,show n,n)
 counter ("quit",n)  = (False,"bye bye",n)
 
-ex8_interact_terminates =
+ex7_interact_terminates =
   forAllBlind word $ \w1 ->
   forAllBlind word $ \w2 ->
   forAllBlind (choose (0::Int,100)) $ \state ->
@@ -123,11 +123,11 @@ ex8_interact_terminates =
   ($ let f (input,state) = (False,input,state) in interact' f state) . withInput (unlines [w1,w2]) $
   check (?==(w1++"\n")) (?==state)
 
-ex8_interact_example =
+ex7_interact_example =
   $(testing' [|interact' counter 1|]) . withInput (unlines ["print","inc","inc","print","quit"]) $
   check (?==unlines ["1","done","done","3","bye bye"]) (?==3)
 
-ex8_interact_loop =
+ex7_interact_loop =
   forAllBlind (choose (0::Int,100)) $ \state ->
   forAllBlind (choose (0::Int,5)) $ \steps ->
   forAllBlind word $ \w ->

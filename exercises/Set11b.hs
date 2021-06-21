@@ -83,7 +83,7 @@ compose :: (a -> IO b) -> (c -> IO a) -> c -> IO b
 compose op1 op2 c = todo
 
 ------------------------------------------------------------------------------
--- Ex 6: Reading lines from a file. The module System.IO defines
+-- Ex 5: Reading lines from a file. The module System.IO defines
 -- operations for Handles, which represent open files that can be read
 -- from or written to. Here are some functions that might be useful:
 --
@@ -113,7 +113,7 @@ hFetchLines :: Handle -> IO [String]
 hFetchLines = todo
 
 ------------------------------------------------------------------------------
--- Ex 7: Given a Handle and a list of line indexes, produce the lines
+-- Ex 6: Given a Handle and a list of line indexes, produce the lines
 -- at those indexes from the file.
 --
 -- Line indexing starts from 1.
@@ -126,7 +126,7 @@ hSelectLines :: Handle -> [Int] -> IO [String]
 hSelectLines h nums = todo
 
 ------------------------------------------------------------------------------
--- Ex 8: In this exercise we see how a program can be split into a
+-- Ex 7: In this exercise we see how a program can be split into a
 -- pure part that does all of the work, and a simple IO wrapper that
 -- drives the pure logic.
 --
