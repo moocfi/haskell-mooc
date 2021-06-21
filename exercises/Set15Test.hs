@@ -26,8 +26,8 @@ tests = [(1,"sumTwoMaybes",[ex1])
         ,(10,"Priced",[ex10_fmap, ex10_liftA2])
         ,(11,"<*> via liftA2",[ex11])
         ,(12,"fmap via liftA2",[ex12])
-        ,(14,"Functor Both",[ex14_ok, ex14_fail])
         ,(13,"tryAll",[ex13_maybe, ex13_list, ex13_validation])
+        ,(14,"Functor Both",[ex14_ok, ex14_fail])
         ,(15,"Applicative Both",[ex15_pure, ex15_liftA2, ex15_liftA2_2])
         ]
 
