@@ -3704,8 +3704,7 @@ bob
 <div class="sourceCode" id="cb336"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb336-1" data-line-number="1"><span class="kw">instance</span> <span class="dt">Applicative</span> <span class="dt">Maybe</span> <span class="kw">where</span></a>
 <a class="sourceLine" id="cb336-2" data-line-number="2">  pure x <span class="fu">=</span> <span class="dt">Just</span> x</a>
 <a class="sourceLine" id="cb336-3" data-line-number="3">  liftA2 f (<span class="dt">Just</span> x) (<span class="dt">Just</span> y) <span class="fu">=</span> <span class="dt">Just</span> (f x y)</a>
-<a class="sourceLine" id="cb336-4" data-line-number="4">  liftA2 f <span class="dt">Nothing</span>  (<span class="dt">Just</span> _) <span class="fu">=</span> <span class="dt">Nothing</span></a>
-<a class="sourceLine" id="cb336-5" data-line-number="5">  liftA2 f (<span class="dt">Just</span> _) <span class="dt">Nothing</span>  <span class="fu">=</span> <span class="dt">Nothing</span></a></code></pre></div>
+<a class="sourceLine" id="cb336-4" data-line-number="4">  liftA2 f _        _        <span class="fu">=</span> <span class="dt">Nothing</span></a></code></pre></div>
 <!-- TODO some GHCi examples? -->
 <p>You’ll see the definition uses the same type of failure propagation as the <code>Monad Maybe</code> instance. Let’s use this when parsing monetary values:</p>
 <div class="sourceCode" id="cb337"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb337-1" data-line-number="1"><span class="kw">data</span> <span class="dt">Currency</span> <span class="fu">=</span> <span class="dt">EUR</span> <span class="fu">|</span> <span class="dt">USD</span></a>
