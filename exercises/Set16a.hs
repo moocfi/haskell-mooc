@@ -91,7 +91,7 @@ freq2 xs = map (\x -> (x,1)) xs
 --
 -- You can assume that the output is nonempty.
 --
--- Examples: TODO fix
+-- Examples:
 --  *Set16a> quickCheck (outputInInput "abb" [('a',1)])
 --  +++ OK, passed 100 tests.
 --  *Set16a> quickCheck (outputInInput "abb" [('a',1),('x',3)])

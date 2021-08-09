@@ -347,7 +347,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td style="text-align: left;"><code>Either String Int</code></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><code>Nil</code>, <code>Cons True Nil</code>, <code>Const True (Cons False Nil)</code> …</td>
+<td style="text-align: left;"><code>Nil</code>, <code>Cons True Nil</code>, <code>Cons True (Cons False Nil)</code> …</td>
 <td style="text-align: left;"><code>List Bool</code></td>
 </tr>
 <tr class="odd">
@@ -4036,7 +4036,7 @@ liftA2 sumMoney (parseMoney &quot;123&quot; &quot;e&quot;) (parseMoney &quot;xxx
 <a class="sourceLine" id="cb380-3" data-line-number="3">parseAnswer <span class="st">&quot;n&quot;</span>      <span class="fu">==&gt;</span> <span class="dt">Just</span> <span class="dt">No</span></a>
 <a class="sourceLine" id="cb380-4" data-line-number="4">parseAnswer <span class="st">&quot;maybe&quot;</span>  <span class="fu">==&gt;</span> <span class="dt">Just</span> <span class="dt">Yes</span></a>
 <a class="sourceLine" id="cb380-5" data-line-number="5">parseAnswer <span class="st">&quot;x&quot;</span>      <span class="fu">==&gt;</span> <span class="dt">Nothing</span></a></code></pre></div>
-<p>How could we generalize <code>eitherOf</code>? We can’t give it the type <code>Applicative f =&gt; f x -&gt; f x -&gt; f x</code> because then the implementation would need to be effectively something like <code>eitherOf a b = liftA2 something a b</code>, but then <code>eitherOf Nothing (Just x)</code> would be <code>Nothing</code> (since that’s how the instance Applicative instance works)!</p>
+<p>How could we generalize <code>eitherOf</code>? We can’t give it the type <code>Applicative f =&gt; f x -&gt; f x -&gt; f x</code> because then the implementation would need to be effectively something like <code>eitherOf a b = liftA2 something a b</code>, but then <code>eitherOf Nothing (Just x)</code> would be <code>Nothing</code> (since that’s how the Applicative instance works)!</p>
 <p>It turns out we need a new type class: <code>Alternative</code>. An Alternative adds two operations to Applicative: <code>empty</code> means no results, and <code>&lt;|&gt;</code> means combining results.</p>
 <div class="sourceCode" id="cb381"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb381-1" data-line-number="1"><span class="kw">class</span> <span class="dt">Applicative</span> f <span class="ot">=&gt;</span> <span class="dt">Alternative</span> f <span class="kw">where</span></a>
 <a class="sourceLine" id="cb381-2" data-line-number="2"><span class="ot">  empty ::</span> f a</a>
@@ -4247,7 +4247,7 @@ TODO explain `some` and `many`
 <div class="sourceCode" id="cb393"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb393-1" data-line-number="1"><span class="ot">rev ::</span> [a] <span class="ot">-&gt;</span> [a]</a>
 <a class="sourceLine" id="cb393-2" data-line-number="2">rev [] <span class="fu">=</span> []</a>
 <a class="sourceLine" id="cb393-3" data-line-number="3">rev (x<span class="fu">:</span>xs) <span class="fu">=</span> xs <span class="fu">++</span> [x]</a></code></pre></div>
-<p>We can write and individual test case using the <code>===</code> operator from QuickCheck:</p>
+<p>We can write an individual test case using the <code>===</code> operator from QuickCheck:</p>
 <div class="sourceCode" id="cb394"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb394-1" data-line-number="1"><span class="ot">(===) ::</span> (<span class="dt">Eq</span> a, <span class="dt">Show</span> a) <span class="ot">=&gt;</span> a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> <span class="dt">Property</span></a></code></pre></div>
 <div class="sourceCode" id="cb395"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb395-1" data-line-number="1"><span class="ot">propRevSmall ::</span> <span class="dt">Property</span></a>
 <a class="sourceLine" id="cb395-2" data-line-number="2">propRevSmall <span class="fu">=</span> rev [<span class="dv">1</span>,<span class="dv">2</span>] <span class="fu">===</span> [<span class="dv">2</span>,<span class="dv">1</span>]</a></code></pre></div>
@@ -4256,7 +4256,7 @@ TODO explain `some` and `many`
 <a class="sourceLine" id="cb396-2" data-line-number="2"><span class="fu">+++</span> <span class="dt">OK</span>, passed <span class="dv">1</span> test<span class="fu">.</span></a></code></pre></div>
 <p>So far so good. However this isn’t really what QuickCheck was made for. QuickCheck was designed for <em>property-based testing</em> where you can state a property your code should have, and QuickCheck runs your code with randomized inputs, checking the property every time. What would be a simple property that a correct implementation of <code>reverse</code> has? Reversing a list twice should certainly give us back the same list. Let’s write it out:</p>
 <div class="sourceCode" id="cb397"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb397-1" data-line-number="1"><span class="ot">propRevTwice ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Property</span></a>
-<a class="sourceLine" id="cb397-2" data-line-number="2">propRevTwice xs <span class="fu">=</span> reverse (reverse xs) <span class="fu">===</span> xs</a></code></pre></div>
+<a class="sourceLine" id="cb397-2" data-line-number="2">propRevTwice xs <span class="fu">=</span> rev (rev xs) <span class="fu">===</span> xs</a></code></pre></div>
 <p>Our <code>Property</code> has an argument, which means that QuickCheck will generate random values and run the test. We can use the <code>verboseCheck</code> function to see which values are run. We can also give a parameter to the test ourselves if we wish to check a specific value.</p>
 <div class="sourceCode" id="cb398"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb398-1" data-line-number="1"><span class="fu">*</span><span class="dt">Examples.QuickCheck</span><span class="fu">&gt;</span> quickCheck propRevTwice</a>
 <a class="sourceLine" id="cb398-2" data-line-number="2"><span class="fu">+++</span> <span class="dt">OK</span>, passed <span class="dv">100</span> tests<span class="fu">.</span></a>
@@ -4522,7 +4522,7 @@ TODO explain `some` and `many`
 <a class="sourceLine" id="cb437-12" data-line-number="12"><span class="dt">Money</span> <span class="fl">0.819672131147541</span></a>
 <a class="sourceLine" id="cb437-13" data-line-number="13"><span class="fu">*</span><span class="dt">Examples.Phantom</span><span class="fu">&gt;</span> convertUnsafe eurToUsd dollar</a>
 <a class="sourceLine" id="cb437-14" data-line-number="14"><span class="dt">Money</span> <span class="fl">1.22</span></a></code></pre></div>
-<p>Note! The words <code>currency</code>, <code>from</code>, <code>to</code> and so for in the previous examples are <em>just type variables</em>. There’s nothing special going on with them. We could’ve as well given <code>invert</code> a type like <code>Rate a b -&gt; Rate b a</code> without any change in type safety.</p>
+<p>Note! The words <code>currency</code>, <code>from</code>, <code>to</code> and so forth in the previous examples are <em>just type variables</em>. There’s nothing special going on with them. We could’ve as well given <code>invert</code> a type like <code>Rate a b -&gt; Rate b a</code> without any change in type safety.</p>
 <p>This approach that uses phantom types has clear benefits: giving us type errors for invalid code. Also, compared to defining lots of concrete types like <code>data MoneyEur = MoneyEur Double</code>, with phantom types we need to implement functions like <code>scaleMoney</code> and <code>addMoney</code> only once. Also, we’re able to define polymorphic and reusable concepts like <code>Rate</code>. You can contrast this approach with the Boxing section of Lecture 7.</p>
 <p>However, phantom types also have downsides. Without advanced tricks we can’t really handle currencies that are defined at runtime (for example: reading an amount from a user). It’s also easy to end up in a place where you start needing language extensions like <a href="https://wiki.haskell.org/GADTs_for_dummies"><em>Generalized Algebraic Datatypes</em></a>, <a href="https://wiki.haskell.org/GHC/Type_families"><em>type families</em></a> and other <a href="https://aphyr.com/posts/342-typing-the-technical-interview"><em>type-level programming</em></a> constructs. Eventually you’re all the way in the world of <a href="https://mitpress.mit.edu/books/little-typer"><em>dependent typing</em></a>.</p>
 <p>So what are good applications for phantom types? When you need to track some simple, but crucial information, that is known at compile-time. An example that’s somewhat better than currencies is tracking whether inputs from the user have been sanitated to prevent attacks like <a href="https://en.wikipedia.org/wiki/SQL_injection">SQL injection</a> or <a href="https://en.wikipedia.org/wiki/Cross-site_scripting">cross-site scripting</a>.</p>
@@ -4566,7 +4566,7 @@ TODO explain `some` and `many`
 <p>That’s almost 2 times as fast, on the 2-core machine that this example is being run on. Pretty nice. The coolest thing here is that we were able to define the <em>computation</em> (<code>map fib ...</code>) completely separately from the <em>evaluation strategy</em> (<code>parList rseq</code>), separating the <em>what to compute</em> from the <em>how to compute</em>.</p>
 <h3 id="concurrency"><span class="header-section-number">16.3.2</span> Concurrency</h3>
 <p>Computer science makes the distinction between parallel and <em>concurrent</em> computations. Parallel computations are those that just run separate independent computations in parallel (in other words, parallelism is <em>pure</em>). Concurrent computations are those where there are multiple interacting threads of computation. Concurrency usually involves threads, locks, messages and deadlocks.</p>
-<p>In addition to great tooling for parallelism, Haskell also has good tooling for concurrency via <em>threads</em>. Since concurrency is all about side-effects, concurrent computations happen in the <code>IO</code> Monad. The classic example of threading is two threads, the other one printing a stream of As and the other a stream of Bs. Here it is in Haskell:</p>
+<p>In addition to great tooling for parallelism, Haskell also has good tooling for concurrency via <em>threads</em>. Since concurrency is all about side-effects, concurrent computations happen in the <code>IO</code> Monad. The classic example of threading is two threads, one printing a stream of As and the other a stream of Bs. Here it is in Haskell:</p>
 <div class="sourceCode" id="cb442"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb442-1" data-line-number="1"><span class="ot">printA ::</span> <span class="dt">IO</span> ()</a>
 <a class="sourceLine" id="cb442-2" data-line-number="2">printA <span class="fu">=</span> putStrLn (replicate <span class="dv">40</span> <span class="ch">&#39;A&#39;</span>)</a>
 <a class="sourceLine" id="cb442-3" data-line-number="3"></a>
@@ -4582,7 +4582,7 @@ TODO explain `some` and `many`
 AABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABB</code></pre>
 <p>The operation <code>forkIO :: IO () -&gt; IO ThreadId</code> takes an IO operation and starts running it in the backgroud. It produces a <code>ThreadId</code> that can be used to e.g. terminate the thread.</p>
 <p>If we want to add actual communication between threads, we can use abstractions like <a href="https://hackage.haskell.org/package/base-4.14.1.0/docs/Control-Concurrent-MVar.html"><code>MVar</code></a> (a mutable thread-safe variable) or <a href="https://hackage.haskell.org/package/base-4.14.1.0/docs/Control-Concurrent-Chan.html"><code>Chan</code></a> (a queue).</p>
-<p>Here’s a simple example where one thread writes a values to an <code>MVar</code> and another one waits for them and prints them. An <code>MVar</code> works like a mailbox: it is either empty or full. Calling <code>takeMVar</code> on an empty box waits for the box to get filled (with a <code>putMVar</code>). Symmetrically, trying to <code>putMVar</code> into a full box waits until the box is empty.</p>
+<p>Here’s a simple example where one thread writes a value to an <code>MVar</code> and another one waits for them and prints them. An <code>MVar</code> works like a mailbox: it is either empty or full. Calling <code>takeMVar</code> on an empty box waits for the box to get filled (with a <code>putMVar</code>). Symmetrically, trying to <code>putMVar</code> into a full box waits until the box is empty.</p>
 <div class="sourceCode" id="cb444"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb444-1" data-line-number="1"><span class="ot">takeMVar ::</span> <span class="dt">MVar</span> a <span class="ot">-&gt;</span> <span class="dt">IO</span> a</a>
 <a class="sourceLine" id="cb444-2" data-line-number="2"><span class="ot">putMVar ::</span> <span class="dt">MVar</span> a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> <span class="dt">IO</span> ()</a>
 <a class="sourceLine" id="cb444-3" data-line-number="3"><span class="ot">newEmptyMVar ::</span> <span class="dt">IO</span> (<span class="dt">MVar</span> a)</a></code></pre></div>
@@ -4611,7 +4611,7 @@ AABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABB
 <ul>
 <li>Set16a: QuickCheck</li>
 <li>Set16b: Phantom types</li>
-<li>No exercises for parallel or concurrent Haskel, sorry!</li>
+<li>No exercises for parallel or concurrent Haskell, sorry!</li>
 </ul>
 <h2 id="where-to-go-from-here"><span class="header-section-number">16.5</span> Where to Go From Here?</h2>
 <p>Congratulations! You’ve reached the end of this two part course on Functional Programming in Haskell. What next? You definitely know enough Haskell to keep learning on your own. The online Haskell community is very friendly and there are lots of blog posts and other content explaining advanced techniques and features. You can find lots of interesting stuff by following for example:</p>
