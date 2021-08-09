@@ -180,8 +180,8 @@ sameAntidiag (i,j) (k,l) = todo
 --
 -- Hint: Use the relations of the previous exercise!
 --
--- Lists of coordinates of queens will be later used in a First in Last Out
--- (LIFO) manner, so we give this type the alias Stack:
+-- Lists of coordinates of queens will be later used in a Last In
+-- First Out (LIFO) manner, so we give this type the alias Stack:
 -- https://en.wikipedia.org/wiki/Stack_(abstract_data_type)
 
 type Size      = Int
