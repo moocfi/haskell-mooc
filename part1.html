@@ -2105,7 +2105,7 @@ Prelude&gt; map (add 3) [1,2,3]
 <code>(a -&gt; Bool) -&gt; (b -&gt; Bool) -&gt; c -&gt; Bool</code>
 </li>
 </ol>
-<p>What’s the type of this function? <code>applyInOut f g x = f (g (f x))</code></p>
+<p>What’s the (most general) type of this function? <code>applyInOut f g x = f (g (f x))</code></p>
 <ol class="quiz">
 <li class="correct">
 <code>(a -&gt; b) -&gt; (b -&gt; a) -&gt; a -&gt; b</code>
