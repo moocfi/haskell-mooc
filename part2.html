@@ -2531,25 +2531,27 @@ this topic connects to equational reasoning discussed in chapter 10.
 <p>One final word of caution: monads, like functors, are a concept originally from a branch of mathematics called Category Theory. However, and I can’t stress this enough, <em>you do not need to know anything or even care about category theory to understand monads in Haskell programming.</em> Just like one can work with object-oriented programming or functional programming without knowing the theory of objects or functions, one can work with monads without understanding the math associated with them. Category theory can be a rewarding topic for a functional programmer, but it’s not a mandatory one.</p>
 <h2 id="example-1-maybes"><span class="header-section-number">13.1</span> Example 1: Maybes</h2>
 <p>When working with many <code>Maybe</code> values, the code tends to become a bit messy. Let’s look at some examples. First, we combine some functions returning <code>Maybe String</code>. Note the nested <code>case</code> we need in <code>stealSecret</code>: It’s not fun to write.</p>
-<div class="sourceCode" id="cb205"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb205-1" data-line-number="1"><span class="co">-- Try to login with a password. `Just username` on success, `Nothing` otherwise.</span></a>
-<a class="sourceLine" id="cb205-2" data-line-number="2"><span class="ot">login ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Maybe</span> <span class="dt">String</span></a>
-<a class="sourceLine" id="cb205-3" data-line-number="3">login <span class="st">&quot;f4bulous!&quot;</span> <span class="fu">=</span> <span class="dt">Just</span> <span class="st">&quot;unicorn73&quot;</span></a>
-<a class="sourceLine" id="cb205-4" data-line-number="4">login <span class="st">&quot;swordfish&quot;</span> <span class="fu">=</span> <span class="dt">Just</span> <span class="st">&quot;megahacker&quot;</span></a>
-<a class="sourceLine" id="cb205-5" data-line-number="5">login _           <span class="fu">=</span> <span class="dt">Nothing</span></a>
-<a class="sourceLine" id="cb205-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb205-7" data-line-number="7"><span class="co">-- Get a secret associated with a user. Not all users have secrets.</span></a>
-<a class="sourceLine" id="cb205-8" data-line-number="8"><span class="ot">secret ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Maybe</span> <span class="dt">String</span></a>
-<a class="sourceLine" id="cb205-9" data-line-number="9">secret <span class="st">&quot;megahacker&quot;</span> <span class="fu">=</span> <span class="dt">Just</span> <span class="st">&quot;I like roses&quot;</span></a>
-<a class="sourceLine" id="cb205-10" data-line-number="10">secret _            <span class="fu">=</span> <span class="dt">Nothing</span></a>
-<a class="sourceLine" id="cb205-11" data-line-number="11"></a>
-<a class="sourceLine" id="cb205-12" data-line-number="12"><span class="co">-- Login and return the user&#39;s secret, if any</span></a>
-<a class="sourceLine" id="cb205-13" data-line-number="13"><span class="ot">stealSecret ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Maybe</span> <span class="dt">String</span></a>
-<a class="sourceLine" id="cb205-14" data-line-number="14">stealSecret password <span class="fu">=</span></a>
-<a class="sourceLine" id="cb205-15" data-line-number="15">  <span class="kw">case</span> login password <span class="kw">of</span></a>
-<a class="sourceLine" id="cb205-16" data-line-number="16">    <span class="dt">Nothing</span> <span class="ot">-&gt;</span> <span class="dt">Nothing</span></a>
-<a class="sourceLine" id="cb205-17" data-line-number="17">    <span class="dt">Just</span> user <span class="ot">-&gt;</span> <span class="kw">case</span> secret user <span class="kw">of</span></a>
-<a class="sourceLine" id="cb205-18" data-line-number="18">                   <span class="dt">Nothing</span> <span class="ot">-&gt;</span> <span class="dt">Nothing</span></a>
-<a class="sourceLine" id="cb205-19" data-line-number="19">                   <span class="dt">Just</span> s <span class="ot">-&gt;</span> <span class="dt">Just</span> (<span class="st">&quot;Stole secret: &quot;</span><span class="fu">++</span>s)</a></code></pre></div>
+<div class="sourceCode" id="cb205"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb205-1" data-line-number="1"><span class="co">-- Try to login with a password.</span></a>
+<a class="sourceLine" id="cb205-2" data-line-number="2"><span class="co">-- `Just username` on success, `Nothing` otherwise.</span></a>
+<a class="sourceLine" id="cb205-3" data-line-number="3"><span class="ot">login ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Maybe</span> <span class="dt">String</span></a>
+<a class="sourceLine" id="cb205-4" data-line-number="4">login <span class="st">&quot;f4bulous!&quot;</span> <span class="fu">=</span> <span class="dt">Just</span> <span class="st">&quot;unicorn73&quot;</span></a>
+<a class="sourceLine" id="cb205-5" data-line-number="5">login <span class="st">&quot;swordfish&quot;</span> <span class="fu">=</span> <span class="dt">Just</span> <span class="st">&quot;megahacker&quot;</span></a>
+<a class="sourceLine" id="cb205-6" data-line-number="6">login _           <span class="fu">=</span> <span class="dt">Nothing</span></a>
+<a class="sourceLine" id="cb205-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb205-8" data-line-number="8"><span class="co">-- Get a secret associated with a user.</span></a>
+<a class="sourceLine" id="cb205-9" data-line-number="9"><span class="co">-- Not all users have secrets.</span></a>
+<a class="sourceLine" id="cb205-10" data-line-number="10"><span class="ot">secret ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Maybe</span> <span class="dt">String</span></a>
+<a class="sourceLine" id="cb205-11" data-line-number="11">secret <span class="st">&quot;megahacker&quot;</span> <span class="fu">=</span> <span class="dt">Just</span> <span class="st">&quot;I like roses&quot;</span></a>
+<a class="sourceLine" id="cb205-12" data-line-number="12">secret _            <span class="fu">=</span> <span class="dt">Nothing</span></a>
+<a class="sourceLine" id="cb205-13" data-line-number="13"></a>
+<a class="sourceLine" id="cb205-14" data-line-number="14"><span class="co">-- Login and return the user&#39;s secret, if any</span></a>
+<a class="sourceLine" id="cb205-15" data-line-number="15"><span class="ot">stealSecret ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Maybe</span> <span class="dt">String</span></a>
+<a class="sourceLine" id="cb205-16" data-line-number="16">stealSecret password <span class="fu">=</span></a>
+<a class="sourceLine" id="cb205-17" data-line-number="17">  <span class="kw">case</span> login password <span class="kw">of</span></a>
+<a class="sourceLine" id="cb205-18" data-line-number="18">    <span class="dt">Nothing</span> <span class="ot">-&gt;</span> <span class="dt">Nothing</span></a>
+<a class="sourceLine" id="cb205-19" data-line-number="19">    <span class="dt">Just</span> user <span class="ot">-&gt;</span> <span class="kw">case</span> secret user <span class="kw">of</span></a>
+<a class="sourceLine" id="cb205-20" data-line-number="20">                   <span class="dt">Nothing</span> <span class="ot">-&gt;</span> <span class="dt">Nothing</span></a>
+<a class="sourceLine" id="cb205-21" data-line-number="21">                   <span class="dt">Just</span> s <span class="ot">-&gt;</span> <span class="dt">Just</span> (<span class="st">&quot;Stole secret: &quot;</span><span class="fu">++</span>s)</a></code></pre></div>
 <div class="sourceCode" id="cb206"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb206-1" data-line-number="1">stealSecret <span class="st">&quot;swordfish&quot;</span>  <span class="fu">==&gt;</span>  <span class="dt">Just</span> <span class="st">&quot;Stole secret: I like roses&quot;</span></a>
 <a class="sourceLine" id="cb206-2" data-line-number="2">stealSecret <span class="st">&quot;f4bulous!&quot;</span>  <span class="fu">==&gt;</span>  <span class="dt">Nothing</span></a>
 <a class="sourceLine" id="cb206-3" data-line-number="3">stealSecret <span class="st">&quot;wrong_password&quot;</span>  <span class="fu">==&gt;</span>  <span class="dt">Nothing</span></a></code></pre></div>
@@ -2567,8 +2569,10 @@ this topic connects to equational reasoning discussed in chapter 10.
 <a class="sourceLine" id="cb208-9" data-line-number="9">                <span class="kw">else</span> <span class="dt">Just</span> ((key,val) <span class="fu">:</span> delete (key,x) assocs)</a></code></pre></div>
 <p>This type of code is pretty common, and usually repeats the same pattern: if any intermediate result is <code>Nothing</code>, the whole result is <code>Nothing</code>. Let’s try to make writing code like this easier by defining a <em>chaining operator</em> <code>?&gt;</code>. The chaining operator takes a result and the next step of computation, and only runs the next step if the result was a <code>Just</code> value.</p>
 <div class="sourceCode" id="cb209"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb209-1" data-line-number="1"><span class="ot">(?&gt;) ::</span> <span class="dt">Maybe</span> a <span class="ot">-&gt;</span> (a <span class="ot">-&gt;</span> <span class="dt">Maybe</span> b) <span class="ot">-&gt;</span> <span class="dt">Maybe</span> b</a>
-<a class="sourceLine" id="cb209-2" data-line-number="2"><span class="dt">Nothing</span> <span class="fu">?&gt;</span> _ <span class="fu">=</span> <span class="dt">Nothing</span>   <span class="co">-- if we failed, don&#39;t even bother running the next step</span></a>
-<a class="sourceLine" id="cb209-3" data-line-number="3"><span class="dt">Just</span> x  <span class="fu">?&gt;</span> f <span class="fu">=</span> f x       <span class="co">-- otherwise run the next step</span></a></code></pre></div>
+<a class="sourceLine" id="cb209-2" data-line-number="2"><span class="co">-- if we failed, don&#39;t even bother running the next step:</span></a>
+<a class="sourceLine" id="cb209-3" data-line-number="3"><span class="dt">Nothing</span> <span class="fu">?&gt;</span> _ <span class="fu">=</span> <span class="dt">Nothing</span></a>
+<a class="sourceLine" id="cb209-4" data-line-number="4"><span class="co">-- otherwise run the next step:</span></a>
+<a class="sourceLine" id="cb209-5" data-line-number="5"><span class="dt">Just</span> x  <span class="fu">?&gt;</span> f <span class="fu">=</span> f x</a></code></pre></div>
 <p>The chaining operator streamlines our examples nicely. Note how we can define simple helper functions that take care of one step of the computation instead of writing one big expression.</p>
 <div class="sourceCode" id="cb210"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb210-1" data-line-number="1"><span class="ot">stealSecret ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Maybe</span> <span class="dt">String</span></a>
 <a class="sourceLine" id="cb210-2" data-line-number="2">stealSecret password <span class="fu">=</span></a>
@@ -2721,24 +2725,27 @@ this topic connects to equational reasoning discussed in chapter 10.
 <a class="sourceLine" id="cb227-2" data-line-number="2">deposit accountName amount (<span class="dt">Bank</span> accounts) <span class="fu">=</span></a>
 <a class="sourceLine" id="cb227-3" data-line-number="3">  <span class="dt">Bank</span> (Map.adjust (\x <span class="ot">-&gt;</span> x<span class="fu">+</span>amount) accountName accounts)</a></code></pre></div>
 <p>Withdrawing money is a bit more complicated, since we want to handle some special cases like the account not existing, or the account not having enough money. We use the library function <code>findWithDefault</code> to help us along.</p>
-<div class="sourceCode" id="cb228"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb228-1" data-line-number="1"><span class="co">-- Fetch the value corresponding to a key from a map, or a default value</span></a>
-<a class="sourceLine" id="cb228-2" data-line-number="2"><span class="co">-- in case the key does not exist</span></a>
+<div class="sourceCode" id="cb228"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb228-1" data-line-number="1"><span class="co">-- Fetch the value corresponding to a key from a map,</span></a>
+<a class="sourceLine" id="cb228-2" data-line-number="2"><span class="co">-- or a default value in case the key does not exist</span></a>
 <a class="sourceLine" id="cb228-3" data-line-number="3">Map.findWithDefault<span class="ot"> ::</span> <span class="dt">Ord</span> k <span class="ot">=&gt;</span> a <span class="ot">-&gt;</span> k <span class="ot">-&gt;</span> <span class="dt">Map.Map</span> k a <span class="ot">-&gt;</span> a</a></code></pre></div>
 <div class="sourceCode" id="cb229"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb229-1" data-line-number="1"><span class="ot">withdraw ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Bank</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>,<span class="dt">Bank</span>)</a>
 <a class="sourceLine" id="cb229-2" data-line-number="2">withdraw accountName amount (<span class="dt">Bank</span> accounts) <span class="fu">=</span></a>
-<a class="sourceLine" id="cb229-3" data-line-number="3">  <span class="kw">let</span> balance <span class="fu">=</span> Map.findWithDefault <span class="dv">0</span> accountName accounts  <span class="co">-- balance is 0 for a nonexistant account</span></a>
-<a class="sourceLine" id="cb229-4" data-line-number="4">      withdrawal <span class="fu">=</span> min amount balance                       <span class="co">-- can&#39;t withdraw over balance</span></a>
-<a class="sourceLine" id="cb229-5" data-line-number="5">      newAccounts <span class="fu">=</span> Map.adjust (\x <span class="ot">-&gt;</span> x<span class="fu">-</span>withdrawal) accountName accounts</a>
-<a class="sourceLine" id="cb229-6" data-line-number="6">  <span class="kw">in</span> (withdrawal, <span class="dt">Bank</span> newAccounts)</a></code></pre></div>
+<a class="sourceLine" id="cb229-3" data-line-number="3">  <span class="kw">let</span> <span class="co">-- balance is 0 for a nonexistant account</span></a>
+<a class="sourceLine" id="cb229-4" data-line-number="4">      balance <span class="fu">=</span> Map.findWithDefault <span class="dv">0</span> accountName accounts</a>
+<a class="sourceLine" id="cb229-5" data-line-number="5">      <span class="co">-- can&#39;t withdraw over balance</span></a>
+<a class="sourceLine" id="cb229-6" data-line-number="6">      withdrawal <span class="fu">=</span> min amount balance</a>
+<a class="sourceLine" id="cb229-7" data-line-number="7">      newAccounts <span class="fu">=</span> Map.adjust (\x <span class="ot">-&gt;</span> x<span class="fu">-</span>withdrawal) accountName accounts</a>
+<a class="sourceLine" id="cb229-8" data-line-number="8">  <span class="kw">in</span> (withdrawal, <span class="dt">Bank</span> newAccounts)</a></code></pre></div>
 <p>Finally, let’s write a function that takes at most 100 money from one account, splits the money in half, and deposits it in two accounts. Pay attention to how we need to carefully thread the different versions of the bank, <code>bank</code>, <code>bank1</code>, <code>bank2</code> and <code>bank3</code> to make sure all transactions happen in the right order.</p>
 <div class="sourceCode" id="cb230"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb230-1" data-line-number="1"><span class="ot">share ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Bank</span> <span class="ot">-&gt;</span> <span class="dt">Bank</span></a>
 <a class="sourceLine" id="cb230-2" data-line-number="2">share from to1 to2 bank <span class="fu">=</span></a>
 <a class="sourceLine" id="cb230-3" data-line-number="3">  <span class="kw">let</span> (amount,bank1) <span class="fu">=</span> withdraw from <span class="dv">100</span> bank</a>
 <a class="sourceLine" id="cb230-4" data-line-number="4">      half <span class="fu">=</span> div amount <span class="dv">2</span></a>
-<a class="sourceLine" id="cb230-5" data-line-number="5">      rest <span class="fu">=</span> amount<span class="fu">-</span>half             <span class="co">-- carefully preserve all money, even if amount was an odd number</span></a>
-<a class="sourceLine" id="cb230-6" data-line-number="6">      bank2 <span class="fu">=</span> deposit to1 half bank1</a>
-<a class="sourceLine" id="cb230-7" data-line-number="7">      bank3 <span class="fu">=</span> deposit to2 rest bank2</a>
-<a class="sourceLine" id="cb230-8" data-line-number="8">  <span class="kw">in</span> bank3</a></code></pre></div>
+<a class="sourceLine" id="cb230-5" data-line-number="5">      <span class="co">-- carefully preserve all money, even if amount was an odd number</span></a>
+<a class="sourceLine" id="cb230-6" data-line-number="6">      rest <span class="fu">=</span> amount<span class="fu">-</span>half</a>
+<a class="sourceLine" id="cb230-7" data-line-number="7">      bank2 <span class="fu">=</span> deposit to1 half bank1</a>
+<a class="sourceLine" id="cb230-8" data-line-number="8">      bank3 <span class="fu">=</span> deposit to2 rest bank2</a>
+<a class="sourceLine" id="cb230-9" data-line-number="9">  <span class="kw">in</span> bank3</a></code></pre></div>
 <div class="sourceCode" id="cb231"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb231-1" data-line-number="1">share <span class="st">&quot;wotan&quot;</span> <span class="st">&quot;siegfried&quot;</span> <span class="st">&quot;brunhilde&quot;</span></a>
 <a class="sourceLine" id="cb231-2" data-line-number="2">      (<span class="dt">Bank</span> (Map.fromList [(<span class="st">&quot;brunhilde&quot;</span>,<span class="dv">0</span>),(<span class="st">&quot;siegfried&quot;</span>,<span class="dv">0</span>),(<span class="st">&quot;wotan&quot;</span>,<span class="dv">1000</span>)]))</a>
 <a class="sourceLine" id="cb231-3" data-line-number="3">   <span class="fu">==&gt;</span> <span class="dt">Bank</span> (Map.fromList [(<span class="st">&quot;brunhilde&quot;</span>,<span class="dv">50</span>),(<span class="st">&quot;siegfried&quot;</span>,<span class="dv">50</span>),(<span class="st">&quot;wotan&quot;</span>,<span class="dv">900</span>)])</a>
@@ -2747,36 +2754,39 @@ this topic connects to equational reasoning discussed in chapter 10.
 <a class="sourceLine" id="cb231-6" data-line-number="6">      (<span class="dt">Bank</span> (Map.fromList [(<span class="st">&quot;brunhilde&quot;</span>,<span class="dv">0</span>),(<span class="st">&quot;siegfried&quot;</span>,<span class="dv">0</span>),(<span class="st">&quot;wotan&quot;</span>,<span class="dv">91</span>)]))</a>
 <a class="sourceLine" id="cb231-7" data-line-number="7">   <span class="fu">==&gt;</span> <span class="dt">Bank</span> (Map.fromList [(<span class="st">&quot;brunhilde&quot;</span>,<span class="dv">46</span>),(<span class="st">&quot;siegfried&quot;</span>,<span class="dv">45</span>),(<span class="st">&quot;wotan&quot;</span>,<span class="dv">0</span>)])</a></code></pre></div>
 <p>Code like this turns up often in Haskell when you’re doing serial updates to one value, while also performing some other computations on the side. It’s easy to make a mistake, and the type system won’t help you if you e.g. reuse the <code>bank1</code> value. Let’s rewrite <code>share</code> so that we don’t need to refer to the bank itself. We can again use the same chaining idea to accomplish this.</p>
-<div class="sourceCode" id="cb232"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb232-1" data-line-number="1"><span class="co">-- `BankOp a` is an operation that transforms a Bank value, while returning a value of type `a`</span></a>
-<a class="sourceLine" id="cb232-2" data-line-number="2"><span class="kw">data</span> <span class="dt">BankOp</span> a <span class="fu">=</span> <span class="dt">BankOp</span> (<span class="dt">Bank</span> <span class="ot">-&gt;</span> (a,<span class="dt">Bank</span>))</a>
-<a class="sourceLine" id="cb232-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb232-4" data-line-number="4"><span class="co">-- running a BankOp on a Bank</span></a>
-<a class="sourceLine" id="cb232-5" data-line-number="5"><span class="ot">runBankOp ::</span> <span class="dt">BankOp</span> a <span class="ot">-&gt;</span> <span class="dt">Bank</span> <span class="ot">-&gt;</span> (a,<span class="dt">Bank</span>)</a>
-<a class="sourceLine" id="cb232-6" data-line-number="6">runBankOp (<span class="dt">BankOp</span> f) bank <span class="fu">=</span> f bank</a>
-<a class="sourceLine" id="cb232-7" data-line-number="7"></a>
-<a class="sourceLine" id="cb232-8" data-line-number="8"><span class="co">-- Running one BankOp after another</span></a>
-<a class="sourceLine" id="cb232-9" data-line-number="9"><span class="ot">(+&gt;&gt;) ::</span> <span class="dt">BankOp</span> a <span class="ot">-&gt;</span> <span class="dt">BankOp</span> b <span class="ot">-&gt;</span> <span class="dt">BankOp</span> b</a>
-<a class="sourceLine" id="cb232-10" data-line-number="10">op1 <span class="fu">+&gt;&gt;</span> op2 <span class="fu">=</span> <span class="dt">BankOp</span> combined</a>
-<a class="sourceLine" id="cb232-11" data-line-number="11">  <span class="kw">where</span> combined bank <span class="fu">=</span> <span class="kw">let</span> (_,bank1) <span class="fu">=</span> runBankOp op1 bank</a>
-<a class="sourceLine" id="cb232-12" data-line-number="12">                        <span class="kw">in</span> runBankOp op2 bank1</a>
-<a class="sourceLine" id="cb232-13" data-line-number="13"></a>
-<a class="sourceLine" id="cb232-14" data-line-number="14"><span class="co">-- Running a parameterized BankOp, using the value returned by a previous BankOp</span></a>
-<a class="sourceLine" id="cb232-15" data-line-number="15"><span class="co">-- The implementation is a bit tricky but it&#39;s enough to understand how +&gt; is used for now.</span></a>
-<a class="sourceLine" id="cb232-16" data-line-number="16"><span class="ot">(+&gt;) ::</span> <span class="dt">BankOp</span> a <span class="ot">-&gt;</span> (a <span class="ot">-&gt;</span> <span class="dt">BankOp</span> b) <span class="ot">-&gt;</span> <span class="dt">BankOp</span> b</a>
-<a class="sourceLine" id="cb232-17" data-line-number="17">op <span class="fu">+&gt;</span> parameterized <span class="fu">=</span> <span class="dt">BankOp</span> combined</a>
-<a class="sourceLine" id="cb232-18" data-line-number="18">  <span class="kw">where</span> combined bank <span class="fu">=</span> <span class="kw">let</span> (a,bank1) <span class="fu">=</span> runBankOp op bank</a>
-<a class="sourceLine" id="cb232-19" data-line-number="19">                        <span class="kw">in</span> runBankOp (parameterized a) bank1</a>
-<a class="sourceLine" id="cb232-20" data-line-number="20"></a>
-<a class="sourceLine" id="cb232-21" data-line-number="21"><span class="co">-- Make a BankOp out of deposit. There is no return value so we use ().</span></a>
-<a class="sourceLine" id="cb232-22" data-line-number="22"><span class="ot">depositOp ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">BankOp</span> ()</a>
-<a class="sourceLine" id="cb232-23" data-line-number="23">depositOp accountName amount <span class="fu">=</span> <span class="dt">BankOp</span> depositHelper</a>
-<a class="sourceLine" id="cb232-24" data-line-number="24">  <span class="kw">where</span> depositHelper bank <span class="fu">=</span> ((), deposit accountName amount bank)</a>
-<a class="sourceLine" id="cb232-25" data-line-number="25"></a>
-<a class="sourceLine" id="cb232-26" data-line-number="26"><span class="co">-- Make a BankOp out of withdraw. Note how</span></a>
-<a class="sourceLine" id="cb232-27" data-line-number="27"><span class="co">--   withdraw accountName amount :: Bank -&gt; (Int,Bank)</span></a>
-<a class="sourceLine" id="cb232-28" data-line-number="28"><span class="co">-- is almost a BankOp already!</span></a>
-<a class="sourceLine" id="cb232-29" data-line-number="29"><span class="ot">withdrawOp ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">BankOp</span> <span class="dt">Int</span></a>
-<a class="sourceLine" id="cb232-30" data-line-number="30">withdrawOp accountName amount <span class="fu">=</span> <span class="dt">BankOp</span> (withdraw accountName amount)</a></code></pre></div>
+<div class="sourceCode" id="cb232"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb232-1" data-line-number="1"><span class="co">-- `BankOp a` is an operation that transforms a Bank value,</span></a>
+<a class="sourceLine" id="cb232-2" data-line-number="2"><span class="co">-- while returning a value of type `a`</span></a>
+<a class="sourceLine" id="cb232-3" data-line-number="3"><span class="kw">data</span> <span class="dt">BankOp</span> a <span class="fu">=</span> <span class="dt">BankOp</span> (<span class="dt">Bank</span> <span class="ot">-&gt;</span> (a,<span class="dt">Bank</span>))</a>
+<a class="sourceLine" id="cb232-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb232-5" data-line-number="5"><span class="co">-- running a BankOp on a Bank</span></a>
+<a class="sourceLine" id="cb232-6" data-line-number="6"><span class="ot">runBankOp ::</span> <span class="dt">BankOp</span> a <span class="ot">-&gt;</span> <span class="dt">Bank</span> <span class="ot">-&gt;</span> (a,<span class="dt">Bank</span>)</a>
+<a class="sourceLine" id="cb232-7" data-line-number="7">runBankOp (<span class="dt">BankOp</span> f) bank <span class="fu">=</span> f bank</a>
+<a class="sourceLine" id="cb232-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb232-9" data-line-number="9"><span class="co">-- Running one BankOp after another</span></a>
+<a class="sourceLine" id="cb232-10" data-line-number="10"><span class="ot">(+&gt;&gt;) ::</span> <span class="dt">BankOp</span> a <span class="ot">-&gt;</span> <span class="dt">BankOp</span> b <span class="ot">-&gt;</span> <span class="dt">BankOp</span> b</a>
+<a class="sourceLine" id="cb232-11" data-line-number="11">op1 <span class="fu">+&gt;&gt;</span> op2 <span class="fu">=</span> <span class="dt">BankOp</span> combined</a>
+<a class="sourceLine" id="cb232-12" data-line-number="12">  <span class="kw">where</span> combined bank <span class="fu">=</span> <span class="kw">let</span> (_,bank1) <span class="fu">=</span> runBankOp op1 bank</a>
+<a class="sourceLine" id="cb232-13" data-line-number="13">                        <span class="kw">in</span> runBankOp op2 bank1</a>
+<a class="sourceLine" id="cb232-14" data-line-number="14"></a>
+<a class="sourceLine" id="cb232-15" data-line-number="15"><span class="co">-- Running a parameterized BankOp, using the value returned</span></a>
+<a class="sourceLine" id="cb232-16" data-line-number="16"><span class="co">-- by a previous BankOp.  The implementation is a bit tricky</span></a>
+<a class="sourceLine" id="cb232-17" data-line-number="17"><span class="co">-- but it&#39;s enough to understand how +&gt; is used for now.</span></a>
+<a class="sourceLine" id="cb232-18" data-line-number="18"><span class="ot">(+&gt;) ::</span> <span class="dt">BankOp</span> a <span class="ot">-&gt;</span> (a <span class="ot">-&gt;</span> <span class="dt">BankOp</span> b) <span class="ot">-&gt;</span> <span class="dt">BankOp</span> b</a>
+<a class="sourceLine" id="cb232-19" data-line-number="19">op <span class="fu">+&gt;</span> parameterized <span class="fu">=</span> <span class="dt">BankOp</span> combined</a>
+<a class="sourceLine" id="cb232-20" data-line-number="20">  <span class="kw">where</span> combined bank <span class="fu">=</span> <span class="kw">let</span> (a,bank1) <span class="fu">=</span> runBankOp op bank</a>
+<a class="sourceLine" id="cb232-21" data-line-number="21">                        <span class="kw">in</span> runBankOp (parameterized a) bank1</a>
+<a class="sourceLine" id="cb232-22" data-line-number="22"></a>
+<a class="sourceLine" id="cb232-23" data-line-number="23"><span class="co">-- Make a BankOp out of deposit.</span></a>
+<a class="sourceLine" id="cb232-24" data-line-number="24"><span class="co">-- There is no return value so we use ().</span></a>
+<a class="sourceLine" id="cb232-25" data-line-number="25"><span class="ot">depositOp ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">BankOp</span> ()</a>
+<a class="sourceLine" id="cb232-26" data-line-number="26">depositOp accountName amount <span class="fu">=</span> <span class="dt">BankOp</span> depositHelper</a>
+<a class="sourceLine" id="cb232-27" data-line-number="27">  <span class="kw">where</span> depositHelper bank <span class="fu">=</span> ((), deposit accountName amount bank)</a>
+<a class="sourceLine" id="cb232-28" data-line-number="28"></a>
+<a class="sourceLine" id="cb232-29" data-line-number="29"><span class="co">-- Make a BankOp out of withdraw. Note how</span></a>
+<a class="sourceLine" id="cb232-30" data-line-number="30"><span class="co">--   withdraw accountName amount :: Bank -&gt; (Int,Bank)</span></a>
+<a class="sourceLine" id="cb232-31" data-line-number="31"><span class="co">-- is almost a BankOp already!</span></a>
+<a class="sourceLine" id="cb232-32" data-line-number="32"><span class="ot">withdrawOp ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">BankOp</span> <span class="dt">Int</span></a>
+<a class="sourceLine" id="cb232-33" data-line-number="33">withdrawOp accountName amount <span class="fu">=</span> <span class="dt">BankOp</span> (withdraw accountName amount)</a></code></pre></div>
 <p>Let’s see how chaining works with these bank operations.</p>
 <div class="sourceCode" id="cb233"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb233-1" data-line-number="1"><span class="dt">Prelude</span><span class="fu">&gt;</span> <span class="kw">let</span> bank <span class="fu">=</span> <span class="dt">Bank</span> (Map.fromList [(<span class="st">&quot;edsger&quot;</span>,<span class="dv">10</span>),(<span class="st">&quot;grace&quot;</span>,<span class="dv">50</span>)])</a>
 <a class="sourceLine" id="cb233-2" data-line-number="2"></a>
@@ -2842,8 +2852,10 @@ this topic connects to equational reasoning discussed in chapter 10.
 <a class="sourceLine" id="cb239-2" data-line-number="2"><span class="ot">(&gt;&gt;=) ::</span> <span class="dt">Monad</span> m <span class="ot">=&gt;</span> m a <span class="ot">-&gt;</span> (a <span class="ot">-&gt;</span> m b) <span class="ot">-&gt;</span> m b</a></code></pre></div>
 <p>The expression <code>operation &gt;&gt;= next</code> takes a monadic operation <code>operation :: m a</code>, and does some further computation with the value that it produces using <code>next :: a -&gt; m b</code>. If this feels too abstract, just recall how chaining works for <code>Maybe</code>:</p>
 <div class="sourceCode" id="cb240"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb240-1" data-line-number="1"><span class="ot">(&gt;&gt;=) ::</span> <span class="dt">Maybe</span> a <span class="ot">-&gt;</span> (a <span class="ot">-&gt;</span> <span class="dt">Maybe</span> b) <span class="ot">-&gt;</span> <span class="dt">Maybe</span> b</a>
-<a class="sourceLine" id="cb240-2" data-line-number="2"><span class="dt">Nothing</span> <span class="fu">&gt;&gt;=</span> _ <span class="fu">=</span> <span class="dt">Nothing</span>  <span class="co">-- if we failed, don&#39;t even bother running the next step</span></a>
-<a class="sourceLine" id="cb240-3" data-line-number="3"><span class="dt">Just</span> x  <span class="fu">&gt;&gt;=</span> f <span class="fu">=</span> f x      <span class="co">-- otherwise run the next step</span></a></code></pre></div>
+<a class="sourceLine" id="cb240-2" data-line-number="2"><span class="co">-- if we failed, don&#39;t even bother running the next step</span></a>
+<a class="sourceLine" id="cb240-3" data-line-number="3"><span class="dt">Nothing</span> <span class="fu">&gt;&gt;=</span> _ <span class="fu">=</span> <span class="dt">Nothing</span></a>
+<a class="sourceLine" id="cb240-4" data-line-number="4"><span class="co">-- otherwise run the next step</span></a>
+<a class="sourceLine" id="cb240-5" data-line-number="5"><span class="dt">Just</span> x  <span class="fu">&gt;&gt;=</span> f <span class="fu">=</span> f x</a></code></pre></div>
 <h2 id="maybe-is-a-monad"><span class="header-section-number">13.5</span> Maybe is a Monad!</h2>
 <p>Here’s the full <code>Monad</code> instance for <code>Maybe</code> and some examples.</p>
 <div class="sourceCode" id="cb241"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb241-1" data-line-number="1"><span class="kw">instance</span>  <span class="dt">Monad</span> <span class="dt">Maybe</span>  <span class="kw">where</span></a>
@@ -2951,17 +2963,18 @@ this topic connects to equational reasoning discussed in chapter 10.
 <a class="sourceLine" id="cb255-9" data-line-number="9"><span class="kw">instance</span> <span class="dt">Functor</span> <span class="dt">Logger</span> <span class="kw">where</span></a>
 <a class="sourceLine" id="cb255-10" data-line-number="10">  fmap f (<span class="dt">Logger</span> log x) <span class="fu">=</span> <span class="dt">Logger</span> log (f x)</a>
 <a class="sourceLine" id="cb255-11" data-line-number="11"></a>
-<a class="sourceLine" id="cb255-12" data-line-number="12"><span class="co">-- This is an Applicative instance that works for any monad, you</span></a>
-<a class="sourceLine" id="cb255-13" data-line-number="13"><span class="co">-- can just ignore it for now. We&#39;ll get back to Applicative later.</span></a>
-<a class="sourceLine" id="cb255-14" data-line-number="14"><span class="kw">instance</span> <span class="dt">Applicative</span> <span class="dt">Logger</span> <span class="kw">where</span></a>
-<a class="sourceLine" id="cb255-15" data-line-number="15">  pure <span class="fu">=</span> return</a>
-<a class="sourceLine" id="cb255-16" data-line-number="16">  (<span class="fu">&lt;*&gt;</span>) <span class="fu">=</span> ap</a>
-<a class="sourceLine" id="cb255-17" data-line-number="17"></a>
-<a class="sourceLine" id="cb255-18" data-line-number="18"><span class="co">-- Finally, the Monad instance</span></a>
-<a class="sourceLine" id="cb255-19" data-line-number="19"><span class="kw">instance</span> <span class="dt">Monad</span> <span class="dt">Logger</span> <span class="kw">where</span></a>
-<a class="sourceLine" id="cb255-20" data-line-number="20">  return x <span class="fu">=</span> <span class="dt">Logger</span> [] x</a>
-<a class="sourceLine" id="cb255-21" data-line-number="21">  <span class="dt">Logger</span> la a <span class="fu">&gt;&gt;=</span> f <span class="fu">=</span> <span class="dt">Logger</span> (la<span class="fu">++</span>lb) b</a>
-<a class="sourceLine" id="cb255-22" data-line-number="22">    <span class="kw">where</span> <span class="dt">Logger</span> lb b <span class="fu">=</span> f a</a></code></pre></div>
+<a class="sourceLine" id="cb255-12" data-line-number="12"><span class="co">-- This is an Applicative instance that works for any</span></a>
+<a class="sourceLine" id="cb255-13" data-line-number="13"><span class="co">-- monad, you can just ignore it for now. We&#39;ll get back</span></a>
+<a class="sourceLine" id="cb255-14" data-line-number="14"><span class="co">-- to Applicative later.</span></a>
+<a class="sourceLine" id="cb255-15" data-line-number="15"><span class="kw">instance</span> <span class="dt">Applicative</span> <span class="dt">Logger</span> <span class="kw">where</span></a>
+<a class="sourceLine" id="cb255-16" data-line-number="16">  pure <span class="fu">=</span> return</a>
+<a class="sourceLine" id="cb255-17" data-line-number="17">  (<span class="fu">&lt;*&gt;</span>) <span class="fu">=</span> ap</a>
+<a class="sourceLine" id="cb255-18" data-line-number="18"></a>
+<a class="sourceLine" id="cb255-19" data-line-number="19"><span class="co">-- Finally, the Monad instance</span></a>
+<a class="sourceLine" id="cb255-20" data-line-number="20"><span class="kw">instance</span> <span class="dt">Monad</span> <span class="dt">Logger</span> <span class="kw">where</span></a>
+<a class="sourceLine" id="cb255-21" data-line-number="21">  return x <span class="fu">=</span> <span class="dt">Logger</span> [] x</a>
+<a class="sourceLine" id="cb255-22" data-line-number="22">  <span class="dt">Logger</span> la a <span class="fu">&gt;&gt;=</span> f <span class="fu">=</span> <span class="dt">Logger</span> (la<span class="fu">++</span>lb) b</a>
+<a class="sourceLine" id="cb255-23" data-line-number="23">    <span class="kw">where</span> <span class="dt">Logger</span> lb b <span class="fu">=</span> f a</a></code></pre></div>
 <p>We don’t need the <code>nomsg</code> operation any more since it’s just <code>return</code>. We can also reimplement the <code>annotate</code> operation using monad operations.</p>
 <div class="sourceCode" id="cb256"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb256-1" data-line-number="1"><span class="ot">nomsg ::</span> a <span class="ot">-&gt;</span> <span class="dt">Logger</span> a</a>
 <a class="sourceLine" id="cb256-2" data-line-number="2">nomsg x <span class="fu">=</span> return x</a>
