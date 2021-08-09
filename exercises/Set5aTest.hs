@@ -32,7 +32,7 @@ tests = [(1,"Vehicle",[ex1])
 -- -- -- -- -- -- -- --
 
 assertNormalConstructor (Constructor _ _) = property True
-assertNormalConstructor (Weird n) = counterexample ("  constructor "++n++" is weird. Make it normal.") False
+assertNormalConstructor (Weird n) = counterexample ("  constructor "++n++" is not a normal constructor. Perhaps it's a record constructor or an infix constructor? Make it normal.") False
 
 assertNoFields (Constructor n vs) = counterexample ("  constructor "++n++" should have no fields") $ null vs
 assertNoFields _ = property True
