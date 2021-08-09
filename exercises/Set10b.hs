@@ -1,5 +1,8 @@
 -- This exercise set hides most of Prelude. You only have access to
 -- the Bool, Int and list types, and pattern matching.
+--
+-- In particular, seq is not available, so you must use pattern
+-- matching to force evaluation!
 
 {-# LANGUAGE NoImplicitPrelude #-}
 
