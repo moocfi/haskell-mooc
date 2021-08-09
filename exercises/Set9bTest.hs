@@ -21,7 +21,7 @@ tests = [ (1, "warmup",         [ ex1_nextRow, ex1_nextCol ])
         , (4, "danger",         [ ex4_danger, ex4_danger_neg, ex4_danger_neg_2 ])
         , (5, "prettyPrint2",   [ ex5_size, ex5_content, ex5_comm
                                 , ex5_correctness ])
-        , (6, "fixFirst",       [ ex6_fixFirst_safeZone, ex6_fixFirst_dangerZone ])
+        , (6, "fixFirst",       [ ex6_fixFirst_safeZone, ex6_fixFirst_dangerZone, ex6_fixFirst_outside ])
         , (7, "stackOps",       [ ex7_continue, ex7_backtrack ])
         , (8, "nqueens_step",   [ ex8_step_4, ex8_step_continue, ex8_step_backtrack ])
         , (9, "nqueens_finish", [ ex9_finish_small, ex9_finish_medium, ex9_finish_large ])
@@ -307,6 +307,12 @@ ex6_fixFirst_dangerZone = property $ do
       ": " ++ show (intersect row sz))
       (all (`elem` dz) row)
       where row = [(i,k) | k <- [j .. n]]
+
+ex6_fixFirst_outside = property $ do
+  n <- choose (5,10)
+  r <- choose (1,n)
+  c <- choose (n+1,20)
+  return $ $(testing [|fixFirst n [(r,c)]|]) (?==Nothing)
 
 --------------------------------------------------------------------------------
 

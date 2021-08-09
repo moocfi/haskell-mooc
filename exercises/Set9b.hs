@@ -238,10 +238,14 @@ prettyPrint2 = todo
 -- If no safe spot is found for the queen on that row, fixFirst should
 -- return Nothing.
 --
+-- Note: this means in particular that if the queen is already outside
+-- the board, Nothing should be returned.
+--
 -- Examples:
 --   fixFirst 5 [(1,1)] ==> Just [(1,1)]
 --   fixFirst 5 [(3,4)] ==> Just [(3,4)]
 --   fixFirst 5 [(1,1),(1,5)] ==> Nothing
+--   fixFirst 5 [(1,6)] ==> Nothing
 --   fixFirst 5 [(1,1),(3,3)] ==> Just [(1,2),(3,3)]
 --   fixFirst 5 [(1,3),(3,3)] ==> Just [(1,4),(3,3)]
 --   fixFirst 5 [(2,1),(3,3)] ==> Just [(2,1),(3,3)]
