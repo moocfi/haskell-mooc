@@ -3178,7 +3178,7 @@ this topic connects to equational reasoning discussed in chapter 10.
 <a class="sourceLine" id="cb292-2" data-line-number="2">   number <span class="ot">&lt;-</span> [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>]</a>
 <a class="sourceLine" id="cb292-3" data-line-number="3">   return (word <span class="fu">++</span> show number)</a>
 <a class="sourceLine" id="cb292-4" data-line-number="4">  <span class="fu">==&gt;</span> [<span class="st">&quot;Blue1&quot;</span>,<span class="st">&quot;Blue2&quot;</span>,<span class="st">&quot;Blue3&quot;</span>,<span class="st">&quot;Green1&quot;</span>,<span class="st">&quot;Green2&quot;</span>,<span class="st">&quot;Green3&quot;</span>]</a></code></pre></div>
-<p>More interesting example: find all the pairs in a list that sum to <code>k</code></p>
+<p>More interesting example: find all the pairs in a list that sum to <code>k</code>. (The same element twice counts as a pair.)</p>
 <div class="sourceCode" id="cb293"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb293-1" data-line-number="1"><span class="ot">findSum ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> [(<span class="dt">Int</span>,<span class="dt">Int</span>)]</a>
 <a class="sourceLine" id="cb293-2" data-line-number="2">findSum xs k <span class="fu">=</span> <span class="kw">do</span> a <span class="ot">&lt;-</span> xs</a>
 <a class="sourceLine" id="cb293-3" data-line-number="3">                  b <span class="ot">&lt;-</span> xs</a>
