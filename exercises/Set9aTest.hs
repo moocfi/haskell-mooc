@@ -187,25 +187,25 @@ ex8_surjective = forAllShrink_ (choose (2,5)) $ \n ->
 
 ex9_id = property $ do
   n <- choose (1,5)
-  let id = [(i,i) | i <- [0..n-1]]
-  xs <- shuffle (take n "abcdefghij")
+  let id = [0..n-1]
+  xs <- shuffle (take n ['a'..'z'])
   return $ $(testing [|permute id xs|]) (?== xs)
 
-ex9_simple = forAllShrink_ (sublistOf "pqrstuv") $ \sorted ->
-  forAllBlind (shuffle sorted) $ \cs ->
-  let res = [(i,j) | (i,c) <- zip [0..] cs, let Just j = elemIndex c sorted]
-  in $(testing [|permute res cs|]) (?==sorted)
+ex9_simple = forAllShrink_ (sublistOf "pqrstuv") $ \original ->
+  forAllBlind (shuffle original) $ \permuted ->
+  let permutation = [i | x <- permuted, let Just i = elemIndex x original]
+  in $(testing [|permute permutation permuted|]) (?==original)
 
 ex9_compose = property $ do
-  n  <- choose (2,5)
-  p  <- return . zip [0..n-1] =<< shuffle [0..n-1]
-  q  <- return . zip [0..n-1] =<< shuffle [0..n-1]
-  xs <- shuffle (take n "abcdefghij")
+  n <- choose (2,5)
+  p <- shuffle [0..n-1]
+  q <- shuffle [0..n-1]
+  xs <- shuffle (take n ['a'..'z'])
   return $ counterexample
-           ("permute (compose p q) xs == permute q (permute p xs) failed:\n\
+           ("permute (multiply p q) xs == permute p (permute q xs) failed:\n\
             \  p was " ++ show p ++ "\n  q was " ++ show q ++ ", and\n  xs \
-            \was " ++ show xs ++ ";\n  permute (compose p q) xs evaluated to " ++
-            show (permute (compose p q) xs) ++ ",\n  while \
-            \permute q (permute p xs) evaluated to " ++
+            \was " ++ show xs ++ ";\n  permute (multiply p q) xs evaluated to " ++
+            show (permute (multiply p q) xs) ++ ",\n  while \
+            \permute p (permute q xs) evaluated to " ++
             show (permute q (permute p xs)))
-           (permute (compose p q) xs == permute q (permute p xs))
+           (permute (multiply p q) xs == permute p (permute q xs))

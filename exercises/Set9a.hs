@@ -185,39 +185,57 @@ compose :: (Eq a, Eq b) => [(a,b)] -> [(b,c)] -> [(a,c)]
 compose = todo
 
 ------------------------------------------------------------------------------
--- Ex 9: Reorder a list using an [(Int,Int)] mapping.
+-- Ex 9: Reorder a list using a list of indices.
 --
--- Given a list of mappings [(from,to)], reorder the list so that the element
--- at the first index (from) goes to the second index (to). You may assume
--- that the list is ordered with respect to the first index (e.g.
--- [(0,0),(1,1),(2,2)], [(0,1),(1,0),(2,2)], [(0,1),(1,2),(2,0)], etc.). You
--- may also assume that for a list of length n, every number from 0 to n - 1
--- (inclusive) appears exactly once as the first index (from) and once as the
--- second index (to).
+-- The order of elements in a list can be described using a list of
+-- indices. The string "abcde" (remember that strings are lists of
+-- chars) has letters 'a', 'b', 'c', 'd', and 'e' in indices 0, 1, 2,
+-- 3, and 4 respectively. If we reverse the string, we get "edcba", in
+-- which the five letters occur in indices 4, 3, 2, 1, and 0
+-- respectively. If we swap the last two letters in "abcde", we get
+-- "abced" which has the letters in indices 0, 1, 2, 4, and 3.
 --
--- (Mappings of this kind are known as permutations in math, see
--- https://en.wikipedia.org/wiki/Permutation)
+-- Thus if we encode the string "abcde" as [0,1,2,3,4], we can encode
+-- "edcba", and "abced" with the index lists [4,3,2,1,0], and
+-- [0,1,2,4,3] respectively.
 --
--- Implement the function permute that performs the reordering.
+-- More generally, the indices in any list xs of length n can be represented
+-- as the index list [0..n-1]. If the index list is reordered, then xs can
+-- be reordered accordingly. Your task is to implement the function permute
+-- that performs such reordering. You may assume that the index list always
+-- has the correct length and contents (no duplicates, missing or negative
+-- indices or any other such funny business).
+--
+-- (The index lists discussed in this exercise correspond to permutations in
+-- math. In fact, permutations can be multiplied which is a special case of
+-- the compose function in the previous exercise. For more information on
+-- permutations, see https://en.wikipedia.org/wiki/Permutation)
 --
 -- Examples:
---   permute [(0,0),(1,1)] [True, False] ==> [True, False]
---   permute [(0,1),(1,0)] [True, False] ==> [False, True]
---   permute [(0,0),(1,1),(2,2),(3,3),(4,4)] "curry" ==> "curry"
---   permute [(0,4),(1,3),(2,2),(3,1),(4,0)] "curry" ==> "yrruc"
---   permute [(0,2),(1,1),(2,0),(3,3),(4,4)] "curry" ==> "rucry"
---   permute [(0,2),(1,1),(2,0)] (permute [(0,2),(1,1),(2,0)] "foo")
---     ==> "foo"
---   permute [(0,1),(1,0),(2,2)] (permute [(0,0),(1,2),(2,1)] [9,3,5])
---     ==> [5,9,3]
---   permute [(0,0),(1,2),(2,1)] (permute [(0,1),(1,0),(2,2)] [9,3,5])
---     ==> [3,5,9]
---   permute ([(0,0),(1,2),(2,1)] `compose` [(0,1),(1,0),(2,2)]) [9,3,5]
---     ==> [5,9,3]
---   permute ([(0,1),(1,0),(2,2)] `compose` [(0,0),(1,2),(2,1)]) [9,3,5]
---     ==> [3,5,9]
+--   permute [0,1] [True, False] ==> [True, False]
+--   permute [1,0] [True, False] ==> [False, True]
+--   permute [0, 1, 2, 3, 4] "curry" ==> "curry"
+--   permute [4, 3, 2, 1, 0] "curry" ==> "yrruc"
+--   permute [2, 1, 0, 3, 4] "curry" ==> "rucry"
+--   permute [2, 1, 0] (permute [2, 1, 0] "foo") ==> "foo"
+--   permute [1, 0, 2] (permute [(0,0),(1,2),(2,1)] [9,3,5]) ==> [5,9,3]
+--   permute [0, 2, 1] (permute [(0,1),(1,0),(2,2)] [9,3,5]) ==> [3,5,9]
+--   permute ([0, 2, 1] `multiply` [1, 0, 2]) [9,3,5] ==> [5,9,3]
+--   permute ([1, 0, 2] `multiply` [0, 2, 1]) [9,3,5] ==> [3,5,9]
+--
+--
 
-type Permutation = [(Int,Int)]
+-- A type alias for index lists.
+type Permutation = [Int]
+
+-- Permuting a list with the identity permutation should change nothing.
+identity :: Int -> Permutation
+identity n = [0 .. n - 1]
+
+-- This function shows how permutations can be composed. Do not edit this
+-- function.
+multiply :: Permutation -> Permutation -> Permutation
+multiply p q = map (\i -> p !! (q !! i)) (identity (length p - 1))
 
 permute :: Permutation -> [a] -> [a]
 permute = todo
