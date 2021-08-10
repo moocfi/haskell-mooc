@@ -235,7 +235,7 @@ identity n = [0 .. n - 1]
 -- This function shows how permutations can be composed. Do not edit this
 -- function.
 multiply :: Permutation -> Permutation -> Permutation
-multiply p q = map (\i -> p !! (q !! i)) (identity (length p - 1))
+multiply p q = map (\i -> p !! (q !! i)) (identity (length p))
 
 permute :: Permutation -> [a] -> [a]
 permute = todo
