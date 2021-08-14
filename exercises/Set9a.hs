@@ -218,8 +218,8 @@ compose = todo
 --   permute [4, 3, 2, 1, 0] "curry" ==> "yrruc"
 --   permute [2, 1, 0, 3, 4] "curry" ==> "rucry"
 --   permute [2, 1, 0] (permute [2, 1, 0] "foo") ==> "foo"
---   permute [1, 0, 2] (permute [(0,0),(1,2),(2,1)] [9,3,5]) ==> [5,9,3]
---   permute [0, 2, 1] (permute [(0,1),(1,0),(2,2)] [9,3,5]) ==> [3,5,9]
+--   permute [1, 0, 2] (permute [0, 2, 1] [9,3,5]) ==> [5,9,3]
+--   permute [0, 2, 1] (permute [1, 0, 2] [9,3,5]) ==> [3,5,9]
 --   permute ([0, 2, 1] `multiply` [1, 0, 2]) [9,3,5] ==> [5,9,3]
 --   permute ([1, 0, 2] `multiply` [0, 2, 1]) [9,3,5] ==> [3,5,9]
 --
