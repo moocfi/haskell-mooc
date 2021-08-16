@@ -191,13 +191,13 @@ ex9_id = property $ do
   xs <- shuffle (take n ['a'..'z'])
   return $ $(testing [|permute id xs|]) (?== xs)
 
-ex9_simple = forAllShrink_ (sublistOf "pqrstuv") $ \original ->
+ex9_simple = forAllBlind (sublistOf "pqrstuvwxyz") $ \original ->
   forAllBlind (shuffle original) $ \permuted ->
   let permutation = [i | x <- permuted, let Just i = elemIndex x original]
   in $(testing [|permute permutation permuted|]) (?==original)
 
 ex9_compose = property $ do
-  n <- choose (2,5)
+  n <- choose (2,7)
   p <- shuffle [0..n-1]
   q <- shuffle [0..n-1]
   xs <- shuffle (take n ['a'..'z'])
