@@ -207,5 +207,5 @@ ex9_compose = property $ do
             \was " ++ show xs ++ ";\n  permute (multiply p q) xs evaluated to " ++
             show (permute (multiply p q) xs) ++ ",\n  while \
             \permute p (permute q xs) evaluated to " ++
-            show (permute q (permute p xs)))
+            show (permute p (permute q xs)))
            (permute (multiply p q) xs == permute p (permute q xs))
