@@ -15,7 +15,7 @@ import Set4a
 
 main = score tests
 
-tests = [(1,"allEqual",[ex1])
+tests = [(1,"allEqual",[ex1, ex1_one])
         ,(2,"distinct",[ex2_int, ex2_char])
         ,(3,"middle",[ex3_char, ex3_int])
         ,(4,"rangeOf",[ex4_int, ex4_integer, ex4_double])
@@ -40,6 +40,11 @@ ex1 = conjoin [m_ex1_true True
               ,m_ex1_false 'a'
               ,m_ex1_true (1::Int)
               ,m_ex1_false (1::Int)]
+
+ex1_one = forAll_ $ \(Positive cnt,x::Int,y) ->
+  forAllBlind (shuffle (y:replicate cnt x)) $ \xs ->
+  x /= y ==>
+  $(testing [|allEqual xs|]) (?==False)
 
 m_ex2 domain = forAllBlind (sublistOf domain) $ \xs ->
   conjoin [forAllBlind (shuffle xs) $ \xs' -> $(testing [|distinct xs'|]) (?==True)
