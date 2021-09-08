@@ -103,7 +103,7 @@ ex6_hSelectLines =
   run $ hPutStr h $ unlines lines
   run $ hSeek h AbsoluteSeek 0
   outs <- run $ hSelectLines h inds
-  length outs `seq` do
+  length (concat outs) `seq` do
     run $ hClose h
     stop_ $ counterexample ("  was: "++show outs) $
       conjoin [counterexample "Length of result" $ length outs ?== length inds
