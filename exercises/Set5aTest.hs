@@ -58,7 +58,9 @@ ex2 = $(reifyType "BusTicket") $ \(DataType vars cs) ->
           ,counterexample "  should have a constructor SingleTicket with no fields" $
            any (==Constructor "SingleTicket" []) cs
           ,counterexample "  should have a constructor MonthlyTicket with a String field" $
+           counterexample (show cs) $
            any (==Constructor "MonthlyTicket" [SimpleType "String"]) cs
+           || any (==Constructor "MonthlyTicket" [SimpleType "[Char]"]) cs
           ]
 
 word = listOf1 (choose ('a','z'))

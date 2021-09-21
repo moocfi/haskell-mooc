@@ -80,6 +80,10 @@ data FieldType = SimpleType String | WeirdType
 
 interpretFieldType (ConT n) = SimpleType $ nameBase n
 interpretFieldType (VarT n) = SimpleType $ nameBase n
+interpretFieldType (AppT ListT t) =
+  case interpretFieldType t of
+    SimpleType s -> SimpleType $ "[" ++ s ++ "]"
+    _ -> WeirdType
 interpretFieldType (AppT t1 t2) =
   case (interpretFieldType t1, interpretFieldType t2) of
     (SimpleType s1, SimpleType s2) -> SimpleType $ s1 ++ " " ++ s2
