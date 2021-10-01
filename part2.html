@@ -3194,9 +3194,9 @@ this topic connects to equational reasoning discussed in chapter 10.
 <span id="cb267-2"><a href="#cb267-2" aria-hidden="true" tabindex="-1"></a><span class="ot">remember ::</span> a <span class="ot">-&gt;</span> <span class="dt">State</span> [a] ()</span>
 <span id="cb267-3"><a href="#cb267-3" aria-hidden="true" tabindex="-1"></a>remember x <span class="ot">=</span> modify (x<span class="op">:</span>)</span>
 <span id="cb267-4"><a href="#cb267-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb267-5"><a href="#cb267-5" aria-hidden="true" tabindex="-1"></a><span class="ot">valuesAfterZero ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> [<span class="dt">Int</span>]</span>
+<span id="cb267-5"><a href="#cb267-5" aria-hidden="true" tabindex="-1"></a><span class="ot">valuesAfterZero ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> ((),[<span class="dt">Int</span>])</span>
 <span id="cb267-6"><a href="#cb267-6" aria-hidden="true" tabindex="-1"></a>valuesAfterZero xs <span class="ot">=</span> runState (go xs) []</span>
-<span id="cb267-7"><a href="#cb267-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span><span class="ot"> go ::</span> [a] <span class="ot">-&gt;</span> <span class="dt">State</span> [a] ()</span>
+<span id="cb267-7"><a href="#cb267-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span><span class="ot"> go ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">State</span> [<span class="dt">Int</span>] ()</span>
 <span id="cb267-8"><a href="#cb267-8" aria-hidden="true" tabindex="-1"></a>        go (<span class="dv">0</span><span class="op">:</span>y<span class="op">:</span>xs) <span class="ot">=</span> <span class="kw">do</span> remember y</span>
 <span id="cb267-9"><a href="#cb267-9" aria-hidden="true" tabindex="-1"></a>                         go (y<span class="op">:</span>xs)</span>
 <span id="cb267-10"><a href="#cb267-10" aria-hidden="true" tabindex="-1"></a>        go (x<span class="op">:</span>xs) <span class="ot">=</span> go xs</span>
