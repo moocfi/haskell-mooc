@@ -1,2 +1,6 @@
 resolver: lts-18.18
 install-ghc: true
+# workaround for https://github.com/commercialhaskell/lts-haskell/issues/329:
+flags:
+  mintty:
+    win32-2-13-1: false
