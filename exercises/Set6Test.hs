@@ -95,42 +95,52 @@ ex7_eq_check =
           ,$(testing [|Finite i == Infinite|]) (?==False)
           ,$(testing [|Infinite == Infinite|]) (?==True)]
 
-ex7_trichotomy =
-  $(withInstance "Ord" "Number" [|(<) :: Number -> Number -> Bool|]) $ \(<) ->
-  $(withInstance "Ord" "Number" [|(>) :: Number -> Number -> Bool|]) $ \(>) ->
-  forAll_ $ \(x :: Number) ->
-  forAll_ $ \(y :: Number) ->
-  (x /= y) ==> counterexample
-  (show x ++ " /= " ++ show y ++ ", but neither " ++
-   show x ++ " < " ++ show y ++ " or " ++
-   show x ++ " > " ++ show y ++ " was true")
-  (x < y || x > y)
+ex7_finite_finite =
+  $(withInstance "Ord" "Number" [|(<) :: Number -> Number -> Bool|]) $ \_ ->
+  forAll_ $ \i ->
+  forAll_ $ \(Positive delta) ->
+  let a = Finite i
+      b = Finite (i+delta)
+  in conjoin [$(testing [|a < b|]) (?==True)
+             ,$(testing [|b < a|]) (?==False)
+             ,$(testing [|a > b|]) (?==False)
+             ,$(testing [|b > a|]) (?==True)
+             ,$(testing [|a <= b|]) (?==True)
+             ,$(testing [|b <= a|]) (?==False)
+             ,$(testing [|a >= b|]) (?==False)
+             ,$(testing [|b >= a|]) (?==True)
+             ]
 
-ex7_reflexivity =
-  $(withInstance "Ord" "Number" [|(<=) :: Number -> Number -> Bool|]) $ \(<=) ->
-  forAll_ $ \(x :: Number) ->
-  $(testing [| x <= x |]) (?==True)
+ex7_finite_infinite =
+  $(withInstance "Ord" "Number" [|(<) :: Number -> Number -> Bool|]) $ \_ ->
+  forAll_ $ \i ->
+  let a = Finite i
+      b = Infinite
+  in conjoin [$(testing [|a < b|]) (?==True)
+             ,$(testing [|b < a|]) (?==False)
+             ,$(testing [|a > b|]) (?==False)
+             ,$(testing [|b > a|]) (?==True)
+             ,$(testing [|a <= b|]) (?==True)
+             ,$(testing [|b <= a|]) (?==False)
+             ,$(testing [|a >= b|]) (?==False)
+             ,$(testing [|b >= a|]) (?==True)
+             ]
 
-ex7_antisymmetry =
-  $(withInstance "Ord" "Number" [|(<=) :: Number -> Number -> Bool|]) $ \(<=) ->
-  forAll_ $ \(x :: Number) ->
-  forAll_ $ \(y :: Number) ->
-  (x <= y && y <= x) ==> $(testing [| x == y |]) (?==True)
+ex7_infinite_infinite =
+  $(withInstance "Ord" "Number" [|(<) :: Number -> Number -> Bool|]) $ \_ ->
+  conjoin [$(testing [|Infinite < Infinite|]) (?==False)
+          ,$(testing [|Infinite > Infinite|]) (?==False)
+          ,$(testing [|Infinite <= Infinite|]) (?==True)
+          ,$(testing [|Infinite >= Infinite|]) (?==True)
+          ]
 
-ex7_transitivity =
-  $(withInstance "Ord" "Number" [|(<=) :: Number -> Number -> Bool|]) $ \(<=) ->
-  forAll_ $ \(x :: Number) ->
-  forAll_ $ \(y :: Number) ->
-  forAll_ $ \(z :: Number) ->
-  (x <= y && y <= z) ==> $(testing [| x <= z |]) (?==True)
-
-ex7_finite =
+ex7_max_finite =
   $(withInstance "Ord" "Number" [|max :: Number -> Number -> Number|]) $ \max ->
   forAll_ $ \i ->
   forAll_ $ \j ->
   $(testing [|max (Finite i) (Finite j)|]) (?==Finite (Prelude.max i j))
 
-ex7_infinite =
+ex7_max_infinite =
   $(withInstance "Ord" "Number" [|max :: Number -> Number -> Number|]) $ \max ->
   forAll_ $ \i ->
   conjoin [$(testing [|max (Finite i) Infinite|]) (?==Infinite)
@@ -303,9 +313,9 @@ tests = [(1,"Eq Country",[ex1])
         ,(4,"Eq List",[ex4_eq, ex4_neq])
         ,(5,"Price",[ex5_egg, ex5_milk])
         ,(6,"Price List",[ex6_egg, ex6_milk])
-        ,(7,"Ord Number",[ ex7_eq_check, ex7_trichotomy, ex7_reflexivity
-                         , ex7_antisymmetry, ex7_transitivity, ex7_finite
-                         , ex7_infinite ])
+        ,(7,"Ord Number",[ ex7_eq_check
+                         , ex7_finite_finite, ex7_finite_infinite, ex7_infinite_infinite
+                         , ex7_max_finite, ex7_max_infinite ])
         ,(8,"Eq RationalNumber",[ex8_refl, ex8_eq])
         ,(9,"simplify",[ex9_prime, ex9_eq])
         ,(10,"Num RationalNumber",[ex10_add_zero, ex10_add_commut, ex10_add_whole, ex10_add
