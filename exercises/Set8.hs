@@ -221,12 +221,12 @@ exampleCircle = fill red (circle 80 100 200)
 -- width of w, and a height of h.
 --
 -- Example:
---  renderList (fill white (rectangle 1 2 2 3)) (0,5) (0,5)
+--  renderList (fill white (rectangle 1 2 4 3)) (0,5) (0,5)
 --   ==> [["000000","000000","000000","000000","000000","000000"],
 --        ["000000","000000","000000","000000","000000","000000"],
---        ["000000","ffffff","ffffff","000000","000000","000000"],
---        ["000000","ffffff","ffffff","000000","000000","000000"],
---        ["000000","ffffff","ffffff","000000","000000","000000"],
+--        ["000000","ffffff","ffffff","ffffff","ffffff","000000"],
+--        ["000000","ffffff","ffffff","ffffff","ffffff","000000"],
+--        ["000000","ffffff","ffffff","ffffff","ffffff","000000"],
 --        ["000000","000000","000000","000000","000000","000000"]]
 
 rectangle :: Int -> Int -> Int -> Int -> Shape
