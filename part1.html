@@ -3507,7 +3507,7 @@ Because <code>Nothing</code> is a constructor.
 <p>Given the following definition of the class <code>BitOperations</code></p>
 <div class="sourceCode" id="cb388"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb388-1"><a href="#cb388-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="dt">BitOperations</span> a <span class="kw">where</span></span>
 <span id="cb388-2"><a href="#cb388-2" aria-hidden="true" tabindex="-1"></a><span class="ot">  bitNot ::</span> a <span class="ot">-&gt;</span> a</span>
-<span id="cb388-3"><a href="#cb388-3" aria-hidden="true" tabindex="-1"></a>  bitNot x <span class="ot">=</span> bitNand bitTrue x</span>
+<span id="cb388-3"><a href="#cb388-3" aria-hidden="true" tabindex="-1"></a>  bitNot x <span class="ot">=</span> bitNand x x</span>
 <span id="cb388-4"><a href="#cb388-4" aria-hidden="true" tabindex="-1"></a><span class="ot">  bitAnd ::</span> a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a</span>
 <span id="cb388-5"><a href="#cb388-5" aria-hidden="true" tabindex="-1"></a>  bitAnd x y <span class="ot">=</span> bitNot (bitOr (bitNot x) (bitNot y))</span>
 <span id="cb388-6"><a href="#cb388-6" aria-hidden="true" tabindex="-1"></a><span class="ot">  bitOr ::</span> a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a</span>
