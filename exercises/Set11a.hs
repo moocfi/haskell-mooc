@@ -17,6 +17,8 @@ import Mooc.Todo
 --   * replicateM
 --   * readFile
 --   * lines
+--
+-- Do not add any new imports! E.g. Data.IORef is forbidden.
 
 ------------------------------------------------------------------------------
 -- Ex 1: define an IO operation hello that prints two lines. The
