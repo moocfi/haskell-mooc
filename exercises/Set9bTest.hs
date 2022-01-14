@@ -326,7 +326,9 @@ ex6_fixFirst_outside = property $ do
   n <- choose (5,10)
   r <- choose (1,n)
   c <- choose (n+1,20)
-  return $ $(testing [|fixFirst n [(r,c)]|]) (?==Nothing)
+  nq <- choose (0,2)
+  (qs, _, _) <- queens n nq
+  return $ $(testing [|fixFirst n ((r,c):qs)|]) (?==Nothing)
 
 --------------------------------------------------------------------------------
 
