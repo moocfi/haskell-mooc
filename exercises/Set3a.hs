@@ -151,6 +151,8 @@ while check update value = todo
 -- Examples (see definition of step below):
 --   whileRight (step 100) 1   ==> 128
 --   whileRight (step 1000) 3  ==> 1536
+--
+-- Hint! Remember the case-of expression from lecture 2.
 
 whileRight :: (a -> Either b a) -> a -> b
 whileRight f x = todo
