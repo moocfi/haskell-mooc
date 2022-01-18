@@ -148,9 +148,10 @@ while check update value = todo
 -- a Right, the function should call `check` on the contents of the
 -- Right and so on.
 --
--- Examples (see definition of step below):
+-- Examples (see definitions of step and bomb below):
 --   whileRight (step 100) 1   ==> 128
 --   whileRight (step 1000) 3  ==> 1536
+--   whileRight bomb 7         ==> "BOOM"
 --
 -- Hint! Remember the case-of expression from lecture 2.
 
@@ -161,6 +162,11 @@ whileRight f x = todo
 -- step k x doubles x if it's less than k
 step :: Int -> Int -> Either Int Int
 step k x = if x<k then Right (2*x) else Left x
+
+-- bomb x implements a countdown: it returns x-1 or "BOOM" if x was 0
+bomb :: Int -> Either String Int
+bomb 0 = Left "BOOM"
+bomb x = Right (x-1)
 
 ------------------------------------------------------------------------------
 -- Ex 9: given a list of strings and a length, return all strings that
