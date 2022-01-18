@@ -156,7 +156,7 @@ while check update value = todo
 -- Hint! Remember the case-of expression from lecture 2.
 
 whileRight :: (a -> Either b a) -> a -> b
-whileRight f x = todo
+whileRight check x = todo
 
 -- for the whileRight examples:
 -- step k x doubles x if it's less than k
