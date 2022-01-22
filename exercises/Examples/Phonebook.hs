@@ -19,7 +19,6 @@ addToPhonebook db name phone = execute db addQuery (name,phone)
 getQuery :: Query
 getQuery = Query (T.pack "SELECT phone FROM phonebook WHERE name = ?;")
 
--- TODO use Only?
 getNumbersFor :: Connection -> String -> IO [[String]]
 getNumbersFor db name = query db getQuery [name]
 
