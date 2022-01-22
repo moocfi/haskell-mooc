@@ -286,6 +286,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The easiest way to get Haskell is to install the <code>stack</code> tool, see <a href="https://haskellstack.org" class="uri">https://haskellstack.org</a>. The exercises on this course are intended to work with Stack, so you should use it for now.</p>
 <p>By the way, if you’re interested in what Stack is, and how it relates to other Haskell tools like Cabal and GHC, <a href="https://www.quora.com/What-is-the-difference-between-Cabal-and-Stack-in-Haskell-projects-Which-one-do-you-recommend-and-why">read more here</a> or <a href="https://docs.haskellstack.org/en/stable/faq/">here</a>. We’ll get back to Haskell packages and using them in detail in part 2 of the course.</p>
 <p>For now, after installing Stack, just run <code>stack ghci</code> to get an interactive Haskell environment.</p>
+<p><strong>Note!</strong> GHC 8.10.7 has a GHCi bug that makes editing lines impossible on ARM-based systems. As a workaround, use <code>TERM=dumb stack ghci</code>. More info <a href="https://gitlab.haskell.org/ghc/ghc/-/issues/20022">here</a>.</p>
 <h2 data-number="1.5" id="lets-start"><span class="header-section-number">1.5</span> Let’s Start!</h2>
 <p>GHCi is the interactive Haskell interpreter. Here’s an example session:</p>
 <pre><code>$ stack ghci
