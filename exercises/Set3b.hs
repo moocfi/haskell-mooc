@@ -88,6 +88,13 @@ indexDefault xs i def = todo
 -- increasing order.
 --
 -- Use pattern matching and recursion to iterate through the list.
+--
+-- Examples:
+--   sorted [1,2,3] ==> True
+--   sorted []      ==> True
+--   sorted [2,7,7] ==> True
+--   sorted [1,3,2] ==> False
+--   sorted [7,2,7] ==> False
 
 sorted :: [Int] -> Bool
 sorted xs = todo
