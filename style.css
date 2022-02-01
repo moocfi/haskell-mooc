@@ -54,6 +54,9 @@ div#text {
     order: 2;
     background: #211c00;
   }
+  nav#TOC code {
+    background: inherit;
+  }
   nav#TOC ul {
     padding-left: 2em;
     padding-right: 1em;
@@ -104,6 +107,9 @@ ol.quiz li:hover {
   background: #ffd608;
   cursor: pointer;
 }
+ol.quiz li:hover code {
+  background: inherit;
+}
 ol.quiz li:active {
   background: red;
 }
@@ -124,6 +130,9 @@ code.sourceCode {
 code {
   font-family: Consolas, Monaco, Lucida Console, Liberation Mono, Bitstream Vera Sans Mono, monospace;
   white-space: pre; /* make non-syntax-colored code blocks behave like colored ones */
+}
+p code, table code, li code {
+  background: #fff5b6;
 }
 table, img {
   max-width: 80%;
