@@ -28,7 +28,7 @@ tests = precondition imports
 
 -- -- -- -- --
 
-imports = $(importsOnly "Set11a" ["Control.Monad","Data.List","Data.Foldable","Prelude","Data.OldList","System.IO"
+imports = $(importsOnly "Set11a" ["Control.Monad","Data.List","Data.Functor","Data.Foldable","Prelude","Data.OldList","System.IO"
                                  ,"Text.Read"
                                  ,"GHC.Num", "GHC.Base", "GHC.Classes", "GHC.Show", "GHC.Types", "GHC.Err", "GHC.List"
                                  ,"Mooc.Todo"])
