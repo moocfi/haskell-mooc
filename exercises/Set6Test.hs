@@ -96,7 +96,10 @@ ex7_eq_check =
           ,$(testing [|Infinite == Infinite|]) (?==True)]
 
 ex7_finite_finite =
-  $(withInstance "Ord" "Number" [|(<) :: Number -> Number -> Bool|]) $ \_ ->
+  $(withInstance "Ord" "Number" [|((<) :: Number -> Number -> Bool
+                                  ,(>) :: Number -> Number -> Bool
+                                  ,(<=) :: Number -> Number -> Bool
+                                  ,(>=) :: Number -> Number -> Bool)|]) $ \((<),(>),(<=),(>=)) ->
   forAll_ $ \i ->
   forAll_ $ \(Positive delta) ->
   let a = Finite i
@@ -112,7 +115,10 @@ ex7_finite_finite =
              ]
 
 ex7_finite_infinite =
-  $(withInstance "Ord" "Number" [|(<) :: Number -> Number -> Bool|]) $ \_ ->
+  $(withInstance "Ord" "Number" [|((<) :: Number -> Number -> Bool
+                                  ,(>) :: Number -> Number -> Bool
+                                  ,(<=) :: Number -> Number -> Bool
+                                  ,(>=) :: Number -> Number -> Bool)|]) $ \((<),(>),(<=),(>=)) ->
   forAll_ $ \i ->
   let a = Finite i
       b = Infinite
@@ -127,7 +133,10 @@ ex7_finite_infinite =
              ]
 
 ex7_infinite_infinite =
-  $(withInstance "Ord" "Number" [|(<) :: Number -> Number -> Bool|]) $ \_ ->
+  $(withInstance "Ord" "Number" [|((<) :: Number -> Number -> Bool
+                                  ,(>) :: Number -> Number -> Bool
+                                  ,(<=) :: Number -> Number -> Bool
+                                  ,(>=) :: Number -> Number -> Bool)|]) $ \((<),(>),(<=),(>=)) ->
   conjoin [$(testing [|Infinite < Infinite|]) (?==False)
           ,$(testing [|Infinite > Infinite|]) (?==False)
           ,$(testing [|Infinite <= Infinite|]) (?==True)
