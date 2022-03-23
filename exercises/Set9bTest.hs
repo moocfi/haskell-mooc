@@ -181,26 +181,30 @@ ex3_sameDiag_pos = property $ do
   let xs = [(i + k, j + k) | k <- [0..9]]
   x <- elements xs
   y <- elements xs
-  return $ $(testing [| sameDiag x y |]) (?== True)
+  return $ conjoin [$(testing [| sameDiag x y |]) (?== True)
+                   ,$(testing [| sameDiag y x |]) (?== True)]
 
 ex3_sameDiag_neg = property $ do
   (i,j) <- coord
-  let xs = [(i, j + k) | k <- [1..10]]
+  let xs = [(i + k', j + k) | k <- [1..10], k' <- [-5..5], k/=k']
   x <- elements xs
-  return $ $(testing [| sameDiag (i,j) x |]) (?== False)
+  return $ conjoin [$(testing [| sameDiag (i,j) x |]) (?== False)
+                   ,$(testing [| sameDiag x (i,j) |]) (?== False)]
 
 ex3_sameAntidiag_pos = property $ do
   (i,j) <- coord
   let xs = [ (i - k, j + k) | k <- [0..min i 10] ]
   x <- elements xs
   y <- elements xs
-  return $ $(testing [| sameAntidiag x y |]) (?== True)
+  return $ conjoin [$(testing [| sameAntidiag x y |]) (?== True)
+                   ,$(testing [| sameAntidiag y x |]) (?== True)]
 
 ex3_sameAntidiag_neg = property $ do
   (i,j) <- coord
-  let xs = [(i, j + k) | k <- [1..10]]
+  let xs = [(i - k', j + k) | k <- [1..10], k' <- [-5..5], k/=k']
   x <- elements xs
-  return $ $(testing [| sameAntidiag (i,j) x |]) (?== False)
+  return $ conjoin [$(testing [| sameAntidiag (i,j) x |]) (?== False)
+                   ,$(testing [| sameAntidiag x (i,j) |]) (?== False)]
 
 --------------------------------------------------------------------------------
 
