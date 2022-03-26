@@ -108,6 +108,8 @@ bake events = go Start events
 -- work on empty lists? Now we can reimplement average for NonEmpty
 -- lists and avoid the edge case.
 --
+-- PS. The Data.List.NonEmpty type has been imported for you
+--
 -- Examples:
 --   average (1.0 :| [])  ==>  1.0
 --   average (1.0 :| [2.0,3.0])  ==>  2.0
@@ -117,6 +119,8 @@ average = todo
 
 ------------------------------------------------------------------------------
 -- Ex 5: reverse a NonEmpty list.
+--
+-- PS. The Data.List.NonEmpty type has been imported for you
 
 reverseNonEmpty :: NonEmpty a -> NonEmpty a
 reverseNonEmpty = todo
