@@ -570,7 +570,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="recursion" data-number="1.4">
 <h2 data-number="9.4"><span class="header-section-number">9.4</span> Recursion</h2>
 <p>To implement a function that uses repetition in Haskell, you need recursion. Haskell has no loops like other programming languages. Here are some simple recursive functions in Haskell:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ot">repeatString ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">String</span></span>
+<div class="sourceCode" id="cb18"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ot">repeatString ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">String</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>repeatString <span class="dv">0</span> s <span class="ot">=</span> <span class="st">&quot;&quot;</span></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>repeatString n s <span class="ot">=</span> s <span class="op">++</span> repeatString (n<span class="op">-</span><span class="dv">1</span>) s</span>
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
