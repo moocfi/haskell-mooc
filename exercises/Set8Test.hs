@@ -233,7 +233,7 @@ ex10_blur_once = forAll_ $ \(x,y) ->
             ,checkPicture (x+1) (y-1) black pic]
 
 ex10_blur_many = forAll_ $ \(x,y) ->
-  forAllBlind (choose (1,6)) $ \n ->
+  forAllBlind (choose (2,6)) $ \n ->
   forAll_ $ \color ->
   let b = BlurMany n
       b' = BlurMany (n-1)
