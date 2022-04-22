@@ -77,7 +77,8 @@ data Milk = Milk Int -- amount in litres
 
 
 ------------------------------------------------------------------------------
--- Ex 6: define the necessary instances in order to be able to compute these:
+-- Ex 6: define the necessary instance hierarchy in order to be able
+-- to compute these:
 --
 -- price (Just ChickenEgg) ==> 20
 -- price [Milk 1, Milk 2]  ==> 45
