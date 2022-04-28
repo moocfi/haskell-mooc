@@ -99,6 +99,9 @@ nextCol (i,j) = todo
 -- of the width (or height) n of the chess board; the naïve solution with elem
 -- takes O(n^3) time. Just ignore the previous sentence, if you're not familiar
 -- with the O-notation.)
+
+type Size = Int
+
 prettyPrint :: Size -> [Coord] -> String
 prettyPrint = todo
 
@@ -184,7 +187,6 @@ sameAntidiag (i,j) (k,l) = todo
 -- First Out (LIFO) manner, so we give this type the alias Stack:
 -- https://en.wikipedia.org/wiki/Stack_(abstract_data_type)
 
-type Size      = Int
 type Candidate = Coord
 type Stack     = [Coord]
 
