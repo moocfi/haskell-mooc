@@ -57,6 +57,14 @@ letter = choose ('a','z')
 
 word = listOf1 letter
 
+assertPhantom (DataType vars cs) =
+  conjoin [counterexample "  should have no constructors (be a phantom type)" $ null cs
+          ,counterexample "  should have no type parameters" $ null vars]
+
+ex3_phantom_First = $(reifyType "First") assertPhantom
+ex3_phantom_Last = $(reifyType "Last") assertPhantom
+ex3_phantom_Full = $(reifyType "Full") assertPhantom
+
 ex3_v = forAll word $ \w ->
   conjoin [counterexample ("fromName (toFirst "++show w++")") $
            fromName (toFirst w) ?== w
@@ -110,7 +118,7 @@ ex5_c = counterexample "render (Money 1.0 :: Money CHF)" $
 
 tests = [(1,"pounds",[ex1_t,ex1_v])
         ,(2,"composeRates",[ex2_v, ex2_t1, ex2_t2])
-        ,(3,"firstlastfull1",[ex3_v, ex3_t1, ex3_t2])
+        ,(3,"firstlastfull1",[ex3_phantom_First, ex3_phantom_Last, ex3_phantom_Full, ex3_v, ex3_t1, ex3_t2])
         ,(4,"firstlastfull2",[ex4_v1, ex4_t1, ex4_v2, ex4_t2])
         ,(5,"Render currency",[ex5_e, ex5_u, ex5_c])]
 

@@ -36,9 +36,10 @@ composeRates rate1 rate2 = todo
 --  * Name Last - for last names
 --  * Name Full - for full names
 --
--- In this exercise, you should define the types First, Last, Full and
--- Name. Then implement the functions fromName, toFirst and toLast. Give
--- the functions the commented-out types
+-- In this exercise, you should define the phantom types First, Last
+-- and Full, and the parameterised type Name. Then implement the
+-- functions fromName, toFirst and toLast. Give the functions the
+-- commented-out types
 --
 -- Examples:
 --  fromName (toFirst "bob") ==> "bob"
