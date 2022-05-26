@@ -66,7 +66,7 @@ validate predicate value = todo
 --
 -- Examples:
 --   myseq True  0 ==> 0
---   myseq (not True) 0 ==> 0
+--   myseq ((\x -> x) True) 0 ==> 0
 --   myseq (undefined :: Bool) 0
 --     ==> *** Exception: Prelude.undefined
 --   myseq (3::Int) True ==> True
