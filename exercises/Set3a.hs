@@ -223,8 +223,8 @@ sumRights = todo
 --   multiCompose [] 1     ==> 1
 --   multiCompose [(++"bar")] "foo" ==> "foobar"
 --   multiCompose [reverse, tail, (++"bar")] "foo" ==> "raboo"
---   multiCompose [(3*), (2^), (+1)] 0 ==> 6
---   multiCompose [(+1), (2^), (3*)] 0 ==> 2
+--   multiCompose [(3*), (2^), (+1)] 0 ==> 2
+--   multiCompose [(+1), (2^), (3*)] 0 ==> 6
 
 multiCompose fs = todo
 
