@@ -198,11 +198,11 @@ update = todo
 -- should work.
 --
 -- Examples:
---   runState (paren '(') 3    ==> (4,())
---   runState (paren ')') 3    ==> (2,())
---   runState (paren ')') 0    ==> (-1,())
---   runState (paren ')') (-1) ==> (-1,())
---   runState (paren '(') (-1) ==> (-1,())
+--   runState (paren '(') 3    ==> ((),4)
+--   runState (paren ')') 3    ==> ((),2)
+--   runState (paren ')') 0    ==> ((),-1)
+--   runState (paren ')') (-1) ==> ((),-1)
+--   runState (paren '(') (-1) ==> ((),-1)
 --   parensMatch "()"          ==> True
 --   parensMatch "("           ==> False
 --   parensMatch "())"         ==> False
