@@ -23,7 +23,7 @@ tests = [(1,"|||",[imports, ex1_normal, ex1_undefined])
 
 -- -- -- -- --
 
-imports = $(importsOnly "Set10b" ["GHC.Num", "GHC.Base", "GHC.Classes", "GHC.Types", "GHC.Err",
+imports = $(importsOnly "Set10b" ["GHC.Num", "GHC.Real", "GHC.Base", "GHC.Classes", "GHC.Types", "GHC.Err",
                                   "Mooc.Todo", "Mooc.VeryLimitedPrelude"])
 
 ex1_normal = forAll_ $ \(a,b) ->
