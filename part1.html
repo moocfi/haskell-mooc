@@ -1061,6 +1061,11 @@ Because <code>`...`</code> is used for delimiting strings.
 <p>Once you’ve cloned the <code>haskell-mooc</code> repository, go into the <code>exercises</code> directory. To download and build dependencies needed for running the exercise tests (such as the correct version of GHC and various libraries), run following command in your terminal:</p>
 <div class="sourceCode" id="cb79"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> stack build</span></code></pre></div>
 <p>Do note that the dependencies are multiple gigabytes and it will take a while for the command to finish.</p>
+<p><strong>Note!</strong> Here are some fixes for common problems with <code>stack build</code>:</p>
+<ul>
+<li>If you get an error like <code>While building package zlib-0.6.2.3</code>, you need to install the zlib library headers. The right command for Ubuntu is <code>sudo apt install zlib1g-dev</code>.</li>
+<li>If you get an error like <code>Downloading lts-18.18 build plan ... RedownloadInvalidResponse</code>, your version of stack is too old. Run <code>stack upgrade</code> to get a newer one.</li>
+</ul>
 <p>There are primarily two types of files in the <code>exercises</code> directory: exercise sets named <code>SetNX.hs</code> and accompanying test program for the exercises named <code>SetNXTest.hs</code>. Both are Haskell source files, but only the exercise file should to be edited when solving the exercises. Instructions to all individual exercises are embedded in the exercise file as comments.</p>
 <p>Use the tests file to check your answers. For example when you have solved some of the exercises in <code>Set1.hs</code>, run the following command:</p>
 <div class="sourceCode" id="cb80"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> stack runhaskell Set1Test.hs</span></code></pre></div>
