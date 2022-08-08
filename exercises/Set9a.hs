@@ -71,10 +71,10 @@ repeated = todo
 -- measurements have failed, so the lab is using the type
 --   Either String Int
 -- to track the measurements. A Left value represents a failed measurement,
--- while a Right value represents a succesful one.
+-- while a Right value represents a successful one.
 --
--- Compute the sum of all succesful measurements. If there are
--- succesful measurements, return the sum wrapped in a Right, but if
+-- Compute the sum of all successful measurements. If there are
+-- successful measurements, return the sum wrapped in a Right, but if
 -- there are none, return Left "no data".
 --
 -- Examples:
