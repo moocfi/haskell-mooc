@@ -112,7 +112,7 @@ ex6_maybe =
 ex7_list =
   forAll_ $ \(is::[Int]) ->
   forAll_ $ \(js::[Int]) ->
-  $(testing [|inBoth (nub is) (nub js)|]) (?==intersect (nub is) (nub js))
+  $(testing [|inBoth (nub is) (nub js)|]) (hasElements $ intersect (nub is) (nub js))
 
 ex7_maybe =
   forAll_ $ \(i::Int) ->
