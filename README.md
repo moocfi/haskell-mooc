@@ -16,7 +16,7 @@ This is an online course on Functional Programming that uses the
 Haskell programming language. You can study at your own pace. All the
 material and exercises are openly available.
 
-The course is inteded to be followed through the [Course
+The course is intended to be followed through the [Course
 page](https://haskell.mooc.fi), but in case the course page is down or
 you want an offline backup, the course material is also available in
 this repository ([part1.html](part1.html), [part2.html](part2.html)).
