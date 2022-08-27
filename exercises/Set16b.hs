@@ -66,7 +66,7 @@ toLast = todo
 -- toFull should combine a first and a last name into a full name. Give
 -- toFull the correct type (see examples below).
 --
--- capitalize shouldCapitalize the first letter of a name. Give
+-- capitalize should capitalize the first letter of a name. Give
 -- capitalize the correct type (see examples below).
 --
 -- Examples:
