@@ -4218,7 +4218,7 @@ liftA2 sumMoney (parseMoney &quot;123&quot; &quot;e&quot;) (parseMoney &quot;xxx
 </section>
 <section id="dealing-with-failure-alternative" data-number="7.7">
 <h2 data-number="15.7"><span class="header-section-number">15.7</span> Dealing with Failure: <code>Alternative</code></h2>
-<p>If you play around with applicatives a bit you’ll start to notice some limits to their power. For example, when writing parsers like we did in the <code>parseMoney</code> example, it would be nice to be able to try some a couple of different parsers and take any non-failure result. This is easy enough to write for a concrete Applicative like <code>Maybe</code>, as can be seen below.</p>
+<p>If you play around with applicatives a bit you’ll start to notice some limits to their power. For example, when writing parsers like we did in the <code>parseMoney</code> example, it would be nice to be able to try a couple of different parsers and take any non-failure result. This is easy enough to write for a concrete Applicative like <code>Maybe</code>, as can be seen below.</p>
 <div class="sourceCode" id="cb380"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb380-1"><a href="#cb380-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">Answer</span> <span class="ot">=</span> <span class="dt">Yes</span> <span class="op">|</span> <span class="dt">No</span></span>
 <span id="cb380-2"><a href="#cb380-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">deriving</span> (<span class="dt">Show</span>, <span class="dt">Eq</span>)</span>
 <span id="cb380-3"><a href="#cb380-3" aria-hidden="true" tabindex="-1"></a></span>
