@@ -232,8 +232,7 @@ ex10_blur_once = forAll_ $ \(x,y) ->
             ,checkPicture (x-1) (y+1) black pic
             ,checkPicture (x+1) (y-1) black pic]
 
-ex10_blur_many = forAll_ $ \(x,y) ->
-  forAllBlind (choose (2,6)) $ \n ->
+m_blur_many n = forAll_ $ \(x,y) ->
   forAll_ $ \color ->
   let b = BlurMany n
       b' = BlurMany (n-1)
@@ -247,3 +246,5 @@ ex10_blur_many = forAll_ $ \(x,y) ->
      let (Picture color) = g img
          expected = color (Coord x' y')
      in checkPicture x' y' expected (f img)
+
+ex10_blur_many = withMaxSuccess 5 $ conjoin [m_blur_many n | n <- [2..5]]
