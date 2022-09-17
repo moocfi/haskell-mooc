@@ -115,7 +115,8 @@ sumTo n = n + sumTo(n - 1)
 -- Ex 10: power n k should compute n to the power k (i.e. n^k)
 -- Use recursion.
 power :: Integer -> Integer -> Integer
-power n k = (mult n) * (k-2)
+power n 1 = n
+power n k = n * power(n - 1)
 
 ------------------------------------------------------------------------------
 -- Ex 11: ilog3 n should be the number of times you can divide given
