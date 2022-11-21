@@ -1,7 +1,7 @@
 -- Exercise set 4a:
 --
--- * using type classes
--- * working with lists
+--  * using type classes
+--  * working with lists
 --
 -- Type classes you'll need
 --  * Eq
