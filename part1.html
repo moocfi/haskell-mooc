@@ -882,10 +882,11 @@ fib 5        ==>          |           |
 <span id="cb70-22"><a href="#cb70-22" aria-hidden="true" tabindex="-1"></a><span class="co">-- end of recursion, return longest length found</span></span>
 <span id="cb70-23"><a href="#cb70-23" aria-hidden="true" tabindex="-1"></a>longest&#39; number _ <span class="dv">0</span> <span class="ot">=</span> number</span>
 <span id="cb70-24"><a href="#cb70-24" aria-hidden="true" tabindex="-1"></a><span class="co">-- recursion step: check if n has a longer Collatz sequence than the current known longest</span></span>
-<span id="cb70-25"><a href="#cb70-25" aria-hidden="true" tabindex="-1"></a>longest&#39; number maxlength n <span class="ot">=</span> <span class="kw">if</span> <span class="fu">length</span> <span class="op">&gt;</span> maxlength</span>
-<span id="cb70-26"><a href="#cb70-26" aria-hidden="true" tabindex="-1"></a>               <span class="kw">then</span> longest&#39; n <span class="fu">length</span> (n<span class="op">-</span><span class="dv">1</span>)</span>
-<span id="cb70-27"><a href="#cb70-27" aria-hidden="true" tabindex="-1"></a>               <span class="kw">else</span> longest&#39; number maxlength (n<span class="op">-</span><span class="dv">1</span>)</span>
-<span id="cb70-28"><a href="#cb70-28" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span> <span class="fu">length</span> <span class="ot">=</span> collatz n</span></code></pre></div>
+<span id="cb70-25"><a href="#cb70-25" aria-hidden="true" tabindex="-1"></a>longest&#39; number maxlength n <span class="ot">=</span></span>
+<span id="cb70-26"><a href="#cb70-26" aria-hidden="true" tabindex="-1"></a>  <span class="kw">if</span> len <span class="op">&gt;</span> maxlength</span>
+<span id="cb70-27"><a href="#cb70-27" aria-hidden="true" tabindex="-1"></a>  <span class="kw">then</span> longest&#39; n len (n<span class="op">-</span><span class="dv">1</span>)</span>
+<span id="cb70-28"><a href="#cb70-28" aria-hidden="true" tabindex="-1"></a>  <span class="kw">else</span> longest&#39; number maxlength (n<span class="op">-</span><span class="dv">1</span>)</span>
+<span id="cb70-29"><a href="#cb70-29" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span> len <span class="ot">=</span> collatz n</span></code></pre></div>
 <p>We can load the program in GHCi and play with it.</p>
 <pre><code>$ stack ghci
 GHCi, version 8.2.2: http://www.haskell.org/ghc/  :? for help
