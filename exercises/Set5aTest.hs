@@ -23,7 +23,8 @@ tests = [(1,"Vehicle",[ex1])
         ,(9,"OneOrTwo",[ex9])
         ,(10,"KeyVals",[ex10_type, ex10_string_bool, ex10_int_int])
         ,(11,"Nat",[ex11_to, ex11_from, ex11_just, ex11_nothing])
-        ,(12,"Bin",[ex12_from_zero, ex12_to_zero, ex12_to_from_zero
+        ,(12,"Bin",[ ex12_prettyPrint
+                   , ex12_from_zero, ex12_to_zero, ex12_to_from_zero
                    , ex12_from_to_zero, ex12_from_one, ex12_to_one
                    , ex12_to_from_one, ex12_from_to_one, ex12_to_from
                    , ex12_from_to])
@@ -196,6 +197,11 @@ instance Arbitrary Bin where
   arbitrary = do
     bs <- arbitrary :: Gen [Bool]
     return $ foldr (\x b -> if x then I b else O b) (I End) (take 8 bs)
+
+ex12_prettyPrint =
+  forAllBlind (listOf1 (elements "01")) $ \w->
+  let inp = foldl' (\acc i -> case i of '0' -> O acc; '1' -> I acc; _ -> error (show i)) End w
+  in $(testing [|prettyPrint inp|]) (?==w)
 
 ex12_from_zero    =
   counterexample ("fromBin (O End)") (fromBin (O End) ?== 0)
