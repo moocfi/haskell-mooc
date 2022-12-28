@@ -191,7 +191,7 @@ allSums xs = todo
 --
 --   foldM :: (Monad m) => (a -> b -> m a) -> a -> [b] -> m a
 --
--- This function behaves like foldr, but the operation used is
+-- This function behaves like foldl, but the operation used is
 -- monadic. foldM f acc xs works by running f for each element in xs,
 -- giving it also the result of the previous invocation of f.
 --
