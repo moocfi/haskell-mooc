@@ -1,0 +1,18 @@
+# By and large most hlint hints are too advanced for this course, and would just confuse students.
+# Since IDEs like VS Code ship with hlint enabled, it's good to disable all hints and enable
+# just a select few.
+- ignore: {}
+- hint: {name: Use if}
+- hint: {name: Use head}
+- hint: {name: Use >}
+- hint: {name: Use >=}
+- hint: {name: Use <}
+- hint: {name: Use <=}
+- hint: {name: Use minimum}
+- hint: {name: Use maximum}
+- hint: {name: Use head}
+- hint: {name: Use last}
+- hint: {name: Use guard}
+- hint: {name: Use const}
+- hint: {name: Redundant bracket}
+- hint: {name: Evaluate}
