@@ -1,10 +1,12 @@
 body {
   margin: 0 0 0 0;
-  padding-left: 5%;
   font-family: sans-serif;
   background: #fffad1;
   color: #211c00;
   /*background: url("chevron.png") repeat;*/
+}
+div#text-container {
+  padding-left: 5%
 }
 a[href] {
   color: black;
