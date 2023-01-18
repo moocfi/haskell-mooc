@@ -279,7 +279,7 @@ multiApp = todo
 --
 -- The suprise will only work if you generate the return list directly
 -- using (:). If you build the list in an argument to a helper
--- function, the surprise won't work.
+-- function, the surprise won't work. See section 3.8 in the material.
 
 interpreter :: [String] -> [String]
 interpreter commands = todo
