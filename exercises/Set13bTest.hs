@@ -29,7 +29,7 @@ tests = [(1,"ifM",[ex1_maybe, ex1_state])
         ,(4,"findSum2", [ex4_simple, ex4])
         ,(5,"allSums", [ex5_bits])
         ,(6,"foldM", [ex6_sumBounded_ok, ex6_sumBounded_fail, ex6_sumNotTwice])
-        ,(7,"Monad Result", [ex7])
+        ,(7,"Monad Result", [ex7_fmap, ex7_fmap_empties, ex7_monad])
         ,(8,"Monad SL", [ex8_fmap_1, ex8_fmap_2, ex8_1, ex8_2, ex8_stress])
         ,(9,"mkCounter",[ex9_mkCounter])]
 
@@ -213,7 +213,19 @@ ex6_sumNotTwice =
   forAllShrink_ (listOf1 (choose (-5,5))) $ \is ->
   $(testing [|sumNotTwice is|]) (?==sum (nub is))
 
-ex7 =
+ex7_fmap =
+  forAll_ $ \(k::Int) ->
+  counterexample ("fmap (+1) (MkResult "++show k++")") $
+  fmap (+(1::Int)) (MkResult k) ?== MkResult (k+1)
+
+ex7_fmap_empties =
+  $(testing' [|fmap not NoResult|]) (?== NoResult)
+  .&.
+  $(testing' [|fmap not (Failure "oh no.")|]) (?== Failure "oh no.")
+  .&.
+  $(testing' [|fmap not (Failure "Mein Gott!")|]) (?== Failure "Mein Gott!")
+
+ex7_monad =
   let op :: Int -> Result Int
       op i = if i>3 then Failure "big" else return (i+1)
       s = "let op i = if (i>3) then Failure \"big\" else return (i+1) in "
