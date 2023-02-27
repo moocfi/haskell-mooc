@@ -113,10 +113,18 @@ ol.quiz li:hover code {
   background: inherit;
 }
 ol.quiz li:active {
-  background: red;
+  background: salmon;
+}
+ol.quiz li:active::after {
+  background: salmon;
+  content: "✘";
 }
 ol.quiz li.correct:active {
-  background: green;
+  background: yellowgreen;
+}
+ol.quiz li.correct:active::after {
+  background: yellowgreen;
+  content: "✔";
 }
 pre {
   border-radius: 5px;
