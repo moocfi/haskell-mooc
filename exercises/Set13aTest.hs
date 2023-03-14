@@ -86,9 +86,9 @@ ex2_fail =
   forAllBlind (word `suchThat` (not.flip elem names)) $ \nok1 ->
   forAllBlind (word `suchThat` (not.flip elem names)) $ \nok2 ->
   let inp = zip names scores
-  in conjoin $[$(testing [|winner inp ok nok1|]) (?==Nothing)
-              ,$(testing [|winner inp nok1 ok|]) (?==Nothing)
-              ,$(testing [|winner inp nok1 nok2|]) (?==Nothing)]
+  in conjoin [$(testing [|winner inp ok nok1|]) (?==Nothing)
+             ,$(testing [|winner inp nok1 ok|]) (?==Nothing)
+             ,$(testing [|winner inp nok1 nok2|]) (?==Nothing)]
 
 ex3_ok = forAll_ $ \(as::[Int]) ->
   forAllBlind (shuffle (zip [0..] as)) $ \pairs ->

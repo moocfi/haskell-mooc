@@ -1,3 +1,5 @@
+{-# OPTIONS_GHC -Wno-noncanonical-monad-instances #-} -- this silences an uninteresting warning
+
 module Set13a where
 
 import Mooc.Todo

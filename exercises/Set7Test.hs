@@ -147,10 +147,22 @@ ex7_mempty = $(withInstance1 "Monoid" "Set" [|((<>),mempty)|]) $ \((<>),mempty) 
 
 smallInt = choose (0,100::Int)
 
-ex8_multiply1 = $(hasType "Multiply1" [t|Int -> Int -> Operation1|]) $ \mul1 ->
+ex8_multiply1 = $(withConstructor "Operation1" "Multiply1" ["Int","Int"]) $ \mul1 ->
   forAllBlind smallInt $ \i ->
   forAllBlind smallInt $ \j ->
   $(testing [|compute1 (mul1 i j)|]) (?==(i*j))
+
+{-
+ex8_multiply1 = $(reifyType "Operation1") $ \(DataType vars cs) ->
+  case filter ok cs of
+    [Constructor _ ts] -> counterexample "  constructor Multiply1 should have type Int -> Int -> Operation1" $
+                          property $ ts == [SimpleType "Int", SimpleType "Int"]
+    [_] -> counterexample ("  constructor Multiply1 is weid. Make it normal.") $ property False
+    _ -> counterexample ("  should have a constructor named Multiply1") $ property False
+  where ok (Constructor "Multiply1" _) = True
+        ok (Weird "Multiply1") = True
+        ok _ = False
+-}
 
 ex8_multiply2 =
   $(withInstance "Operation2" "Multiply2" [|compute2|]) $ \compute2 ->
@@ -169,7 +181,7 @@ ex8_show1 =
           ,$(testing [|show1 (Subtract1 i j)|]) (?==show i++"-"++show j)]
 
 ex8_show1_multiply1 =
-  $(hasType "Multiply1" [t|Int -> Int -> Operation1|]) $ \mul1 ->
+  $(withConstructor "Operation1" "Multiply1" ["Int","Int"]) $ \mul1 ->
   $(hasType "show1" [t|Operation1 -> String|]) $ \show1 ->
   forAllBlind smallInt $ \i ->
   forAllBlind smallInt $ \j ->

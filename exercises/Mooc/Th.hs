@@ -2,7 +2,7 @@
 
 module Mooc.Th (testing, testing', timeLimit,
                 isDefined, withDefined, hasType, hasType', importsOnly, show',
-                reifyType, DataType(..), FieldType(..), Constructor(..),
+                reifyType, DataType(..), FieldType(..), Constructor(..), withConstructor,
                 withInstance, withInstanceSilent, withInstance1, withInstances1,
                 classContains, defineInstance)
 where
@@ -12,6 +12,7 @@ import Data.List
 import Data.Maybe
 import Language.Haskell.TH hiding (reifyType)
 import Language.Haskell.TH.Syntax hiding (reifyType)
+import Language.Haskell.TH.Datatype (tvName)
 
 -- testing presence of definitions
 
@@ -101,20 +102,24 @@ interpretConstructor c = Weird (constructorName c)
 data DataType = DataType [String] [Constructor]
   deriving (Eq,Show,Lift)
 
+lookupType' s =
+    do n <- lookupTypeName s
+       case n of Nothing -> return Nothing
+                 Just n -> do info <- reify n
+                              return $ case info of
+                                         TyConI (DataD _ _ vs _ cs _) -> let cons = map interpretConstructor cs
+                                                                             vars = map bndrName vs
+                                                                         in Just (DataType vars cons)
+                                         _ -> Nothing
+
 reifyType :: String -> Q Exp
 reifyType s = do
-  n <- lookupTypeName s
-  case n of
+  info <- lookupType' s
+  case info of
     Nothing -> [|\k -> counterexample ("Type "++s++" not defined!") False|]
-    Just n -> do info <- reify n
-                 case info of
-                   TyConI (DataD _ _ vs _ cs _) -> let cons = map interpretConstructor cs
-                                                       vars = map bndrName vs
-                                                   in [|\k -> counterexample ("The type "++s) $ k (DataType vars cons)|]
-                   _ -> [|\k -> counterexample ("Definition "++s++" is not a data declaration!") False|]
+    Just d -> [|\k -> counterexample ("The type "++s) $ k d|]
 
-bndrName (PlainTV n) = nameBase n
-bndrName (KindedTV n _) = nameBase n
+bndrName = nameBase . tvName
 
 constructorName = nameBase . constructorName'
 
@@ -126,6 +131,21 @@ constructorName' c = case c of
   ForallC _ _ c -> constructorName' c
   GadtC (n:_) _ _ -> n
   RecGadtC (n:_) _ _ -> n
+
+withConstructor :: String -> String -> [String] -> Q Exp
+withConstructor typName consName argTypes = do
+  d <- lookupType' typName
+  case d of
+    Nothing -> [|\k -> counterexample ("Type "++typName++" not defined!") False|]
+    Just (DataType _ cs) ->
+        case filter ok cs of
+          [] -> [|\k -> counterexample ("Type "++typName++" should have a constructor named "++consName) False|]
+          [Weird _] -> [|\k -> counterexample ("Constructor "++consName++" of type "++typName++" is weird. Make it normal.") False|]
+          [Constructor _ ts]
+              | ts == map SimpleType argTypes -> [|\k -> counterexample consName (k $(varOrCon $ mkName consName))|]
+              | otherwise -> [|\k -> counterexample ("Constructor "++consName++" of type "++typName++" should have fields of types "++intercalate ", " argTypes) False |]
+    where ok (Constructor n _) = n == consName
+          ok (Weird n) = n == consName
 
 -- testing classes
 
