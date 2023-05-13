@@ -88,9 +88,11 @@ checkPassword password = if password == "swordfish" || password == "mellon"
 -- in grams, and returns the cost in credits.
 
 postagePrice :: Int -> Int
-postagePrice weight = if weight <= 500 then 250
-                      else if weight > 5000 then 6000
-                           else 300 + weight
+
+postagePrice weight
+    | weight <= 500 = 500
+    | weight > 5000 = 6000
+    | otherwise = 300 + weight
 
 ------------------------------------------------------------------------------
 -- Ex 8: define a function isZero that returns True if it is given an
