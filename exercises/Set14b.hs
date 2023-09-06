@@ -72,6 +72,9 @@ getAllQuery = Query (T.pack "SELECT account, amount FROM events;")
 
 -- openDatabase should open an SQLite database using the given
 -- filename, run initQuery on it, and produce a database Connection.
+--
+-- NOTE! Do not add anything to the name, otherwise you'll get weird
+-- test failures later.
 openDatabase :: String -> IO Connection
 openDatabase = todo
 
