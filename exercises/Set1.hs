@@ -36,6 +36,7 @@ double x = todo
 
 quadruple :: Integer -> Integer
 quadruple x = todo
+123123123123123123123123123123
 
 ------------------------------------------------------------------------------
 -- Ex 4: define the function distance. It should take four arguments of
