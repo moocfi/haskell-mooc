@@ -220,7 +220,17 @@ exampleCircle = fill red (circle 80 100 200)
 -- should be a rectangle with the upper left corner at (x0, y0), a
 -- width of w, and a height of h.
 --
--- Example:
+-- NB! The rectangle should be exactly w pixels wide and h pixels high!
+-- For example, (3,3) isn't in `rectangle 2 2 1 1`.
+--
+-- Examples:
+--
+--  renderList (fill white (rectangle 2 2 1 1)) (0,3) (0,3)
+--   ==> [["000000","000000","000000","000000"],
+--        ["000000","000000","000000","000000"],
+--        ["000000","000000","ffffff","000000"],
+--        ["000000","000000","000000","000000"]]
+--
 --  renderList (fill white (rectangle 1 2 4 3)) (0,5) (0,5)
 --   ==> [["000000","000000","000000","000000","000000","000000"],
 --        ["000000","000000","000000","000000","000000","000000"],
