@@ -291,7 +291,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2 data-number="1.5" id="lets-start"><span class="header-section-number">1.5</span> Let’s Start!</h2>
 <p>GHCi is the interactive Haskell interpreter. Here’s an example session:</p>
 <pre><code>$ stack ghci
-GHCi, version 8.0.1: http://www.haskell.org/ghc/  :? for help
+GHCi, version 9.2.8: http://www.haskell.org/ghc/  :? for help
 Prelude&gt; 1+1
 2
 Prelude&gt; &quot;asdf&quot;
@@ -889,7 +889,7 @@ fib 5        ==>          |           |
 <span id="cb70-29"><a href="#cb70-29" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span> len <span class="ot">=</span> collatz n</span></code></pre></div>
 <p>We can load the program in GHCi and play with it.</p>
 <pre><code>$ stack ghci
-GHCi, version 8.2.2: http://www.haskell.org/ghc/  :? for help
+GHCi, version 9.2.8: http://www.haskell.org/ghc/  :? for help
 Prelude&gt; :load Collatz.hs
 [1 of 1] Compiling Collatz          ( Collatz.hs, interpreted )
 Ok, one module loaded.
@@ -1120,7 +1120,7 @@ quadruple 1
 <p>In the example above, I’ve made a mistake in exercise 3.</p>
 <p>To make debugging faster and more straightforward, I can load my exercise file in GHCi, which allows me to evaluate any top-level function manually. For instance I can verify the above mistake by:</p>
 <pre><code>$ stack ghci Set1.hs
-GHCi, version 8.6.5: http://www.haskell.org/ghc/  :? for help
+GHCi, version 9.2.8: http://www.haskell.org/ghc/  :? for help
 [1 of 2] Compiling Mooc.Todo        ( Mooc/Todo.hs, interpreted )
 [2 of 2] Compiling Set1             ( Set1.hs, interpreted )
 Ok, two modules loaded.
@@ -2106,11 +2106,11 @@ Prelude&gt; map (add 3) [1,2,3]
 <span id="cb239-6"><a href="#cb239-6" aria-hidden="true" tabindex="-1"></a><span class="op">==&gt;</span> <span class="dv">2</span><span class="op">*</span><span class="dv">1</span> <span class="op">:</span> (<span class="dv">2</span><span class="op">*</span><span class="dv">2</span> <span class="op">:</span> (<span class="dv">2</span><span class="op">*</span><span class="dv">3</span> <span class="op">:</span> []))</span>
 <span id="cb239-7"><a href="#cb239-7" aria-hidden="true" tabindex="-1"></a><span class="op">===</span> [<span class="dv">2</span><span class="op">*</span><span class="dv">1</span>, <span class="dv">2</span><span class="op">*</span><span class="dv">2</span>, <span class="dv">2</span><span class="op">*</span><span class="dv">3</span>]</span>
 <span id="cb239-8"><a href="#cb239-8" aria-hidden="true" tabindex="-1"></a><span class="op">==&gt;</span> [<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">6</span>]</span></code></pre></div>
-<p>Once you know pattern matching for lists, it’s straightforward to define <code>map</code> and <code>filter</code>. Actually, let’s just look at the GHC standard library implementations. <a href="https://hackage.haskell.org/package/base-4.14.1.0/docs/src/GHC.Base.html#map">Here’s map</a>:</p>
+<p>Once you know pattern matching for lists, it’s straightforward to define <code>map</code> and <code>filter</code>. Actually, let’s just look at the GHC standard library implementations. <a href="https://hackage.haskell.org/package/base-4.16.4.0/docs/src/GHC.Base.html#map">Here’s map</a>:</p>
 <div class="sourceCode" id="cb240"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb240-1"><a href="#cb240-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map</span><span class="ot"> ::</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> [b]</span>
 <span id="cb240-2"><a href="#cb240-2" aria-hidden="true" tabindex="-1"></a><span class="fu">map</span> _ []     <span class="ot">=</span> []</span>
 <span id="cb240-3"><a href="#cb240-3" aria-hidden="true" tabindex="-1"></a><span class="fu">map</span> f (x<span class="op">:</span>xs) <span class="ot">=</span> f x <span class="op">:</span> <span class="fu">map</span> f xs</span></code></pre></div>
-<p>and <a href="https://hackage.haskell.org/package/base-4.14.1.0/docs/src/GHC.List.html#filter">here’s filter</a>:</p>
+<p>and <a href="https://hackage.haskell.org/package/base-4.16.4.0/docs/src/GHC.List.html#filter">here’s filter</a>:</p>
 <div class="sourceCode" id="cb241"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb241-1"><a href="#cb241-1" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span><span class="ot"> ::</span> (a <span class="ot">-&gt;</span> <span class="dt">Bool</span>) <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> [a]</span>
 <span id="cb241-2"><a href="#cb241-2" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span> _pred []    <span class="ot">=</span> []</span>
 <span id="cb241-3"><a href="#cb241-3" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span> <span class="fu">pred</span> (x<span class="op">:</span>xs)</span>
@@ -2763,7 +2763,7 @@ unspecified
 <p><code>Data.Map</code> defines all sorts of useful higher-order functions for updating maps. We can rewrite the <code>withdraw</code> function using <code>Data.Map.adjust</code>:</p>
 <div class="sourceCode" id="cb315"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb315-1"><a href="#cb315-1" aria-hidden="true" tabindex="-1"></a><span class="ot">withdraw ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Map.Map</span> <span class="dt">String</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Map.Map</span> <span class="dt">String</span> <span class="dt">Int</span></span>
 <span id="cb315-2"><a href="#cb315-2" aria-hidden="true" tabindex="-1"></a>withdraw account amount bank <span class="ot">=</span> Map.adjust (\x <span class="ot">-&gt;</span> x<span class="op">-</span>amount) account bank</span></code></pre></div>
-<p><strong>Note!</strong> There are separate <code>Data.Map.Strict</code> and <code>Data.Map.Lazy</code> implementations. When you import <code>Data.Map</code> you get <code>Data.Map.Lazy</code>. You can find the documentation for all the <code>Data.Map</code> functions in <a href="https://hackage.haskell.org/package/containers-0.6.2.1/docs/Data-Map-Lazy.html">the docs for <code>Data.Map.Lazy</code></a>. We won’t go into their differences here, but mostly you should use <code>Data.Map.Strict</code> in real code.</p>
+<p><strong>Note!</strong> There are separate <code>Data.Map.Strict</code> and <code>Data.Map.Lazy</code> implementations. When you import <code>Data.Map</code> you get <code>Data.Map.Lazy</code>. You can find the documentation for all the <code>Data.Map</code> functions in <a href="https://hackage.haskell.org/package/containers-0.6.5.1/docs/Data-Map-Lazy.html">the docs for <code>Data.Map.Lazy</code></a>. We won’t go into their differences here, but mostly you should use <code>Data.Map.Strict</code> in real code.</p>
 <h3 data-number="4.6.2" id="data.array"><span class="header-section-number">4.6.2</span> <code>Data.Array</code></h3>
 <p>Another type that works kind of like a list but is more efficient for some operations is the array. Arrays are familiar from many other programming languages, but Haskell arrays are a bit different.</p>
 <p>Unlike the <code>Data.Map</code> module, the <code>Data.Array</code> can just be imported normally:</p>
@@ -2803,7 +2803,7 @@ unspecified
 <span id="cb323-4"><a href="#cb323-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">==&gt;</span> <span class="dv">10</span></span></code></pre></div>
 <h2 data-number="4.7" id="reading-docs"><span class="header-section-number">4.7</span> Reading Docs</h2>
 <p>Haskell libraries tend to have pretty good docs. We’ve linked to docs via Hackage (<a href="https://hackage.haskell.org" class="uri">https://hackage.haskell.org</a>) previously, but it’s important to know how to find the docs by yourself too. The tool for generating Haskell documentation is called <em>Haddock</em> so sometimes Haskell docs are referred to as <em>haddocks</em>.</p>
-<p>Hackage is the Haskell package repository (just like <a href="https://pypi.org/">PyPI</a> for Python, Maven Central for Java or <a href="https://npmjs.com">NPM</a> for Javascript). In addition to the actual packages, it hosts documentation for them. Most of the modules that we use on this course are in the package called <code>base</code>. You can browse the docs for the base package at <a href="https://hackage.haskell.org/package/base-4.14.1.0/" class="uri">https://hackage.haskell.org/package/base-4.14.1.0/</a>.</p>
+<p>Hackage is the Haskell package repository (just like <a href="https://pypi.org/">PyPI</a> for Python, Maven Central for Java or <a href="https://npmjs.com">NPM</a> for Javascript). In addition to the actual packages, it hosts documentation for them. Most of the modules that we use on this course are in the package called <code>base</code>. You can browse the docs for the base package at <a href="https://hackage.haskell.org/package/base-4.16.4.0/" class="uri">https://hackage.haskell.org/package/base-4.16.4.0/</a>.</p>
 <p>When you’re not quite sure where the function you’re looking for is, Hoogle (<a href="https://hoogle.haskell.org/" class="uri">https://hoogle.haskell.org/</a>) can help. Hoogle is a search engine for Haskell documentation. It is a great resource when you need to check what was the type of <code>foldr</code> or which packages contain a function named <code>reverse</code>.</p>
 <p>Finally, since this course is using the <code>stack</code> tool, you can also browse the documentation for the libraries stack has installed for you with the commands</p>
 <pre><code>stack haddock --open
@@ -3436,7 +3436,7 @@ Because <code>Nothing</code> is a constructor.
 <span id="cb387-5"><a href="#cb387-5" aria-hidden="true" tabindex="-1"></a><span class="ot">  (/=) ::</span>  a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> <span class="dt">Bool</span></span>
 <span id="cb387-6"><a href="#cb387-6" aria-hidden="true" tabindex="-1"></a>  x <span class="op">/=</span> y  <span class="ot">=</span> <span class="fu">not</span> (x <span class="op">==</span> y)</span></code></pre></div>
 <p>Note how both operations have a default implementation in terms of the other. This means we could define an <code>Eq</code> instance with no content at all, but the resulting functions would just recurse forever. In practice, we want to define at least one of <code>==</code> and <code>/=</code>.</p>
-<p>When there are lots of default implementations, it can be hard to know which functions you need to implement yourself. For this reason class documentation usually mentions the <em>minimal complete definition</em>. For <code>Eq</code>, <a href="https://hackage.haskell.org/package/base-4.14.1.0/docs/Prelude.html#t:Eq">the docs say</a> “Minimal complete definition: either == or /=.”</p>
+<p>When there are lots of default implementations, it can be hard to know which functions you need to implement yourself. For this reason class documentation usually mentions the <em>minimal complete definition</em>. For <code>Eq</code>, <a href="https://hackage.haskell.org/package/base-4.16.4.0/docs/Prelude.html#t:Eq">the docs say</a> “Minimal complete definition: either == or /=.”</p>
 <p>Let’s look at <code>Ord</code> next. <code>Ord</code> has 7 operations, all with default implementations in terms of each other. By the way, note the quirky way of defining multiple type signatures at once. It’s okay, it’s a feature of Haskell, this is how <code>Ord</code> is defined in <a href="https://www.haskell.org/onlinereport/haskell2010/haskellch6.html#x13-1270006.3">the standard</a>. (We’ll get back to what the <code>(Eq a) =&gt;</code> part means soon.)</p>
 <div class="sourceCode" id="cb388"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb388-1"><a href="#cb388-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span>  (<span class="dt">Eq</span> a) <span class="ot">=&gt;</span> <span class="dt">Ord</span> a  <span class="kw">where</span></span>
 <span id="cb388-2"><a href="#cb388-2" aria-hidden="true" tabindex="-1"></a><span class="ot">  compare              ::</span> a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> <span class="dt">Ordering</span></span>
@@ -3456,7 +3456,7 @@ Because <code>Nothing</code> is a constructor.
 <span id="cb388-16"><a href="#cb388-16" aria-hidden="true" tabindex="-1"></a>          <span class="op">|</span> <span class="fu">otherwise</span> <span class="ot">=</span>  x</span>
 <span id="cb388-17"><a href="#cb388-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">min</span> x y <span class="op">|</span> x <span class="op">&lt;=</span> y    <span class="ot">=</span>  x</span>
 <span id="cb388-18"><a href="#cb388-18" aria-hidden="true" tabindex="-1"></a>          <span class="op">|</span> <span class="fu">otherwise</span> <span class="ot">=</span>  y</span></code></pre></div>
-<p>With this definition it’s really hard to know what the minimal complete definition is. Luckily the <a href="https://hackage.haskell.org/package/base-4.14.1.0/docs/Prelude.html#t:Ord">docs tell us</a> “Minimal complete definition: either compare or &lt;=.”</p>
+<p>With this definition it’s really hard to know what the minimal complete definition is. Luckily the <a href="https://hackage.haskell.org/package/base-4.16.4.0/docs/Prelude.html#t:Ord">docs tell us</a> “Minimal complete definition: either compare or &lt;=.”</p>
 <p>As a final word on default implementations, if there is never a need to override the default definition, the function can be moved out of the class for simplicity. Consider a class like <code>Combine</code> below:</p>
 <div class="sourceCode" id="cb389"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb389-1"><a href="#cb389-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="dt">Combine</span> a <span class="kw">where</span></span>
 <span id="cb389-2"><a href="#cb389-2" aria-hidden="true" tabindex="-1"></a><span class="ot">  combine ::</span> a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a</span>
@@ -3747,7 +3747,7 @@ If I define an instance for <code>Num</code>, I also get an instance for <code>F
 <span id="cb414-3"><a href="#cb414-3" aria-hidden="true" tabindex="-1"></a>sortPersons <span class="dt">Age</span> <span class="dt">Descending</span> persons</span>
 <span id="cb414-4"><a href="#cb414-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">==&gt;</span> [<span class="dt">Person</span> {name <span class="ot">=</span> <span class="st">&quot;Fridolf&quot;</span>, age <span class="ot">=</span> <span class="dv">73</span>},<span class="dt">Person</span> {name <span class="ot">=</span> <span class="st">&quot;Hans&quot;</span>, age <span class="ot">=</span> <span class="dv">65</span>},<span class="dt">Person</span> {name <span class="ot">=</span> <span class="st">&quot;Greta&quot;</span>, age <span class="ot">=</span> <span class="dv">60</span>}]</span></code></pre></div>
 <p>Note how you can’t accidentally typo the field name (unlike with strings), and how you don’t need to remember whether <code>true</code> refers to ascending or descending order.</p>
-<p>Let’s move on to the next example. Many Haskell functions don’t work with empty lists (consider <code>head []</code>). If you’re writing code that needs to track whether lists are possibly empty or guaranteed to not be empty, you can use the <code>NonEmpty</code> type from the <a href="https://hackage.haskell.org/package/base-4.14.1.0/docs/Data-List-NonEmpty.html">Data.List.NonEmpty</a> module.</p>
+<p>Let’s move on to the next example. Many Haskell functions don’t work with empty lists (consider <code>head []</code>). If you’re writing code that needs to track whether lists are possibly empty or guaranteed to not be empty, you can use the <code>NonEmpty</code> type from the <a href="https://hackage.haskell.org/package/base-4.16.4.0/docs/Data-List-NonEmpty.html">Data.List.NonEmpty</a> module.</p>
 <p>Consider the definition of <code>NonEmpty</code>:</p>
 <div class="sourceCode" id="cb415"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb415-1"><a href="#cb415-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">NonEmpty</span> a <span class="ot">=</span> a <span class="op">:|</span> [a]</span></code></pre></div>
 <p>Here the type represents a <em>lack of</em> cases. The type <code>NonEmpty a</code> will always consist of a value of type <code>a</code>, and some further <code>a</code>s, collected in a list. Here are some example values of <code>NonEmpty Int</code>:</p>
