@@ -3,7 +3,7 @@
 module Mooc.Th (testing, testing', timeLimit,
                 isDefined, withDefined, hasType, hasType', importsOnly, show',
                 reifyType, DataType(..), FieldType(..), Constructor(..), withConstructor,
-                withInstance, withInstanceSilent, withInstance1, withInstances1,
+                withInstance, withInstanceType, withInstanceSilent, withInstance1, withInstances1,
                 classContains, defineInstance)
 where
 
@@ -152,6 +152,13 @@ withConstructor typName consName argTypes = do
 data Instance = Found | NotFound String String | NoClass String | NoType String
   deriving (Show, Eq)
 
+lookupInstanceResolved :: Name -> Type -> Q Instance
+lookupInstanceResolved cl t = do
+  b <- isInstance cl [t]
+  if b
+    then return Found
+    else return $ NotFound (nameBase cl) (showType t)
+
 lookupInstance :: String -> String -> Q Instance
 lookupInstance cln typn = do
   cl <- lookupTypeName cln
@@ -159,10 +166,7 @@ lookupInstance cln typn = do
   case (cl,typ) of
     (Nothing,_) -> return $ NoClass cln
     (_,Nothing) -> return $ NoType typn
-    (Just c, Just t) -> do b <- isInstance c [(ConT t)]
-                           if b
-                             then return Found
-                             else return $ NotFound cln typn
+    (Just c, Just t) -> lookupInstanceResolved c (ConT t)
 
 withInstance :: String -> String -> Q Exp -> Q Exp
 withInstance cln typn val = do
@@ -172,6 +176,17 @@ withInstance cln typn val = do
     NoType typn -> [|\k -> counterexample ("Type "++typn++" not found") (property False)|]
     NotFound cln typn -> [|\k -> counterexample ("Type "++typn++" is not an instance of class "++cln) (property False)|]
     Found -> [|\k -> k $val|]
+
+withInstanceType :: String -> Q Type -> Q Exp -> Q Exp
+withInstanceType cln qt val = do
+  cl <- lookupTypeName cln
+  t <- qt
+  case cl of
+    Nothing -> [|\k -> counterexample ("Class "++cln++" not found") (property False)|]
+    Just cl -> do ins <- lookupInstanceResolved cl t
+                  case ins of
+                    NotFound cln typn -> [|\k -> counterexample ("Type "++typn++" is not an instance of class "++cln) (property False)|]
+                    Found -> [|\k -> k $val|]
 
 withInstanceSilent :: String -> String -> Q Exp -> String -> Q Exp
 withInstanceSilent cln typn val err = do
@@ -204,10 +219,7 @@ lookupInstance1 cln typn = do
   case (cl,cons) of
     (Nothing,_) -> return $ NoClass cln
     (_,Nothing) -> return $ NoType typn
-    (Just c, Just t) -> do b <- isInstance c [AppT t (VarT (mkName "a"))]
-                           if b
-                             then return Found
-                             else return $ NotFound cln typn
+    (Just c, Just t) -> lookupInstanceResolved c (AppT t (VarT (mkName "a")))
 
 withInstance1 :: String -> String -> Q Exp -> Q Exp
 withInstance1 cln typn val = do

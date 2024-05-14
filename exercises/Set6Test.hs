@@ -69,14 +69,32 @@ ex5_milk = $(withInstance "Price" "Milk" [|price|]) $ \price ->
   forAllBlind (choose (0,100)) $ \l ->
   $(testing [|price (Milk l)|]) (?==(15*l))
 
-ex6_egg =
-  $(withInstances1 "Price" ["Maybe", "[]"] [|price|]) $ \price ->
+ex6_maybe_egg =
+  $(withInstanceType "Price" [t|Maybe Egg|] [|price|]) $ \price ->
+  $(testing [|price [Just ChickenEgg]|]) (?==20)
+
+ex6_maybe_milk =
+  $(withInstanceType "Price" [t|Maybe Milk|] [|price|]) $ \price ->
+  forAllBlind (choose (0,100)) $ \l ->
+  $(testing [|price [Just (Milk l)]|]) (?==(15*l))
+
+ex6_list_egg =
+  $(withInstanceType "Price" [t|[Egg]|] [|price|]) $ \price ->
+  $(testing [|price [ChocolateEgg, ChickenEgg]|]) (?==50)
+
+ex6_list_milk =
+  $(withInstanceType "Price" [t|[Milk]|] [|price|]) $ \price ->
+  forAllBlind (choose (0,100)) $ \l ->
+  $(testing [|price [Milk l, Milk 1]|]) (?==(15*(l+1)))
+
+ex6_list_maybe_egg =
+  $(withInstanceType "Price" [t|[Maybe Egg]|] [|price|]) $ \price ->
   conjoin [$(testing [|price [Just ChocolateEgg, Nothing, Just ChickenEgg]|]) (?==50)
           ,$(testing [|price [Nothing, Nothing, Nothing :: Maybe Egg]|]) (?==0)]
 
 
-ex6_milk =
-  $(withInstances1 "Price" ["Maybe", "[]"] [|price|]) $ \price ->
+ex6_list_maybe_milk =
+  $(withInstanceType "Price" [t|[Maybe Milk]|] [|price|]) $ \price ->
   forAllBlind (choose (0,10)) $ \milk1 ->
   forAllBlind (choose (0,10)) $ \milk2 ->
   conjoin [$(testing [|price [Just (Milk milk1), Nothing, Just (Milk milk2)]|]) (?==(15*milk1+15*milk2))
@@ -321,7 +339,9 @@ tests = [(1,"Eq Country",[ex1])
         ,(3,"Eq Name",[ex3])
         ,(4,"Eq List",[ex4_eq, ex4_neq])
         ,(5,"Price",[ex5_egg, ex5_milk])
-        ,(6,"Price List",[ex6_egg, ex6_milk])
+        ,(6,"Price List",[ ex6_maybe_egg, ex6_maybe_milk
+                         , ex6_list_egg, ex6_list_milk
+                         , ex6_list_maybe_egg, ex6_list_maybe_milk])
         ,(7,"Ord Number",[ ex7_eq_check
                          , ex7_finite_finite, ex7_finite_infinite, ex7_infinite_infinite
                          , ex7_max_finite, ex7_max_infinite ])
