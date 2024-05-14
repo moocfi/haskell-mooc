@@ -16,7 +16,7 @@ main = score tests
 tests = [(1,"workload",[ex1_small, ex1_medium, ex1_big])
         ,(2,"echo",[ex2_examples, ex2_random])
         ,(3,"countValid",[ex3])
-        ,(4,"repeated",[ex4_unrepeated_int, ex4_repeated_char, ex4_repeated_int])
+        ,(4,"repeated",[ex4_examples, ex4_unrepeated_int, ex4_repeated_char, ex4_repeated_int])
         ,(5,"sumSuccess",[ex5])
         ,(6,"Lock",[ex6_examples, ex6_gen])
         ,(7,"Eq Text",[ex7])
@@ -77,6 +77,11 @@ ex3 = forAllShrinkBlind (listOf valid) subterms $ \vs ->
   forAllShrinkBlind (listOf invalid) subterms $ \is ->
   forAllBlind (shuffle (vs++is)) $ \ns ->
   $(testing [|countValid ns|]) (?==length vs)
+
+ex4_examples = conjoin
+  [$(testing [|repeated [1,2,3]|]) (?==Nothing)
+  ,$(testing [|repeated [1,2,2,3,3]|]) (?==Just 2)
+  ,$(testing [|repeated [1,2,1,2,3,3]|]) (?==Just 3)]
 
 ex4_unrepeated_int = forAll_ $ \ls ->
   $(testing [|repeated (nub (ls :: [Int]))|]) (?==Nothing)
