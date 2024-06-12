@@ -2,3 +2,4 @@
 *.lock
 .stack-work
 score.json
+stack.yaml
