@@ -162,7 +162,8 @@ while check update value = if check value then while check update $ update value
 -- Hint! Remember the case-of expression from lecture 2.
 
 whileRight :: (a -> Either b a) -> a -> b
-whileRight check x = todo
+whileRight check x = case check x of    Right result -> whileRight check result
+                                        Left result  -> result
 
 -- for the whileRight examples:
 -- step k x doubles x if it's less than k
@@ -199,7 +200,10 @@ joinToLength limit strings = [string1 ++ string2 | string1 <- strings, string2 <
 --   [1,2,3] +|+ [4,5,6]  ==> [1,4]
 --   [] +|+ [True]        ==> [True]
 --   [] +|+ []            ==> []
-
+(+|+) :: [a] -> [a] -> [a]
+(+|+) list_a [] = [head list_a]
+(+|+) [] list_b = [head list_b]
+(+|+) list_a list_b = [head list_a, head list_b]
 
 ------------------------------------------------------------------------------
 -- Ex 11: remember the lectureParticipants example from Lecture 2? We
@@ -216,13 +220,14 @@ joinToLength limit strings = [string1 ++ string2 | string1 <- strings, string2 <
 --   sumRights [Left "bad!", Left "missing"]         ==>  0
 
 sumRights :: [Either a Int] -> Int
-sumRights = todo
+sumRights list = sum $ map convertStringToZero list
+    where convertStringToZero element =  either (const 0) ( \x -> x) element
 
 ------------------------------------------------------------------------------
 -- Ex 12: recall the binary function composition operation
 -- (f . g) x = f (g x). In this exercise, your task is to define a function
 -- that takes any number of functions given as a list and composes them in the
--- same order than they appear in the list.
+-- same order than they appear in the list. 
 --
 -- Examples:
 --   multiCompose [] "foo" ==> "foo"
@@ -232,7 +237,9 @@ sumRights = todo
 --   multiCompose [(3*), (2^), (+1)] 0 ==> 6
 --   multiCompose [(+1), (2^), (3*)] 0 ==> 2
 
-multiCompose fs = todo
+multiCompose :: [a -> a] -> (a -> a)
+multiCompose [] = id
+multiCompose fs = head fs . (multiCompose $ drop 1 fs)
 
 ------------------------------------------------------------------------------
 -- Ex 13: let's consider another way to compose multiple functions. Given
@@ -253,6 +260,7 @@ multiCompose fs = todo
 --   multiApp id [head, (!!2), last] "axbxc" ==> ['a','b','c'] i.e. "abc"
 --   multiApp sum [head, (!!2), last] [1,9,2,9,3] ==> 6
 
+-- multiApp :: ([a] -> b) -> [a -> a] -> (a -> b)
 multiApp = todo
 
 ------------------------------------------------------------------------------
