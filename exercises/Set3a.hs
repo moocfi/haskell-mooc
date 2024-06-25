@@ -261,7 +261,14 @@ multiCompose fs = head fs . (multiCompose $ drop 1 fs)
 --   multiApp sum [head, (!!2), last] [1,9,2,9,3] ==> 6
 
 multiApp :: ([b] -> c) -> [a -> b] -> a -> c
-multiApp f gs x = f $ [g x | g <- gs]
+-- With list comprehension
+-- multiApp f gs x = f $ [g x | g <- gs]
+
+-- Without list comprehension
+multiApp f gs x = f $ createList gs x
+    where   createList [] x = []
+            createList (g:[]) x = [g x] 
+            createList gs x = head gs x : createList (drop 1 gs) x
 
 ------------------------------------------------------------------------------
 -- Ex 14: in this exercise you get to implement an interpreter for a
