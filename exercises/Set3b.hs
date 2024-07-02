@@ -94,7 +94,11 @@ mylast def (x:rest) = mylast x rest
 --   indexDefault ["a","b","c"] (-1) "d" ==> "d"
 
 indexDefault :: [a] -> Int -> a -> a
-indexDefault xs i def = todo
+indexDefault [] i def = def
+indexDefault (first : rest) i def
+    | i < 0     = def
+    | i == 0    = first
+    | i > 0     = indexDefault rest (i-1) def
 
 ------------------------------------------------------------------------------
 -- Ex 5: define a function that checks if the given list is in
@@ -110,7 +114,9 @@ indexDefault xs i def = todo
 --   sorted [7,2,7] ==> False
 
 sorted :: [Int] -> Bool
-sorted xs = todo
+sorted []  = True
+sorted [x] = True
+sorted (x : y : rest) = if x > y then False else sorted (y:rest)
 
 ------------------------------------------------------------------------------
 -- Ex 6: compute the partial sums of the given list like this:
@@ -122,7 +128,9 @@ sorted xs = todo
 -- Use pattern matching and recursion (and the list constructors : and [])
 
 sumsOf :: [Int] -> [Int]
-sumsOf xs = todo
+sumsOf []           = []
+sumsOf [x]          = [x]
+sumsOf (x:y:rest)   = x : sumsOf ((x+y) : rest) 
 
 ------------------------------------------------------------------------------
 -- Ex 7: implement the function merge that merges two sorted lists of
@@ -135,7 +143,10 @@ sumsOf xs = todo
 --   merge [1,1,6] [1,2]   ==> [1,1,1,2,6]
 
 merge :: [Int] -> [Int] -> [Int]
-merge xs ys = todo
+merge [] ys                         = ys
+merge xs []                         = xs
+merge (x : rest_xs) (y : rest_ys)   = if x <= y then x : merge rest_xs (y : rest_ys)
+                                                else y : merge (x : rest_xs) rest_ys
 
 ------------------------------------------------------------------------------
 -- Ex 8: compute the biggest element, using a comparison function
@@ -159,7 +170,10 @@ merge xs ys = todo
 --     ==> ("Mouse",8)
 
 mymaximum :: (a -> a -> Bool) -> a -> [a] -> a
-mymaximum bigger initial xs = todo
+mymaximum bigger initial []         = initial
+mymaximum bigger initial (x:rest)   = if bigger x initial 
+                                        then mymaximum bigger x rest        
+                                        else mymaximum bigger initial rest
 
 ------------------------------------------------------------------------------
 -- Ex 9: define a version of map that takes a two-argument function
@@ -173,7 +187,9 @@ mymaximum bigger initial xs = todo
 -- Use recursion and pattern matching. Do not use any library functions.
 
 map2 :: (a -> b -> c) -> [a] -> [b] -> [c]
-map2 f as bs = todo
+map2 f [] bs                        = []
+map2 f as []                        = []
+map2 f (a: rest_as) (b: rest_bs)     = f a b : map2 f rest_as rest_bs
 
 ------------------------------------------------------------------------------
 -- Ex 10: implement the function maybeMap, which works a bit like a
@@ -197,4 +213,14 @@ map2 f as bs = todo
 --   ==> []
 
 maybeMap :: (a -> Maybe b) -> [a] -> [b]
-maybeMap f xs = todo
+maybeMap f []       = []
+maybeMap f (x:rest) = if checkForNothing (f x) then maybeMap f rest else extractValue (f x) : maybeMap f rest
+    where 
+        checkForNothing :: Maybe b -> Bool
+        checkForNothing (Just x) = False
+        checkForNothing Nothing = True
+
+        extractValue :: Maybe b -> b
+        extractValue (Just x) = x
+
+        
