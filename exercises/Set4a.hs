@@ -124,8 +124,10 @@ longest lists =
 --   incrementKey True [(True,1),(False,3),(True,4)] ==> [(True,2),(False,3),(True,5)]
 --   incrementKey 'a' [('a',3.4)] ==> [('a',4.4)]
 
-incrementKey :: k -> [(k,v)] -> [(k,v)]
-incrementKey = todo
+incrementKey :: (Eq k, Num v) => k -> [(k,v)] -> [(k,v)]
+incrementKey key []                 = []
+incrementKey key ( (k,v) : rest)    = if k == key   then (k, v+1) : incrementKey key rest 
+                                                    else (k, v)   : incrementKey key rest 
 
 ------------------------------------------------------------------------------
 -- Ex 7: compute the average of a list of values of the Fractional
@@ -140,7 +142,7 @@ incrementKey = todo
 -- length to a Fractional
 
 average :: Fractional a => [a] -> a
-average xs = todo
+average xs = sum xs / (fromIntegral $ length xs)
 
 ------------------------------------------------------------------------------
 -- Ex 8: given a map from player name to score and two players, return
@@ -159,8 +161,12 @@ average xs = todo
 --     ==> "Lisa"
 
 winner :: Map.Map String Int -> String -> String -> String
-winner scores player1 player2 = todo
-
+winner scores player1 player2 = case compare score1 score2 of   GT -> player1
+                                                                EQ -> player1
+                                                                LT -> player2
+    where 
+        score1 = Map.findWithDefault 0 player1 scores
+        score2 = Map.findWithDefault 0 player2 scores
 ------------------------------------------------------------------------------
 -- Ex 9: compute how many times each value in the list occurs. Return
 -- the frequencies as a Map from value to Int.
