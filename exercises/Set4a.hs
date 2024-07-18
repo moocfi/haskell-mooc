@@ -180,8 +180,17 @@ winner scores player1 player2 = case compare score1 score2 of   GT -> player1
 --     ==> Map.fromList [(False,3),(True,1)]
 
 freqs :: (Eq a, Ord a) => [a] -> Map.Map a Int
-freqs xs = todo
+freqs xs = foldr addTally starting_map xs
+    where
+        --starting_map :: (Eq a, Ord a) => Map.Map a Int
+        starting_map = Map.fromList [ (element, 0) | element <- nub xs]
 
+        --addTally :: a -> Map.Map a Int -> Map.Map a Int
+        addTally x current_tally = Map.alter maybeCount x current_tally 
+
+        maybeCount :: Maybe Int -> Maybe Int
+        maybeCount Nothing = Just 0
+        maybeCount (Just x) = Just (x + 1) 
 ------------------------------------------------------------------------------
 -- Ex 10: recall the withdraw example from the course material. Write a
 -- similar function, transfer, that transfers money from one account
