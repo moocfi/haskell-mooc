@@ -217,7 +217,15 @@ freqs xs = foldr addTally starting_map xs
 --     ==> fromList [("Bob",100),("Mike",50)]
 
 transfer :: String -> String -> Int -> Map.Map String Int -> Map.Map String Int
-transfer from to amount bank = todo
+transfer from to amount bank = if checkConditions bank  then Map.adjust ((+) $ - amount) from $ Map.adjust ((+) amount) to bank 
+                                                        else bank
+    where 
+        checkConditions :: Map.Map String Int -> Bool
+        checkConditions map_bank = 
+            Map.member from map_bank        &&      -- Check that from account exists
+            Map.member to map_bank          &&      -- Check that to account exists
+            amount > 0                      &&      -- Check that the amount is non-negative
+            Map.lookup from bank >= Just amount     -- Check that the from acount has enought money
 
 ------------------------------------------------------------------------------
 -- Ex 11: given an Array and two indices, swap the elements in the indices.
