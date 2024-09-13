@@ -130,7 +130,7 @@ ex8_green = $(testing [|rgb Green|]) (?==[0,1,0])
 ex8_blue = $(testing [|rgb Blue|]) (?==[0,0,1])
 
 fcmp expected actual =
-  expectation expected actual (diff < eps)
+  expectation expected actual (length expected == length actual && diff < eps)
   where diff = sum . map abs $ zipWith (-) actual expected
         eps = 0.01
 
