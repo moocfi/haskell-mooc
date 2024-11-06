@@ -3216,7 +3216,7 @@ It turns a list of pairs into a list of elements
 <p>This gives you accessor functions like <code>field1 :: TypeName -&gt; Field1Type</code> for free.</p>
 <h2 data-number="5.6" id="sidenote-other-ways-of-defining-types"><span class="header-section-number">5.6</span> Sidenote: Other Ways of Defining Types</h2>
 <p>In addition to the <code>data</code> keyword, there are two additional ways of defining types in Haskell.</p>
-<p>The <code>newtype</code> keyword works like <code>data</code>, but you can only have a single constructor with a single field. It’s sometimes wise to use <code>newtype</code> for performance resons, but we’ll get back to those in part 2.</p>
+<p>The <code>newtype</code> keyword works like <code>data</code>, but you can only have a single constructor with a single field. It’s sometimes wise to use <code>newtype</code> for performance reasons, but we’ll get back to those in part 2.</p>
 <p>The <code>type</code> keyword introduces a <em>type alias</em>. Type aliases don’t affect type checking, they just offer a shorthand for writing types. For example the familiar <code>String</code> type is an alias for <code>[Char]</code>:</p>
 <div class="sourceCode" id="cb373"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb373-1"><a href="#cb373-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> <span class="dt">String</span> <span class="ot">=</span> [<span class="dt">Char</span>]</span></code></pre></div>
 <p>This means that whenever the compiler reads <code>String</code>, it just immediately replaces it with <code>[Char]</code>. Type aliases seem useful, but they can easily make reading type errors harder.</p>
