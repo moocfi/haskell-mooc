@@ -3157,7 +3157,7 @@ It turns a list of pairs into a list of elements
 <p>Suppose that we need to find all engineers from Finland:</p>
 <div class="sourceCode" id="cb361"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb361-1"><a href="#cb361-1" aria-hidden="true" tabindex="-1"></a><span class="ot">query ::</span> [<span class="dt">Person</span>] <span class="ot">-&gt;</span> [<span class="dt">Person</span>]</span>
 <span id="cb361-2"><a href="#cb361-2" aria-hidden="true" tabindex="-1"></a>query [] <span class="ot">=</span> []</span>
-<span id="cb361-3"><a href="#cb361-3" aria-hidden="true" tabindex="-1"></a>query (<span class="dt">MkPerson</span> name age town state profession)<span class="op">:</span>xs</span>
+<span id="cb361-3"><a href="#cb361-3" aria-hidden="true" tabindex="-1"></a>query ((<span class="dt">MkPerson</span> name age town state profession)<span class="op">:</span>xs)</span>
 <span id="cb361-4"><a href="#cb361-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">|</span> state <span class="op">==</span> <span class="st">&quot;Finland&quot;</span> <span class="op">&amp;&amp;</span> profession <span class="op">==</span> <span class="st">&quot;Engineer&quot;</span> <span class="ot">=</span></span>
 <span id="cb361-5"><a href="#cb361-5" aria-hidden="true" tabindex="-1"></a>      (<span class="dt">MkPerson</span> name age town state profession) <span class="op">:</span> query xs</span>
 <span id="cb361-6"><a href="#cb361-6" aria-hidden="true" tabindex="-1"></a>  <span class="op">|</span> <span class="fu">otherwise</span> <span class="ot">=</span> query xs</span></code></pre></div>
