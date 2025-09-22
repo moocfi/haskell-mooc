@@ -106,9 +106,10 @@ ex4 = property $ do
   i <- choose (0::Int,10)
   is <- listOf (choose (0,10) `suchThat` (/=i))
   n <- choose (0,5)
-  input <- shuffle (replicate n i ++ is)
-  return $ counterexample ("countAndLog (=="++show i++") "++show input) $
-    countAndLog (==i) input ?== Logger (replicate n (show i)) n
+  input <- shuffle $ zip (replicate n i ++ is) [0..]
+  let goods = filter ((< n) . snd) input
+  return $ counterexample ("countAndLog ((=="++show i++") . fst) "++show input) $
+    countAndLog ((==i) . fst) input ?== Logger (map show $ goods) n
 
 ex5_balance_examples =
   conjoin [$(testing' [|runBankOp (balance "harry") exampleBank|]) (?==(10,exampleBank))
