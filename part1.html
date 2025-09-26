@@ -1672,6 +1672,10 @@ a while for the command to finish.</p>
 <code>While building package zlib-0.6.2.3</code>, you need to install
 the zlib library headers. The right command for Ubuntu is
 <code>sudo apt install zlib1g-dev</code>.</li>
+<li>If you get an error like <code>cannot find -ltinfo</code>, you need
+to install the ncurses headers. The right command for Ubuntu is
+<code>sudo apt install libncurses-dev</code>. The right command for
+Fedora is <code>dnf install ncurses-devel</code>.</li>
 <li>If you get an error like
 <code>Downloading lts-18.18 build plan ... RedownloadInvalidResponse</code>,
 your version of stack is too old. Run <code>stack upgrade</code> to get
