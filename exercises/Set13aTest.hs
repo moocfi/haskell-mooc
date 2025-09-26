@@ -19,7 +19,7 @@ main = score tests
 tests = [(1,"readNames",[ex1_ok, ex1_fail])
         ,(2,"winnerMaybe",[ex2_small, ex2_big, ex2_fail])
         ,(3,"selectSum",[ex3_ok, ex3_fail])
-        ,(4,"countAndLog",[ex4])
+        ,(4,"countAndLog",[ex4_example, ex4_gen])
         ,(5,"balance",[ex5_balance_examples, ex5_balance_ok, ex5_balance_nok])
         ,(6,"rob",[ex6_rob_examples, ex6_rob])
         ,(7,"State update",[ex7])
@@ -102,7 +102,10 @@ ex3_fail = property $ do
   inp <- shuffle (b:is)
   return $ $(testing [|selectSum as inp|]) (?==Nothing)
 
-ex4 = property $ do
+ex4_example =
+  $(testing' [|countAndLog even [0,1,2,3,4,5]|]) (?==Logger ["0","2","4"] 3)
+
+ex4_gen = property $ do
   i <- choose (0::Int,10)
   is <- listOf (choose (0,10) `suchThat` (/=i))
   n <- choose (0,5)
