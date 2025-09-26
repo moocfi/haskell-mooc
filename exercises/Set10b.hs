@@ -77,7 +77,7 @@ validate predicate value = todo
 --   myseq (1:undefined) 'z' ==> 'z'         -- 1:undefined is in WHNF
 --   myseq (undefined:[2,3]) 'z' ==> 'z'     -- undefined:[2,3] is in WHNF
 --   myseq [1..] 'z' ==> 'z'
---   myseq (undefined::[Int])
+--   myseq (undefined::[Int]) 'z'
 --     ==> *** Exception: Prelude.undefined
 
 class MySeq a where
