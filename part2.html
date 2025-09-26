@@ -3404,7 +3404,7 @@ this topic connects to equational reasoning discussed in chapter 10.
 <h3 data-number="13.13.1"><span class="header-section-number">13.13.1</span> Optionals</h3>
 <p>Many langages have an <a href="https://en.wikipedia.org/wiki/Option_type">option type</a>. This type is called <code>Optional&lt;T&gt;</code> in Java, <code>std::optional&lt;T&gt;</code> in C++, <code>Nullable&lt;T&gt;</code> in C#, and so on. These types often have behaviour resembling the Haskell <code>Maybe</code> monad, for example:</p>
 <ul>
-<li>In Java, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Optional.html#flatMap(java.util.function.Function)"><code>Optional.flatMap</code></a> corresponds to <code>&gt;&gt;=</code>: it lets you apply a <code>Function&lt;T,&lt;Optional&lt;U&gt;&gt;</code> to an <code>Optional&lt;T&gt;</code> and get an <code>Optional&lt;U&gt;</code>.</li>
+<li>In Java, <a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Optional.html#flatMap(java.util.function.Function)"><code>Optional.flatMap</code></a> corresponds to <code>&gt;&gt;=</code>: it lets you apply a <code>Function&lt;T,Optional&lt;U&gt;&gt;</code> to an <code>Optional&lt;T&gt;</code> and get an <code>Optional&lt;U&gt;</code>.</li>
 <li>In C#, binary operations get automatically <a href="https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/nullable-value-types#lifted-operators">lifted</a> to <code>Nullable</code> types. For example, <code>a + null</code> becomes <code>null</code>.</li>
 </ul>
 </section>
