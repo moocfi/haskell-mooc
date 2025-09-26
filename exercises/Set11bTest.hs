@@ -1,6 +1,6 @@
 {-# LANGUAGE TemplateHaskell, ScopedTypeVariables #-}
 
-module Set11aTest where
+module Set11bTest where
 
 import Mooc.Test
 import Mooc.Th
