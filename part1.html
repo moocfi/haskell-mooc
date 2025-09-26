@@ -3550,7 +3550,6 @@ Because <code>Nothing</code> is a constructor.
 <div class="sourceCode" id="cb401"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb401-1"><a href="#cb401-1" aria-hidden="true" tabindex="-1"></a>    • <span class="dt">No</span> <span class="kw">instance</span> for (<span class="dt">Check</span> a) arising from a use <span class="kw">of</span> ‘check’</span>
 <span id="cb401-2"><a href="#cb401-2" aria-hidden="true" tabindex="-1"></a>      <span class="dt">Possible</span> fix<span class="op">:</span></span>
 <span id="cb401-3"><a href="#cb401-3" aria-hidden="true" tabindex="-1"></a>        add (<span class="dt">Check</span> a) to the context <span class="kw">of</span> the <span class="kw">instance</span> declaration</span></code></pre></div>
-<p>If you think about it, this instance hierarchy allows us to circumvent the limitation that we can’t make a <code>Check [Int]</code> instance.</p>
 <p>Finally, sometimes multiple constraints are needed. Consider for example the <code>Eq</code> instance for <code>Either</code>:</p>
 <div class="sourceCode" id="cb402"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb402-1"><a href="#cb402-1" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> (<span class="dt">Eq</span> a, <span class="dt">Eq</span> b) <span class="ot">=&gt;</span> <span class="dt">Eq</span> (<span class="dt">Either</span> a b) <span class="kw">where</span></span>
 <span id="cb402-2"><a href="#cb402-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">Left</span> x  <span class="op">==</span> <span class="dt">Left</span> y   <span class="ot">=</span>  x<span class="op">==</span>y</span>
@@ -3593,21 +3592,6 @@ Because <code>Nothing</code> is a constructor.
 </li>
 <li>
 <code>Size</code>
-</li>
-</ol>
-<p>Which of the following instance declarations is legal?</p>
-<ol class="quiz">
-<li>
-<code>instance Eq Maybe</code>
-</li>
-<li>
-<code>instance Eq (a,a)</code>
-</li>
-<li>
-<code>instance Eq (Maybe Int)</code>
-</li>
-<li class="correct">
-<code>instance Eq (a,b)</code>
 </li>
 </ol>
 <p>Given the following definition of the class <code>BitOperations</code></p>
