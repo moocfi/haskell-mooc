@@ -5,8 +5,8 @@ import Data.Char
 import Data.List
 
 rev :: [a] -> [a]
-rev [] = []
-rev (x:xs) = xs ++ [x]
+rev (x:y:xs) = y:x:xs
+rev xs = xs
 
 propRevSmall :: Property
 propRevSmall = rev [1,2] === [2,1]

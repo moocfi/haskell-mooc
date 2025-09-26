@@ -6329,8 +6329,8 @@ the file <a
 href="https://github.com/moocfi/haskell-mooc/blob/master/exercises/Examples/QuickCheck.hs"><code>exercises/Examples/QuickCheck.hs</code></a>.</p>
 <div class="sourceCode" id="cb395"><pre
 class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb395-1"><a href="#cb395-1" aria-hidden="true" tabindex="-1"></a><span class="ot">rev ::</span> [a] <span class="ot">-&gt;</span> [a]</span>
-<span id="cb395-2"><a href="#cb395-2" aria-hidden="true" tabindex="-1"></a>rev [] <span class="ot">=</span> []</span>
-<span id="cb395-3"><a href="#cb395-3" aria-hidden="true" tabindex="-1"></a>rev (x<span class="op">:</span>xs) <span class="ot">=</span> xs <span class="op">++</span> [x]</span></code></pre></div>
+<span id="cb395-2"><a href="#cb395-2" aria-hidden="true" tabindex="-1"></a>rev (x<span class="op">:</span>y<span class="op">:</span>xs) <span class="ot">=</span> y<span class="op">:</span>x<span class="op">:</span>xs</span>
+<span id="cb395-3"><a href="#cb395-3" aria-hidden="true" tabindex="-1"></a>rev xs <span class="ot">=</span> xs</span></code></pre></div>
 <p>We can write an individual test case using the <code>===</code>
 operator from QuickCheck:</p>
 <div class="sourceCode" id="cb396"><pre
