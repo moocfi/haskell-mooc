@@ -1881,11 +1881,11 @@ you see why? The answer is that there are less recursive calls. The
 expression <code>fibonacci' _ _ n</code> calls
 <code>fibonacci' _ _ (n-1)</code> once, and this means that we can
 compute <code>fibonacci' _ _ n</code> in <code>n</code> steps.</p>
-<p>This type of recursion where a function just directly calls itself
-with different arguments is called <em>tail recursion</em>. As you’ve
-seen above, tail recursion corresponds to loops. This is why tail
-recursion is often fast: the compiler can generate a loop in machine
-code when it sees tail recursion.</p>
+<p>This type of recursion is called <em>tail recursion</em>, meaning
+its recursive call occurs in tail position — that is, there is no 
+remaining work to perform after the recursive call. Because nothing
+must be done afterward, a tail-recursive function can be optimized
+into an efficient loop by the compiler in machine code.</p>
 <h2 data-number="2.2" id="guards"><span
 class="header-section-number">2.2</span> Guards</h2>
 <p>Before we move on to new types, let’s go over one more piece of
