@@ -105,6 +105,7 @@ sumTo = todo
 ------------------------------------------------------------------------------
 -- Ex 10: power n k should compute n to the power k (i.e. n^k)
 -- Use recursion.
+-- There's no need to handle negative values of k.
 
 power :: Integer -> Integer -> Integer
 power = todo
