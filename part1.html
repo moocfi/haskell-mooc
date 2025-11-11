@@ -1398,7 +1398,7 @@ fib 5        ==>          |           |
                                                   1       1
 ```
 -->
-<p>This tree then exaclty corresponds with the expression
+<p>This tree then exactly corresponds with the expression
 <code>(1 + 1) + (1 + (1 + 1))</code>. Recursion can often produce
 chain-like, tree-like, nested, or loopy structures and computations.
 Recursion is one of the main techniques in functional programming, so
@@ -1407,7 +1407,7 @@ it’s worth spending some effort in learning it.</p>
 <h2 data-number="1.10" id="all-together-now"><span
 class="header-section-number">1.10</span> All Together Now!</h2>
 <p>Finally, here’s a complete Haskell module that uses ifs, pattern
-matching, local defintions and recursion. The module is interested in
+matching, local definitions and recursion. The module is interested in
 the <a
 href="https://en.wikipedia.org/wiki/Collatz_conjecture"><em>Collatz
 conjecture</em></a>, a famous open problem in mathematics. It asks:</p>
@@ -1550,7 +1550,7 @@ If you can’t seem to get indentation to work, try putting everything on
 just one long line at first.</p>
 <h2 data-number="1.12" id="quiz"><span
 class="header-section-number">1.12</span> Quiz</h2>
-<p>At the end of each lecture you’ll find a quiz like this. The quizes
+<p>At the end of each lecture you'll find a quiz like this. The quizzes
 aren’t graded, they’re just here to help you check you’ve understood the
 chapter. You can check your answer by clicking on an option. You’ll see
 a green background if you were right, a red one if you were wrong. Feel
@@ -1560,10 +1560,10 @@ why the right option is right in the end.</p>
 <code>combine(prettify(lawn),construct(house,concrete))</code>?</p>
 <ol class="quiz">
 <li>
-<code>combine prettify (lawn) construct (house concerete)</code>
+<code>combine prettify (lawn) construct (house concrete)</code>
 </li>
 <li>
-<code>combine (prettify lawn (counstruct house concrete))</code>
+<code>combine (prettify lawn (construct house concrete))</code>
 </li>
 <li class="correct">
 <code>combine (prettify lawn) (construct house concrete)</code>
@@ -2880,9 +2880,9 @@ class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb180-1"><
 <span id="cb180-6"><a href="#cb180-6" aria-hidden="true" tabindex="-1"></a>[<span class="fl">1.0</span>,<span class="fl">0.5</span>,<span class="fl">0.3333333333333333</span>,<span class="fl">0.25</span>,<span class="fl">0.2</span>]</span></code></pre></div>
 <h2 data-number="3.3" id="prefix-and-infix-notations"><span
 class="header-section-number">3.3</span> Prefix and Infix Notations</h2>
-<p>Normal Haskell operators are applied with <em>prefix notation</em>,
+<p>Normal Haskell functions are applied with <em>prefix notation</em>,
 which is just a fancy way to say that the function name comes before the
-arguments. In contrast, symbolic operators are applied with <em>infix
+arguments. In contrast, operators are applied with <em>infix
 notation</em> – the name of the function comes between the
 arguments.</p>
 <p>An infix operator can be converted into a prefix function by adding
@@ -2903,7 +2903,7 @@ class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb182-1"><
 use a helper function – such as <code>add</code> above.</p>
 <p>Note that omitting the parentheses leads into a type error:</p>
 <div class="sourceCode" id="cb183"><pre
-class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb183-1"><a href="#cb183-1" aria-hidden="true" tabindex="-1"></a><span class="dt">Prelude</span><span class="op">&gt;</span> <span class="fu">zipWith</span> <span class="op">+</span> [<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">3</span>] [<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">3</span>]</span>
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb183-1"><a href="#cb183-1" aria-hidden="true" tabindex="-1"></a><span class="dt">Prelude</span><span class="op">&gt;</span> <span class="fu">zipWith</span> <span class="op">+</span> [<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">5</span>] [<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">3</span>]</span>
 <span id="cb183-2"><a href="#cb183-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb183-3"><a href="#cb183-3" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span>interactive<span class="op">&gt;:</span><span class="dv">1</span><span class="op">:</span><span class="dv">11</span><span class="op">:</span> <span class="fu">error</span><span class="op">:</span></span>
 <span id="cb183-4"><a href="#cb183-4" aria-hidden="true" tabindex="-1"></a>    • <span class="dt">Couldn&#39;t</span> match expected <span class="kw">type</span> ‘[<span class="dt">Integer</span>]</span>
@@ -2918,8 +2918,8 @@ class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb183-1"><
 <span id="cb183-13"><a href="#cb183-13" aria-hidden="true" tabindex="-1"></a>          (bound at <span class="op">&lt;</span>interactive<span class="op">&gt;:</span><span class="dv">1</span><span class="op">:</span><span class="dv">1</span>)</span></code></pre></div>
 <p>The reason for this weird-looking error is that GHCi got confused and
 thought that we were somehow trying to add <code>zipWith</code> and
-<code>[0,2,5,3] [1,3,3]</code> together. Logically, it deduced that
-<code>[0,2,5,3]</code> must be a function since it’s being applied to
+<code>[0,2,5] [1,3,3]</code> together. Logically, it deduced that
+<code>[0,2,5]</code> must be a function since it’s being applied to
 <code>[1,3,3]</code> (remember that functions bind tighter than
 operators).</p>
 <p>Unfortunately, error messages can sometimes be obscure, since the
