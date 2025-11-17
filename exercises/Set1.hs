@@ -75,7 +75,7 @@ checkPassword password = if password == "swordfish"
 ------------------------------------------------------------------------------
 -- Ex 7: A postal service prices packages the following way.
 -- Packages that weigh up to 500 grams cost 250 credits.
--- Packages over 500 grams cost 300 credit + 1 credit per gram.
+-- Packages over 500 grams and up to 5000 grams cost 300 credit + 1 credit per gram.
 -- Packages over 5000 grams cost a constant 6000 credits.
 --
 -- Write a function postagePrice that takes the weight of a package
