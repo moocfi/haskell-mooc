@@ -1398,7 +1398,7 @@ fib 5        ==>          |           |
                                                   1       1
 ```
 -->
-<p>This tree then exaclty corresponds with the expression
+<p>This tree then exactly corresponds with the expression
 <code>(1 + 1) + (1 + (1 + 1))</code>. Recursion can often produce
 chain-like, tree-like, nested, or loopy structures and computations.
 Recursion is one of the main techniques in functional programming, so
@@ -1407,7 +1407,7 @@ it’s worth spending some effort in learning it.</p>
 <h2 data-number="1.10" id="all-together-now"><span
 class="header-section-number">1.10</span> All Together Now!</h2>
 <p>Finally, here’s a complete Haskell module that uses ifs, pattern
-matching, local defintions and recursion. The module is interested in
+matching, local definitions and recursion. The module is interested in
 the <a
 href="https://en.wikipedia.org/wiki/Collatz_conjecture"><em>Collatz
 conjecture</em></a>, a famous open problem in mathematics. It asks:</p>
@@ -1550,7 +1550,7 @@ If you can’t seem to get indentation to work, try putting everything on
 just one long line at first.</p>
 <h2 data-number="1.12" id="quiz"><span
 class="header-section-number">1.12</span> Quiz</h2>
-<p>At the end of each lecture you’ll find a quiz like this. The quizes
+<p>At the end of each lecture you’ll find a quiz like this. The quizzes
 aren’t graded, they’re just here to help you check you’ve understood the
 chapter. You can check your answer by clicking on an option. You’ll see
 a green background if you were right, a red one if you were wrong. Feel
@@ -4250,7 +4250,7 @@ course.</p>
 over. The true type of <code>foldr</code> is:</p>
 <div class="sourceCode" id="cb308"><pre
 class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb308-1"><a href="#cb308-1" aria-hidden="true" tabindex="-1"></a><span class="fu">foldr</span><span class="ot"> ::</span> <span class="dt">Foldable</span> t <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> b <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> b <span class="ot">-&gt;</span> t a <span class="ot">-&gt;</span> b</span></code></pre></div>
-<p>We’ve succesfully used the fact that lists are <code>Foldable</code>
+<p>We’ve successfully used the fact that lists are <code>Foldable</code>
 since we’ve managed to use <code>length</code> and <code>foldr</code> on
 lists. However, <code>Maybe</code> is also <code>Foldable</code>! The
 <code>Foldable</code> instance for <code>Maybe</code> just pretends that
@@ -4844,7 +4844,7 @@ thing with a type parameter. This is the same as the built in type
 <div class="sourceCode" id="cb350"><pre
 class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb350-1"><a href="#cb350-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">List</span> a <span class="ot">=</span> <span class="dt">Empty</span> <span class="op">|</span> <span class="dt">Node</span> a (<span class="dt">List</span> a)</span>
 <span id="cb350-2"><a href="#cb350-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">deriving</span> <span class="dt">Show</span></span></code></pre></div>
-<p>Note how we need to pass the the type parameter <code>a</code>
+<p>Note how we need to pass the type parameter <code>a</code>
 onwards in the recursion. We need to write <code>Node a (List a)</code>
 instead of <code>Node a List</code>. The <code>Node</code> constructor
 has two arguments. The first has type <code>a</code>, and the second has
@@ -4938,7 +4938,7 @@ class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb357-1"><
 <span id="cb357-12"><a href="#cb357-12" aria-hidden="true" tabindex="-1"></a>  <span class="op">==&gt;</span> <span class="dv">1</span> <span class="op">+</span> <span class="fu">max</span> <span class="dv">2</span> <span class="dv">0</span></span>
 <span id="cb357-13"><a href="#cb357-13" aria-hidden="true" tabindex="-1"></a>  <span class="op">==&gt;</span> <span class="dv">3</span></span></code></pre></div>
 <p>In case you’re familiar with <em>binary search trees</em>, here are
-the definitions of the lookup and insert opertions for a binary search
+the definitions of the lookup and insert operations for a binary search
 tree. If you don’t know what I’m talking about, you don’t need to
 understand this.</p>
 <div class="sourceCode" id="cb358"><pre
@@ -5695,7 +5695,7 @@ skills from the previous lectures.</p>
 <h2 data-number="7.1" id="modeling-with-boxes"><span
 class="header-section-number">7.1</span> Modeling with Boxes</h2>
 <p>Sometimes you don’t need a new type, but instead can just reuse a
-standard type. For example, repesenting car register plate numbers with
+standard type. For example, representing car register plate numbers with
 <code>String</code>. However, if your code is full of
 <code>String</code>s, it can be easy to accidentally mix up e.g. a car’s
 model and registration in a function like
@@ -6284,7 +6284,7 @@ class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb454-1"><
 <span id="cb454-7"><a href="#cb454-7" aria-hidden="true" tabindex="-1"></a><span class="dt">Hello</span>, <span class="dt">Seraphim</span></span></code></pre></div>
 <h3 data-number="8.1.1" id="what-about-purity"><span
 class="header-section-number">8.1.1</span> What About Purity?</h3>
-<p>It feels as if we can just do side effects where ever we want with
+<p>It feels as if we can just do side effects wherever we want with
 these IO actions. However, it’s important to remember the distinction
 between <em>defining</em> an IO action and <em>executing</em> it.</p>
 <p>Let’s try to print while mapping over a list</p>
