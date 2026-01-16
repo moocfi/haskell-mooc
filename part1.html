@@ -1398,7 +1398,7 @@ fib 5        ==>          |           |
                                                   1       1
 ```
 -->
-<p>This tree then exaclty corresponds with the expression
+<p>This tree then exactly corresponds with the expression
 <code>(1 + 1) + (1 + (1 + 1))</code>. Recursion can often produce
 chain-like, tree-like, nested, or loopy structures and computations.
 Recursion is one of the main techniques in functional programming, so
@@ -1407,7 +1407,7 @@ it’s worth spending some effort in learning it.</p>
 <h2 data-number="1.10" id="all-together-now"><span
 class="header-section-number">1.10</span> All Together Now!</h2>
 <p>Finally, here’s a complete Haskell module that uses ifs, pattern
-matching, local defintions and recursion. The module is interested in
+matching, local definitions and recursion. The module is interested in
 the <a
 href="https://en.wikipedia.org/wiki/Collatz_conjecture"><em>Collatz
 conjecture</em></a>, a famous open problem in mathematics. It asks:</p>
@@ -1550,7 +1550,7 @@ If you can’t seem to get indentation to work, try putting everything on
 just one long line at first.</p>
 <h2 data-number="1.12" id="quiz"><span
 class="header-section-number">1.12</span> Quiz</h2>
-<p>At the end of each lecture you’ll find a quiz like this. The quizes
+<p>At the end of each lecture you’ll find a quiz like this. The quizzes
 aren’t graded, they’re just here to help you check you’ve understood the
 chapter. You can check your answer by clicking on an option. You’ll see
 a green background if you were right, a red one if you were wrong. Feel
@@ -1560,10 +1560,10 @@ why the right option is right in the end.</p>
 <code>combine(prettify(lawn),construct(house,concrete))</code>?</p>
 <ol class="quiz">
 <li>
-<code>combine prettify (lawn) construct (house concerete)</code>
+<code>combine prettify (lawn) construct (house concrete)</code>
 </li>
 <li>
-<code>combine (prettify lawn (counstruct house concrete))</code>
+<code>combine (prettify lawn (construct house concrete))</code>
 </li>
 <li class="correct">
 <code>combine (prettify lawn) (construct house concrete)</code>
@@ -1684,8 +1684,8 @@ a newer one.</li>
 <p>There are primarily two types of files in the <code>exercises</code>
 directory: exercise sets named <code>SetNX.hs</code> and accompanying
 test program for the exercises named <code>SetNXTest.hs</code>. Both are
-Haskell source files, but only the exercise file should to be edited
-when solving the exercises. Instructions to all individual exercises are
+Haskell source files, but only the exercise file should be edited when
+solving the exercises. Instructions to all individual exercises are
 embedded in the exercise file as comments.</p>
 <p>Use the tests file to check your answers. For example when you have
 solved some of the exercises in <code>Set1.hs</code>, run the following
@@ -1986,7 +1986,7 @@ class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb99-1"><a
 <span id="cb99-4"><a href="#cb99-4" aria-hidden="true" tabindex="-1"></a><span class="fu">init</span><span class="ot"> ::</span> [a] <span class="ot">-&gt;</span> [a]          <span class="co">-- returns everything except the last element</span></span>
 <span id="cb99-5"><a href="#cb99-5" aria-hidden="true" tabindex="-1"></a><span class="fu">take</span><span class="ot"> ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> [a]   <span class="co">-- returns the n first elements</span></span>
 <span id="cb99-6"><a href="#cb99-6" aria-hidden="true" tabindex="-1"></a><span class="fu">drop</span><span class="ot"> ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> [a]   <span class="co">-- returns everything except the n first elements</span></span>
-<span id="cb99-7"><a href="#cb99-7" aria-hidden="true" tabindex="-1"></a><span class="ot">(++) ::</span> [a] <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> [a]   <span class="co">-- lists are catenated with the ++ operator</span></span>
+<span id="cb99-7"><a href="#cb99-7" aria-hidden="true" tabindex="-1"></a><span class="ot">(++) ::</span> [a] <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> [a]   <span class="co">-- lists are concatenated with the ++ operator</span></span>
 <span id="cb99-8"><a href="#cb99-8" aria-hidden="true" tabindex="-1"></a><span class="ot">(!!) ::</span> [a] <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> a     <span class="co">-- lists are indexed with the !! operator</span></span>
 <span id="cb99-9"><a href="#cb99-9" aria-hidden="true" tabindex="-1"></a><span class="fu">reverse</span><span class="ot"> ::</span> [a] <span class="ot">-&gt;</span> [a]       <span class="co">-- reverse a list</span></span>
 <span id="cb99-10"><a href="#cb99-10" aria-hidden="true" tabindex="-1"></a><span class="fu">null</span><span class="ot"> ::</span> [a] <span class="ot">-&gt;</span> <span class="dt">Bool</span>         <span class="co">-- is this list empty?</span></span>
@@ -2903,23 +2903,23 @@ class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb182-1"><
 use a helper function – such as <code>add</code> above.</p>
 <p>Note that omitting the parentheses leads into a type error:</p>
 <div class="sourceCode" id="cb183"><pre
-class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb183-1"><a href="#cb183-1" aria-hidden="true" tabindex="-1"></a><span class="dt">Prelude</span><span class="op">&gt;</span> <span class="fu">zipWith</span> <span class="op">+</span> [<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">3</span>] [<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">3</span>]</span>
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb183-1"><a href="#cb183-1" aria-hidden="true" tabindex="-1"></a><span class="dt">Prelude</span><span class="op">&gt;</span> <span class="fu">zipWith</span> <span class="op">+</span> [<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">5</span>] [<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">3</span>]</span>
 <span id="cb183-2"><a href="#cb183-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb183-3"><a href="#cb183-3" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span>interactive<span class="op">&gt;:</span><span class="dv">1</span><span class="op">:</span><span class="dv">11</span><span class="op">:</span> <span class="fu">error</span><span class="op">:</span></span>
 <span id="cb183-4"><a href="#cb183-4" aria-hidden="true" tabindex="-1"></a>    • <span class="dt">Couldn&#39;t</span> match expected <span class="kw">type</span> ‘[<span class="dt">Integer</span>]</span>
 <span id="cb183-5"><a href="#cb183-5" aria-hidden="true" tabindex="-1"></a>                                    <span class="ot">-&gt;</span> (a <span class="ot">-&gt;</span> b <span class="ot">-&gt;</span> c) <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> [b] <span class="ot">-&gt;</span> [c]’</span>
 <span id="cb183-6"><a href="#cb183-6" aria-hidden="true" tabindex="-1"></a>                  with actual <span class="kw">type</span> ‘[<span class="dt">Integer</span>]’</span>
-<span id="cb183-7"><a href="#cb183-7" aria-hidden="true" tabindex="-1"></a>    • <span class="dt">The</span> function ‘[<span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">3</span>]’ is applied to one argument,</span>
+<span id="cb183-7"><a href="#cb183-7" aria-hidden="true" tabindex="-1"></a>    • <span class="dt">The</span> function ‘[<span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">5</span>]’ is applied to one argument,</span>
 <span id="cb183-8"><a href="#cb183-8" aria-hidden="true" tabindex="-1"></a>      but its <span class="kw">type</span> ‘[<span class="dt">Integer</span>]’ has none</span>
-<span id="cb183-9"><a href="#cb183-9" aria-hidden="true" tabindex="-1"></a>      <span class="dt">In</span> the second argument <span class="kw">of</span> ‘(<span class="op">+</span>)’, namely ‘[<span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">3</span>] [<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">3</span>]’</span>
-<span id="cb183-10"><a href="#cb183-10" aria-hidden="true" tabindex="-1"></a>      <span class="dt">In</span> the expression<span class="op">:</span> <span class="fu">zipWith</span> <span class="op">+</span> [<span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">3</span>] [<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">3</span>]</span>
+<span id="cb183-9"><a href="#cb183-9" aria-hidden="true" tabindex="-1"></a>      <span class="dt">In</span> the second argument <span class="kw">of</span> ‘(<span class="op">+</span>)’, namely ‘[<span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">5</span>] [<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">3</span>]’</span>
+<span id="cb183-10"><a href="#cb183-10" aria-hidden="true" tabindex="-1"></a>      <span class="dt">In</span> the expression<span class="op">:</span> <span class="fu">zipWith</span> <span class="op">+</span> [<span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">5</span>] [<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">3</span>]</span>
 <span id="cb183-11"><a href="#cb183-11" aria-hidden="true" tabindex="-1"></a>    • <span class="dt">Relevant</span> bindings include</span>
 <span id="cb183-12"><a href="#cb183-12" aria-hidden="true" tabindex="-1"></a><span class="ot">        it ::</span> (a <span class="ot">-&gt;</span> b <span class="ot">-&gt;</span> c) <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> [b] <span class="ot">-&gt;</span> [c]</span>
 <span id="cb183-13"><a href="#cb183-13" aria-hidden="true" tabindex="-1"></a>          (bound at <span class="op">&lt;</span>interactive<span class="op">&gt;:</span><span class="dv">1</span><span class="op">:</span><span class="dv">1</span>)</span></code></pre></div>
 <p>The reason for this weird-looking error is that GHCi got confused and
 thought that we were somehow trying to add <code>zipWith</code> and
-<code>[0,2,5,3] [1,3,3]</code> together. Logically, it deduced that
-<code>[0,2,5,3]</code> must be a function since it’s being applied to
+<code>[0,2,5] [1,3,3]</code> together. Logically, it deduced that
+<code>[0,2,5]</code> must be a function since it’s being applied to
 <code>[1,3,3]</code> (remember that functions bind tighter than
 operators).</p>
 <p>Unfortunately, error messages can sometimes be obscure, since the
