@@ -23,10 +23,14 @@ this repository ([part1.html](part1.html), [part2.html](part2.html)).
 
 ## Exercises
 
-Exercises can be found under `exercises/` directory. All required dependencies
-can be downloaded and built with:
+Exercises can be found under `exercises/` directory. You can use **Stack**, **Cabal**, or **Nix** to build and run them.
+
+### Using Stack
+
+All required dependencies can be downloaded and built with:
 
 ```
+cd exercises
 stack build
 ```
 
@@ -40,6 +44,53 @@ stack runhaskell SetXTest.hs
 
 in the `exercises/` directory. Remember to replace `X` with the number
 of the set you are working on.
+
+### Using Cabal
+
+If you prefer Cabal over Stack, make sure you have [GHC](https://www.haskell.org/ghc/) and [cabal-install](https://www.haskell.org/cabal/) installed (e.g. via [ghcup](https://www.haskell.org/ghcup/)). Then run:
+
+```
+cd exercises
+cabal update                # You may need to perform this manually to obtain hackage index information.
+cabal v2-build
+```
+
+To check your answers:
+
+```
+cabal v2-exec runhaskell SetXTest.hs
+```
+
+**Important:** This course targets GHC 9.2.8. Using a different GHC version may cause test failures due to import restrictions that are version-sensitive. If you encounter `forbidden imports` errors, make sure you are using GHC 9.2.8 (or try the `ghc-9.6.6` branch for GHC 9.6.6 support).
+
+### Using Nix
+
+If you use [Nix](https://nixos.org/), this repository provides a [flake.nix](flake.nix) that sets up a complete development environment with GHC 9.2.8, Cabal, and HLS (Haskell Language Server).
+
+Enter the development shell:
+
+```
+nix develop
+```
+
+Or if you use [direnv](https://direnv.net/), you can just:
+
+```
+direnv allow
+```
+
+Once inside the Nix shell, you can use the Cabal commands described above. If you encounter issues with missing packages, try running `cabal update` first to refresh the Hackage index.
+
+```
+cd exercises
+cabal v2-build
+cabal v2-exec runhaskell SetXTest.hs
+```
+
+The Nix shell also provides two convenience commands:
+
+- `cabal-build` — builds the exercises
+- `cabal-test <file>` — runs a test file (e.g. `cabal-test Set1Test.hs`, `cabal-test ./exercises/Set1Test.hs`)
 
 See [the material](part1.html#working-on-the-exercises) for more info.
 
@@ -56,7 +107,7 @@ If you need to use a newer version of GHC, perhaps to get
 vscode-haskell to work, try the `ghc-9.6.6` branch of this repository
 for GHC 9.6.6. The default for the course is GHC 9.2.8 for now.
 
-Don't forget to run `stack build` again after changing branches.
+Don't forget to run `stack build` (or `cabal v2-build`) again after changing branches.
 
 ## Reporting errors
 
