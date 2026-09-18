@@ -308,7 +308,8 @@ testing' call = do
 
 importsOnly :: String -> [String] -> Q Exp
 importsOnly name allowed = do
-  (ModuleInfo pkgImports) <- reifyModule (Module (PkgName "main") (ModName name))
+  Module pkg _ <- thisModule
+  (ModuleInfo pkgImports) <- reifyModule (Module pkg (ModName name))
   let imports = [nam | (Module _ (ModName nam)) <- pkgImports]
   let forbidden = imports \\ allowed
   case forbidden of
