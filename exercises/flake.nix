@@ -17,7 +17,12 @@
 
       perSystem = { system, pkgs, ... }:
         let
-          hpkgs = pkgs.haskell.packages.ghc912;
+          hlib = pkgs.haskell.lib;
+          hpkgs = pkgs.haskell.packages."ghc912".override {
+            overrides = self: super: {
+              zlib = hlib.dontCheck (hlib.doJailbreak super.zlib);
+            };
+          };
 
           tests = pkgs.haskell.lib.overrideCabal (hpkgs.callCabal2nix "tests" ./. { }) (_: {
             doCheck = true;
@@ -38,7 +43,8 @@
               hpkgs.ghc
               pkgs.haskellPackages.cabal-fmt
               pkgs.haskellPackages.implicit-hie
-              pkgs.libz
+              pkgs.zlib
+              pkgs.zlib.dev
             ];
           };
         };
