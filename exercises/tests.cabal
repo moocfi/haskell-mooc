@@ -4,11 +4,81 @@ build-type:    Simple
 cabal-version: >=1.10
 
 library
+  hs-source-dirs: .
+  exposed-modules:
+      Mooc.LimitedPrelude
+    , Mooc.Test
+    , Mooc.Th
+    , Mooc.Todo
+    , Mooc.VeryLimitedPrelude
+    , Examples.Bank
+    , Examples.FetchWords
+    , Examples.HelloServer
+    , Examples.PathServer
+    , Examples.Phantom
+    , Examples.Phonebook
+    , Examples.QuickCheck
+    , Examples.ReadTypes
+    , Examples.Validation
+    , Set1
+    , Set1Test
+    , Set2a
+    , Set2aTest
+    , Set2b
+    , Set2bTest
+    , Set3a
+    , Set3aTest
+    , Set3b
+    , Set3bTest
+    , Set4a
+    , Set4aTest
+    , Set4b
+    , Set4bTest
+    , Set5a
+    , Set5aTest
+    , Set5b
+    , Set5bTest
+    , Set6
+    , Set6Test
+    , Set7
+    , Set7Test
+    , Set8
+    , Set8Test
+    , Set9a
+    , Set9aTest
+    , Set9b
+    , Set9bTest
+    , Set10a
+    , Set10aTest
+    , Set10b
+    , Set10bTest
+    , Set11a
+    , Set11aTest
+    , Set11b
+    , Set11bTest
+    , Set12
+    , Set12Test
+    , Set13a
+    , Set13aTest
+    , Set13b
+    , Set13bTest
+    , Set14a
+    , Set14aTest
+    , Set14b
+    , Set14bTest
+    , Set15
+    , Set15Test
+    , Set16a
+    , Set16aTest
+    , Set16b
+    , Set16bTest
   build-depends:
       array
     , base
     , bytestring
     , containers
+    , deepseq
+    , directory
     , generic-random
     , hspec
     , HTTP
