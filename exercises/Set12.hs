@@ -2,7 +2,7 @@ module Set12 where
 
 import Data.Functor
 import Data.Foldable
-import Data.List
+import Data.List hiding (List)
 import Data.Monoid
 
 import Mooc.Todo
